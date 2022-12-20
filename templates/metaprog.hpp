@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/19 19:37:04 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/20 12:57:11 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ namespace ft {
 	struct integral_constant {
 		typedef T type;
 		static const T value = val;
+		const T operator()() const { return value; }
 	};
+
+	struct true_type : integral_constant< bool, true > {};
+	struct false_type : integral_constant< bool, false > {};
 
 }
 
