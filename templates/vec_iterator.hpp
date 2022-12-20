@@ -6,12 +6,14 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/20 20:35:20 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/20 21:04:19 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __VEC_ITERATOR_HPP__
 # define __VEC_ITERATOR_HPP__
+
+# include "metaprog.hpp"
 
 namespace ft {
 
@@ -34,12 +36,14 @@ namespace ft {
 		public:
 
 			random_access_iterator( void ) : it(NULL) {}
-			random_access_iterator( pointer ptr ) : it(ptr) { }
+
+			random_access_iterator( const random_access_iterator & rhs ) : it(rhs.it) { }
+
 			~random_access_iterator() {}
 
 			random_access_iterator	& operator=( const random_access_iterator & rhs )
 			{
-				*(this->it) = *(rhs.it);
+				this->it = rhs.it;
 				return *this;
 			}
 
