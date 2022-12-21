@@ -6,14 +6,13 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/21 16:21:51 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/21 17:18:44 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __RANDOM_ITERATOR_HPP__
 # define __RANDOM_ITERATOR_HPP__
 
-# include "metaprog.hpp"
 
 namespace ft {
 
@@ -47,12 +46,6 @@ namespace ft {
 			{
 				if ( this != &rhs )
 					this->it = rhs.it;
-				return *this;
-			}
-
-			inline randomIterator	& operator=( randomIterator & rhs )
-			{
-				this->it = rhs.it;
 				return *this;
 			}
 
