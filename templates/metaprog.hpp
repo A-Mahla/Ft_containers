@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/20 19:32:24 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/21 20:24:20 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ namespace ft {
 
 	/*	remove_cv_qualified	*/
 	template< typename T >
-	struct remove_qualified {
+	struct remove_cv {
 		typedef T type;
 	};
 
 	template< typename T >
-	struct remove_qualified< T const > {
+	struct remove_cv< T const > {
 		typedef T type;
 	};
 
 	template< typename T >
-	struct remove_qualified< T volatile > {
+	struct remove_cv< T volatile > {
 		typedef T type;
 	};
 

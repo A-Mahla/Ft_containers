@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/21 17:18:44 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/21 21:57:57 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft {
 		public:
 
 			typedef T								value_type;
-			typedef T&								reference;
+			typedef T&							 	reference;
 			typedef T*								pointer;
 			typedef std::ptrdiff_t					difference_type;
 			typedef std::random_access_iterator_tag	iterator_category;

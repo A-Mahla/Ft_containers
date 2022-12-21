@@ -6,7 +6,7 @@
 #    By: meudier <meudier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/17 21:07:29 by amahla            #+#    #+#              #
-#    Updated: 2022/12/20 20:04:02 by amahla           ###   ########.fr        #
+#    Updated: 2022/12/21 18:48:13 by amahla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC					:=	c++
 RM					:=	rm
 
 PROG_VECTOR			:=	vector
-PROG_TOOLS		:=	tools
+PROG_VECTOR_STD		:=	vector_std
 
 SRCDIR				:=	srcs_tests
 
@@ -24,7 +24,7 @@ INCLUDEDIR			:=	templates
 OBJDIR				:=	./obj
 DEBUGDIR			:=	./debugobj
 
-SRCS_TOOLS			:=	$(addprefix tools/,		main.cpp	)
+SRCS_VECTOR_STD		:=	$(addprefix vector/,	main_std.cpp	)
 SRCS_VECTOR			:=	$(addprefix vector/,	main.cpp	)
 
 
@@ -44,7 +44,7 @@ ifdef DEBUG
 endif
 
 all					:	$(addprefix $(PROG_VECTOR), $(NAME))	\
-						$(addprefix $(PROG_TOOLS), $(NAME))
+						$(addprefix $(PROG_VECTOR_STD), $(NAME))
 
 debug				:
 ifndef DEBUG
@@ -55,7 +55,7 @@ $(OUTDIR)/%.o		:	$(SRCDIR)/%.cpp | $(OUTDIR)
 	@mkdir -p $(dir $@)
 	$(CC) -c -MMD -MP $(CCFLAGS) $(OPTFLAG) $(addprefix -I ,$(INCLUDEDIR)) $< -o $@
 
-$(addprefix $(PROG_TOOLS), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS_TOOLS:.cpp=.o))
+$(addprefix $(PROG_VECTOR_STD), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR_STD:.cpp=.o))
 										$(CC) $(CCFLAGS) $(OPTFLAG) -o $@ $^
 
 $(addprefix $(PROG_VECTOR), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR:.cpp=.o))
@@ -76,4 +76,4 @@ re					:	fclean
 .PHONY				:	all clean fclean re debug mac select
 
 -include	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR:.cpp=.d))
--include	$(addprefix $(OUTDIR)/,$(SRCS_TOOLS:.cpp=.d))
+-include	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR_STD:.cpp=.d))
