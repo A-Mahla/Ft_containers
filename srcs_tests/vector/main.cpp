@@ -62,20 +62,29 @@ void	capacityTest( void )
 	std::cout << e.empty() << std::endl << std::endl;
 }
 
+# include <vector>
 void	accessConstruct( void )
 {
-	std::cout << "\t\ttest size(), max_size()\n\n";
+	std::cout << "\t\tTEST operator[]() / at()\n\n";
 
 	vector<int> a(10);
 	for ( size_t i(0); i < a.size(); i++ )
 	{
 		a[i] = i;
-		std::cout << a[i] << std::endl;
+		std::cout << a[i] <<  a.at(i) << std::endl;
 	}
 
 	const vector<int> b(10);
 	for ( size_t i(0); i < b.size(); i++ )
-		std::cout << b[i] << std::endl;
+		std::cout << b[i] << b.at(i) << std::endl;
+	std::cout << b.front() << std::endl;
+	std::cout << b.back() << std::endl;
+
+	vector<char>c(26);
+	for ( size_t i(0), a = 'a'; i < c.size(); i++, a++ )
+		c.at(i) = a;
+	std::cout << c.front() << std::endl;
+	std::cout << c.back() << std::endl;
 
 }
 

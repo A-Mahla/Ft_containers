@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/22 17:08:23 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/22 19:16:01 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define __VECTOR_HPP__
 
 # include "random_iterator.hpp"
-# include <memory>
+# include <memory> 
+# include <sstream>
 
 namespace ft {
 
@@ -176,7 +177,7 @@ namespace ft {
 
 			// ===== ELEMENT ACCESS =====
 
-			/* @member operator()
+			/* @member operator[]()
 			 *
 			 * @brief access operator read/write
 			 *
@@ -187,9 +188,9 @@ namespace ft {
 				return *(this->_start + n);
 			}
 
-			/* @member operator()
+			/* @member operator[]()
 			 *
-			 * @brief access operator read
+			 * @brief access operator read only
 			 *
 			 * @return const_reference*/
 
@@ -204,21 +205,83 @@ namespace ft {
 			 *
 			 * @return reference*/
 
-			inline reference	operator[]( size_type n )
+			inline reference	at( size_type n )
 			{
+				if ( n >= size() )
+				{
+					std::stringstream error;
+					error << "vector::_M_range_check: n (which is ";
+					error << n << ") >= this->size() (which is ";
+					error << this->size() << ")";
+					throw std::out_of_range(error.str());
+				}
 				return *(this->_start + n);
 			}
 
-			/* @member operator()
+			/* @member at()
 			 *
-			 * @brief access operator read
+			 * @brief access operator read only
 			 *
 			 * @return const_reference*/
 
-			inline const_reference	operator[]( size_type n ) const
+			inline const_reference	at( size_type n ) const
 			{
+				if ( n >= size() )
+				{
+					std::stringstream error;
+					error << "vector::_M_range_check: n (which is ";
+					error << n << ") >= this->size() (which is ";
+					error << this->size() << ")";
+					throw std::out_of_range(error.str());
+				}
 				return *(this->_start + n);
 			}
+
+			/* @member front()
+			 *
+			 * @brief access first elem write/read
+			 *
+			 * @return reference*/
+
+			inline reference	front( void )
+			{
+				return *(this->_start);
+			}
+
+			/* @member front()
+			 *
+			 * @brief access first elem read only
+			 *
+			 * @return const_reference*/
+
+			inline const_reference	front( void ) const
+			{
+				return *(this->_start);
+			}
+
+			/* @member back()
+			 *
+			 * @brief access first elem write/read
+			 *
+			 * @return reference*/
+
+			inline reference	back( void )
+			{
+				return *(this->_finish - 1);
+			}
+
+			/* @member back()
+			 *
+			 * @brief access first elem read only
+			 *
+			 * @return const_reference*/
+
+			inline const_reference	back( void ) const
+			{
+				return *(this->_finish - 1);
+			}
+
+			
 
 	};
 }
