@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/21 21:57:57 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:39:27 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,11 @@ namespace ft {
 			inline bool		operator<=( const randomIterator & rhs ) const
 			{
 				return !(rhs > *this);
+			}
+
+			operator randomIterator< const T >( void ) const
+			{
+				return randomIterator< const T >(this->it);
 			}
 
 	};

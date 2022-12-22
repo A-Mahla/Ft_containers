@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/21 21:54:33 by amahla           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:08:23 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,12 @@ namespace ft {
 			explicit	vector<T>( size_type n, const T& value = T(),
 					const Allocator& = Allocator() )
 			{
-				_start = _alloc.allocate(n);
-				_alloc.construct(_start, value);
-				_finish = _start + n;
-				_end_of_storage = _finish;
-				_nelem = n;
+				this->_start = this->_alloc.allocate(n);
+				this->_finish = _start + n;
+				for ( pointer x = this->_start; x != this->_finish; x++ )
+					this->_alloc.construct(x, value);
+				this->_end_of_storage = _finish;
+				this->_nelem = n;
 			}
 
 //			template <class InputIterator>
@@ -83,6 +84,13 @@ namespace ft {
   				end_of_storage = p + x.size();
 			}
 */
+
+			// ===== ITERATORS =====
+
+			/* @member begin() and end()
+			 *
+			 * @return iterator*/
+
 			inline iterator			begin( void )
 			{
 				return iterator(_start);
@@ -95,16 +103,124 @@ namespace ft {
 
 			inline iterator			end( void )
 			{
-				return iterator(_start);
+				return iterator(_finish);
 			}
 
 			inline const_iterator	end( void ) const
 			{
-				return const_iterator(_start);
+				return const_iterator(_finish);
+			}
+
+			// ===== CAPACITY =====
+
+			/* @member size()
+			 *
+			 * @brief the size of current instance is return
+			 *
+			 * @return size_type*/
+
+			inline size_type	size( void ) const
+			{
+				return this->_finish - this->_start;
+			}
+
+			/* @member max_size()
+			 *
+			 * @brief the max_size can be stored in this instance
+			 *
+			 * @return size_type*/
+
+			inline size_type	max_size( void ) const
+			{
+				return this->_alloc.max_size();
+			}
+
+			/* @member resize()
+			 *
+			 * @brief
+			 *
+			 * @return void*/
+
+			inline void	resize( size_type sz, T c = T() );
+
+			/* @member capacity()
+			 *
+			 * @brief the capacity before realloc of current instance is return
+			 *
+			 * @return size_type*/
+
+			inline size_type	capacity( void ) const
+			{
+				return this->_end_of_storage - this->_start;
+			}
+
+			/* @member empty()
+			 *
+			 * @brief boolean statement about size()==0 of current instance
+			 *
+			 * @return size_type*/
+
+			inline bool	empty( void ) const
+			{
+				return !(this->size());
+			}
+
+			/* @member reserve()
+			 *
+			 * @brief
+			 *
+			 * @return void*/
+
+			inline void	reserve( size_type n );
+
+
+			// ===== ELEMENT ACCESS =====
+
+			/* @member operator()
+			 *
+			 * @brief access operator read/write
+			 *
+			 * @return reference*/
+
+			inline reference	operator[]( size_type n )
+			{
+				return *(this->_start + n);
+			}
+
+			/* @member operator()
+			 *
+			 * @brief access operator read
+			 *
+			 * @return const_reference*/
+
+			inline const_reference	operator[]( size_type n ) const
+			{
+				return *(this->_start + n);
+			}
+
+			/* @member at()
+			 *
+			 * @brief access operator read/write
+			 *
+			 * @return reference*/
+
+			inline reference	operator[]( size_type n )
+			{
+				return *(this->_start + n);
+			}
+
+			/* @member operator()
+			 *
+			 * @brief access operator read
+			 *
+			 * @return const_reference*/
+
+			inline const_reference	operator[]( size_type n ) const
+			{
+				return *(this->_start + n);
 			}
 
 	};
 }
-
 
 #endif
