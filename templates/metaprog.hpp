@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/21 20:24:20 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 08:50:03 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,24 @@ namespace ft {
 		typedef typename Iter::pointer				pointer;
 		typedef typename Iter::reference			reference;
 		typedef typename Iter::iterator_category	iterator_category;
+	};
+
+	template< typename Iter >
+	struct iterator_traits<Iter*> {
+		typedef Iter								value_type;
+		typedef std::ptrdiff_t							difference_type;
+		typedef Iter*								pointer;
+		typedef Iter&								reference;
+		typedef std::random_access_iterator_tag	iterator_category;
+	};
+
+	template< typename Iter >
+	struct iterator_traits<const Iter*> {
+		typedef Iter								value_type;
+		typedef std::ptrdiff_t							difference_type;
+		typedef const Iter*						pointer;
+		typedef const Iter&						reference;
+		typedef std::random_access_iterator_tag	iterator_category;
 	};
 
 

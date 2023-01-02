@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/22 19:16:01 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 09:13:10 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define __VECTOR_HPP__
 
 # include "random_iterator.hpp"
+# include "reverse_iterator.hpp"
+# include "algo.hpp"
 # include <memory> 
 # include <sstream>
 
@@ -42,19 +44,18 @@ namespace ft {
 			pointer			_start;
 			pointer			_finish;
 			pointer			_end_of_storage;
-			size_type		_nelem;
 
 		public:
 
 			vector( const Allocator& = Allocator() )
+				: _start(NULL), _finish(NULL), _end_of_storage(NULL)
 			{
 				_start = NULL;
 				_finish = NULL;
 				_end_of_storage = NULL;
-				_nelem = 0;
 			}
 
-			explicit	vector<T>( size_type n, const T& value = T(),
+			explicit	vector( size_type n, const T& value = T(),
 					const Allocator& = Allocator() )
 			{
 				this->_start = this->_alloc.allocate(n);
@@ -62,7 +63,6 @@ namespace ft {
 				for ( pointer x = this->_start; x != this->_finish; x++ )
 					this->_alloc.construct(x, value);
 				this->_end_of_storage = _finish;
-				this->_nelem = n;
 			}
 
 //			template <class InputIterator>

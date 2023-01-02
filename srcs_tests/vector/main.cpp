@@ -13,6 +13,53 @@ struct Test {};
 
 /*====================VECTOR_TEST=======================*/
 
+#include <vector>
+void	reverse( void )
+{
+	std::vector<int> vec;
+
+	vec.push_back(0);
+	vec.push_back(1);
+	vec.push_back(2);
+	vec.push_back(3);
+	vec.push_back(4);
+	vec.push_back(5);
+	reverse_iterator<std::vector<int>::iterator> d;
+	reverse_iterator<std::vector<int>::iterator> a(vec.end());
+	std::vector<int>::reverse_iterator c;
+	std::vector<int>::reverse_iterator b(vec.end());
+
+
+	std::cout << *a << std::endl;
+	std::cout << *b << std::endl;
+	std::cout << b[1] << std::endl;
+	std::cout << a[1] << std::endl;
+	std::cout << *a++ << std::endl;
+	std::cout << *b++ << std::endl;
+	std::cout << *++a << std::endl;
+	std::cout << *++b << std::endl;
+	std::cout << *a-- << std::endl;
+	std::cout << *b-- << std::endl;
+	std::cout << *--a << std::endl;
+	std::cout << *--b << std::endl;
+	std::cout << "test" << std::endl;
+	a += 2;
+	b += 2;
+	std::cout << *a << std::endl;
+	std::cout << *b << std::endl;
+	a -= 2;
+	b -= 2;
+	std::cout << *a << std::endl;
+	std::cout << *b << std::endl;
+	std::cout << *(a + 2) << std::endl;
+	std::cout << *(b + 2) << std::endl;
+	std::cout << *(a - 2) << std::endl;
+	std::cout << *(b - 2) << std::endl;
+
+	
+	
+}
+
 void	beginAndEnd( void )
 {
 	std::cout << "\t\tTEST begin() / end()\n\n";
@@ -62,7 +109,6 @@ void	capacityTest( void )
 	std::cout << e.empty() << std::endl << std::endl;
 }
 
-# include <vector>
 void	accessConstruct( void )
 {
 	std::cout << "\t\tTEST operator[]() / at()\n\n";
@@ -102,9 +148,10 @@ void	vectorConstruct( void )
 
 int main(void)
 {
+	reverse();
 //	vectorConstruct();
 //	beginAndEnd();
 //	capacityTest();
-	accessConstruct();
+//	accessConstruct();
 	return 0;
 }
