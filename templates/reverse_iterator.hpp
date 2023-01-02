@@ -6,7 +6,7 @@
 /*   By: amahla <amahla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 08:24:04 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 11:56:38 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 14:45:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ namespace ft {
 		const reverse_iterator<Iterator>& x,
 		const reverse_iterator<Iterator>& y )
 	{
-		return x.base() - y.base();
+		return y.base() - x.base();
 	}
 
 	template <class Iterator>

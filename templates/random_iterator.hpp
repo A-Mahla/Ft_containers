@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2022/12/22 14:39:27 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 14:53:21 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ namespace ft {
 
 			inline difference_type	operator-( const randomIterator & rhs ) const
 			{
-				return this->it > rhs.it ? this->it - rhs.it : rhs.it - this->it;
+				return this->it - rhs.it;
 			}
 
 			inline value_type	operator[]( const long int n ) const

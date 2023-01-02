@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 09:13:10 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 15:18:32 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,18 @@ namespace ft {
 	
 		public:
 
-			typedef T										value_type;
-			typedef T&										reference;
-			typedef const T&								const_reference;
-			typedef Allocator								allocator_type;
-			typedef std::size_t								size_type;
-			typedef std::ptrdiff_t							difference_type;
-			typedef typename Allocator::pointer				pointer;
-			typedef typename Allocator::const_pointer		const_pointer;
-			typedef typename ft::randomIterator<T>			iterator;
-			typedef typename ft::randomIterator<const T>	const_iterator;
+			typedef T												value_type;
+			typedef T&												reference;
+			typedef const T&										const_reference;
+			typedef Allocator										allocator_type;
+			typedef std::size_t										size_type;
+			typedef std::ptrdiff_t									difference_type;
+			typedef typename Allocator::pointer						pointer;
+			typedef typename Allocator::const_pointer				const_pointer;
+			typedef typename ft::randomIterator<T>					iterator;
+			typedef typename ft::randomIterator<const T>			const_iterator;
+			typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		private:
 
@@ -88,7 +90,7 @@ namespace ft {
 
 			// ===== ITERATORS =====
 
-			/* @member begin() and end()
+			/* @member begin() / end() / rbegin() / rend()
 			 *
 			 * @return iterator*/
 
@@ -110,6 +112,26 @@ namespace ft {
 			inline const_iterator	end( void ) const
 			{
 				return const_iterator(_finish);
+			}
+
+			inline reverse_iterator	rbegin( void )
+			{
+				return reverse_iterator(end());
+			}
+
+			inline const_reverse_iterator	rbegin( void ) const
+			{
+				return const_reverse_iterator(end());
+			}
+
+			inline reverse_iterator	rend( void )
+			{
+				return reverse_iterator(begin());
+			}
+
+			inline const_reverse_iterator	rend( void ) const
+			{
+				return const_reverse_iterator(begin());
 			}
 
 			// ===== CAPACITY =====
