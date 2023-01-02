@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 15:18:32 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 22:46:11 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ namespace ft {
   				end_of_storage = p + x.size();
 			}
 */
+			inline	~vector( void )
+			{
+				for( pointer p = this->_start ; p != this->_finish; p++ )
+					this->_alloc.destroy(p);
+				this->_alloc.deallocate(this->_start, capacity());
+			}
 
 			// ===== ITERATORS =====
 
@@ -164,7 +170,10 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			inline void	resize( size_type sz, T c = T() );
+			inline void	resize( size_type sz, T c = T() )
+			{
+				
+			}
 
 			/* @member capacity()
 			 *
@@ -303,7 +312,85 @@ namespace ft {
 				return *(this->_finish - 1);
 			}
 
-			
+
+			// ===== MODIFIERS =====
+
+			/* @member push_back()
+			 *
+			 * @brief add a elem at the end
+			 *
+			 * @return void*/
+
+			void push_back( const T& x );
+
+			/* @member pop_back()
+			 *
+			 * @brief remove a elem from the end
+			 *
+			 * @return void*/
+
+			void pop_back( void );
+
+			/* @member insert()
+			 *
+			 * @brief insert at an iterator position
+			 *
+			 * @return iterator*/
+
+			iterator	insert( iterator position, const T& x )
+			{
+				
+			}
+
+			/* @member erase()
+			 *
+			 * @brief erase from an iterator to the end of the current instance
+			 *
+			 * @return iterator*/
+
+			iterator	erase( iterator pos )
+			{
+				if ( pos == end() )
+					return end();
+				this->_alloc.destroy( &(*pos) );
+				return pos;
+			}
+			/* @member erase()
+			 *
+			 * @brief erase a range of iterators from current instance
+			 *
+			 * @return iterator*/
+
+			iterator	erase( iterator first, iterator last )
+			{
+				if ( first == last )
+					return last;
+			}
+
+			/* @member swap()
+			 *
+			 * @brief exchanges the contents of the container with other
+			 *
+			 * @return void*/
+
+
+			void	swap( vector<T, Allocator>	& other )
+			{
+			}
+
+			/* @member clear()
+			 *
+			 * @brief (alloc.)destroy all element of current instance
+			 *
+			 * @return void*/
+
+			inline void	clear()
+			{
+				for( pointer p = this->_start ; p != this->_finish; p++ )
+					this->_alloc.destroy(p);
+				this->_finish = this->_start;
+			}
+
 
 	};
 }

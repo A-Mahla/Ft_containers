@@ -6,7 +6,7 @@
 /*   By: amahla <amahla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 08:09:59 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 16:23:38 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/02 20:56:41 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ namespace ft {
 		return first1 == last1 && first2 != last2;
 	}
 
+	#include <iostream>
 	template< class InputIt1, class InputIt2 >
 	bool	equal( InputIt1 first1, InputIt1 last1, InputIt2 first2 )
 	{
-		for ( ; first1 != last1 && *first1 == *first2; ++first1, ++first2 )
+		for ( ; first1 != last1 && *first1 == *first2; first1++, first2++ )
 			;
 		return first1 == last1;
 	}

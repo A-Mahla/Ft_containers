@@ -13,33 +13,14 @@ struct Test {};
 
 /*====================VECTOR_TEST=======================*/
 
-#include <vector>
-void	reverse( void )
+void	vectorConstruct( void )
 {
-	const vector<int> r;
-	std::vector<int> vec;
-	vector<int> vec1(6);
+	vector<float> b(1);
+	vector< int >	a(10);
+	vector<double> c(10000, 10);
+	vector<std::string> d(10000000, "");
 
-	vec1[0] = 0;
-	vec1[1] = 1;
-	vec1[2] = 2;
-	vec1[3] = 3;
-	vec1[4] = 4;
-	vec1[5] = 5;
-
-	vec.push_back(0);
-	vec.push_back(1);
-	vec.push_back(2);
-	vec.push_back(3);
-	vec.push_back(4);
-	vec.push_back(5);
-	vector<int>::reverse_iterator d(vec1.rend());
-	std::vector<int>::reverse_iterator c(vec.rend());
-	vector<int>::const_reverse_iterator e(r.rend());
-
-	std::cout << *(d.base())  << std::endl;
-	std::cout << *(c.base()) << std::endl;
-	
+	vector<int >::const_iterator	it = a.end();
 }
 
 void	beginAndEnd( void )
@@ -116,24 +97,36 @@ void	accessConstruct( void )
 
 }
 
-void	vectorConstruct( void )
+void	modifier( void )
 {
-	vector<float> b(1);
-	vector< int >	a(10);
-	vector<double> c(10000, 10);
-	vector<std::string> d(10000000, "");
 
-	vector<int >::const_iterator	it = a.end();
+	vector<int> a( 10, 10 );
+	for ( vector<int>::iterator it = a.begin(); it != a.end(); it++ )
+		std::cout << *it << std::endl;
+	std::cout << "capacity : " << a.capacity() << std::endl;
+	
+	a.clear();
+	if ( !a.size() )
+		std::cout << "vector cleared" << std::endl;
+	for ( vector<int>::iterator it = a.begin(); it != a.end(); it++ )
+		std::cout << *it << std::endl;
+	std::cout << "capacity : " << a.capacity() << std::endl;
+
+	std::cout << "test erase" << std::endl;
+	vector<int> b( 4, 10 );
+	b.erase( b.begin() );
+	for ( vector<int>::iterator it = b.begin(); it != b.end(); it++ )
+		std::cout << *it << std::endl;
+
 
 }
 
-
 int main(void)
 {
-//	reverse();
 //	vectorConstruct();
 //	beginAndEnd();
-	capacityTest();
+//	capacityTest();
 //	accessConstruct();
+	modifier();
 	return 0;
 }
