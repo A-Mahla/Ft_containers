@@ -70,6 +70,39 @@ void	capacityTest( void )
 	std::cout << e.capacity() << std::endl;
 	std::cout << e.max_size() << std::endl;
 	std::cout << e.empty() << std::endl << std::endl;
+
+	std::cout << "Test resize" << std::endl;
+	vector<int> f( 1, 10 );
+    std::cout << "The vector holds: " << std::endl;
+	for ( vector<int>::iterator it = f.begin(); it != f.end(); it++ )
+		std::cout << *it << ' ' << std::endl;
+	std::cout << "size : " << f.size() << std::endl;
+	std::cout << "capacity : " << f.capacity() << std::endl;
+    std::cout << '\n';
+ 
+    f.resize(5);
+    std::cout << "After resize up to 5: " << std::endl;
+	for ( vector<int>::iterator it = f.begin(); it != f.end(); it++ )
+		std::cout << *it << ' ' << std::endl;
+	std::cout << "size : " << f.size() << std::endl;
+	std::cout << "capacity : " << f.capacity() << std::endl;
+    std::cout << '\n';
+ 
+    f.resize(2);
+    std::cout << "After resize down to 2: " << std::endl;
+	for ( vector<int>::iterator it = f.begin(); it != f.end(); it++ )
+		std::cout << *it << ' ' << std::endl;
+	std::cout << "size : " << f.size() << std::endl;
+	std::cout << "capacity : " << f.capacity() << std::endl;
+    std::cout << '\n';
+ 
+    f.resize(11, 4);
+    std::cout << "After resize up to 6 (initializer = 4): " << std::endl;
+	for ( vector<int>::iterator it = f.begin(); it != f.end(); it++ )
+		std::cout << *it << ' ' << std::endl;
+	std::cout << "size : " << f.size() << std::endl;
+	std::cout << "capacity : " << f.capacity() << std::endl;
+    std::cout << '\n';
 }
 
 void	accessConstruct( void )
@@ -97,9 +130,11 @@ void	accessConstruct( void )
 
 }
 
+#include<vector>
 void	modifier( void )
 {
 
+	std::cout << "test cleared" << std::endl;
 	vector<int> a( 10, 10 );
 	for ( vector<int>::iterator it = a.begin(); it != a.end(); it++ )
 		std::cout << *it << std::endl;
@@ -107,26 +142,48 @@ void	modifier( void )
 	
 	a.clear();
 	if ( !a.size() )
-		std::cout << "vector cleared" << std::endl;
+		std::cout << "vector a cleared" << std::endl;
 	for ( vector<int>::iterator it = a.begin(); it != a.end(); it++ )
 		std::cout << *it << std::endl;
-	std::cout << "capacity : " << a.capacity() << std::endl;
+	std::cout << "capacity a : " << a.capacity() << std::endl;
 
-	std::cout << "test erase" << std::endl;
-	vector<int> b( 4, 10 );
-	b.erase( b.begin() );
+	/* RETEST WITH DIFFERENT VALUE !!!*/
+	std::cout << "test erase std" << std::endl;
+	vector<int> b( 10, 10 );
+	std::cout << "capacity b : " << b.capacity() << std::endl;
+	b.erase( b.begin(), b.end() - 1 );
 	for ( vector<int>::iterator it = b.begin(); it != b.end(); it++ )
 		std::cout << *it << std::endl;
+	std::cout << "capacity b : " << b.capacity() << std::endl;
+	std::cout << "size b : " << b.size() << std::endl;
 
 
+	std::cout << "test erase( pos )" << std::endl;
+
+	vector<int> c( 1, 10 );
+	std::cout << "capacity c : " << c.capacity() << std::endl;
+	c.erase( c.begin() );
+	for ( vector<int>::iterator it = c.begin(); it != c.end(); it++ )
+		std::cout << *it << std::endl;
+	std::cout << "capacity c : " << c.capacity() << std::endl;
+	std::cout << "size c : " << c.size() << std::endl;
+
+	std::cout << "test erase( pos )" << std::endl;
+	std::vector<int> z( 1, 10 );
+	std::cout << "capacity z : " << z.capacity() << std::endl;
+	z.erase( z.begin() );
+	for ( std::vector<int>::iterator it = z.begin(); it != z.end(); it++ )
+		std::cout << *it << std::endl;
+	std::cout << "capacity z : " << z.capacity() << std::endl;
+	std::cout << "size z : " << z.size() << std::endl;
 }
 
 int main(void)
 {
 //	vectorConstruct();
 //	beginAndEnd();
-//	capacityTest();
+	capacityTest();
 //	accessConstruct();
-	modifier();
+//	modifier();
 	return 0;
 }

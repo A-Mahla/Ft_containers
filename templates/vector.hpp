@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 22:46:11 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/03 14:10:40 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ namespace ft {
 			pointer			_finish;
 			pointer			_end_of_storage;
 
+			difference_type	_hdlCapacity;
+
 		public:
 
 			vector( const Allocator& = Allocator() )
@@ -72,21 +74,17 @@ namespace ft {
 //				const Allocator& = Allocator())
 //			{}
 
-/*			vector( const vector<T,Allocator>& x )
+			vector( const vector<T, Allocator>&	x )
 			{
-				// Allocate enough memory to store the elements of x
-				pointer p = alloc.allocate(x.size());
+				this->_start = this->_alloc.allocate(x.size());
+				pointer	p = this->_start;
 
-  				// Copy the elements of x into the new vector
-  				for (const_iterator i = x.begin(); i != x.end(); ++i, ++p)
-					alloc.construct(p, *i);
-
-  				// Update the pointers of the new vector
-  				start = p;
-  				finish = p + x.size();
-  				end_of_storage = p + x.size();
+  				for (const_iterator i = x.begin(); i != x.end(); i++, p++)
+					this->_alloc.construct(p, *i);
+  				this->_finish = this->_start + x.size();
+  				this->_end_of_storage = p + x.size();
 			}
-*/
+
 			inline	~vector( void )
 			{
 				for( pointer p = this->_start ; p != this->_finish; p++ )
@@ -172,7 +170,45 @@ namespace ft {
 
 			inline void	resize( size_type sz, T c = T() )
 			{
-				
+				if ( sz > capacity() )
+				{
+					vector<T> tmp(*this);
+					size_type n = 0;
+
+					for ( iterator it = begin(); it != end(); it++ )
+						this->_alloc.destroy( &(*it) );
+					this->_alloc.deallocate( this->_start, capacity() );
+					this->_start = _alloc.allocate( sz * 2 );
+					this->_end_of_storage = this->_start + sz * 2;
+					for ( iterator it = begin(); n < sz; it++, n++ )
+					{
+						if ( n < tmp.size() )
+							this->_alloc.construct( &(*it), tmp[n] );
+						else
+							this->_alloc.construct( &(*it), c );
+					}
+					this->_finish = this->_start + n;
+				}
+				else
+				{
+					if ( size() > sz )
+					{
+						while ( size() > sz )
+						{
+							this->_alloc.destroy( this->_finish - 1 );
+							this->_alloc.construct( this->_finish - 1, c );
+							(this->_finish)--;
+						}
+					}
+					else
+					{
+						while ( size() < sz )
+						{
+							this->_alloc.construct( this->_finish, c );
+							(this->_finish)++;
+						}
+					}
+				}
 			}
 
 			/* @member capacity()
@@ -337,24 +373,20 @@ namespace ft {
 			 *
 			 * @return iterator*/
 
-			iterator	insert( iterator position, const T& x )
-			{
-				
-			}
+			iterator	insert( iterator position, const T& x );
 
 			/* @member erase()
 			 *
-			 * @brief erase from an iterator to the end of the current instance
+			 * @brief erase an elem (iterator) from current instance
 			 *
 			 * @return iterator*/
 
 			iterator	erase( iterator pos )
 			{
-				if ( pos == end() )
-					return end();
-				this->_alloc.destroy( &(*pos) );
+				erase( pos, pos + 1 );
 				return pos;
 			}
+
 			/* @member erase()
 			 *
 			 * @brief erase a range of iterators from current instance
@@ -363,8 +395,18 @@ namespace ft {
 
 			iterator	erase( iterator first, iterator last )
 			{
-				if ( first == last )
-					return last;
+				iterator	tmpFirst = first;
+				iterator	endIt = end();
+
+				for ( ; last != endIt; tmpFirst++, last++ )
+				{
+					this->_alloc.destroy( &(*tmpFirst) );
+					this->_alloc.construct( &(*tmpFirst), *last );
+				}
+				this->_finish = &(*tmpFirst);
+				while ( tmpFirst++ != endIt )
+					this->_alloc.destroy( &(*tmpFirst) );
+				return first;
 			}
 
 			/* @member swap()
@@ -374,9 +416,7 @@ namespace ft {
 			 * @return void*/
 
 
-			void	swap( vector<T, Allocator>	& other )
-			{
-			}
+			void	swap( vector<T, Allocator>	& other );
 
 			/* @member clear()
 			 *
