@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/03 14:16:44 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/03 21:05:36 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,37 @@ namespace ft {
 			pointer			_finish;
 			pointer			_end_of_storage;
 
-			difference_type	_hdlCapacity;
+			inline void	_realloc( size_type sz, bool construct, T c = T() )
+			{
+				vector<T> tmp(*this);
+				size_type n = 0;
+
+				for ( iterator it = begin(); it != end(); it++ )
+					this->_alloc.destroy( &(*it) );
+				this->_alloc.deallocate( this->_start, capacity() );
+				this->_start = _alloc.allocate( sz );
+				this->_end_of_storage = this->_start + sz;
+				for ( iterator it = begin(); n < sz; it++, n++ )
+				{
+					if ( n < tmp.size() )
+						this->_alloc.construct( &(*it), tmp[n] );
+					else if ( construct )
+						this->_alloc.construct( &(*it), c );
+					else
+						break ;
+				}
+				this->_finish = this->_start + n;
+			}
+
+			inline size_type _hdlCapacity( size_type n )
+			{
+				if ( capacity() == 0 )
+					return 1;
+				else if ( n > capacity() * 2 )
+					return n + capacity();
+				else
+					return capacity() * 2;
+			}
 
 		public:
 
@@ -82,7 +112,7 @@ namespace ft {
   				for (const_iterator i = x.begin(); i != x.end(); i++, p++)
 					this->_alloc.construct(p, *i);
   				this->_finish = this->_start + x.size();
-  				this->_end_of_storage = p + x.size();
+  				this->_end_of_storage = this->_finish;
 			}
 
 			inline	~vector( void )
@@ -151,9 +181,8 @@ namespace ft {
 				return this->_finish - this->_start;
 			}
 
-			/* @member max_size()
-			 *
-			 * @brief the max_size can be stored in this instance
+
+			/* @brief the max_size can be stored in this instance
 			 *
 			 * @return size_type*/
 
@@ -164,50 +193,30 @@ namespace ft {
 
 			/* @member resize()
 			 *
-			 * @brief
+			 * @brief change the size of the vector and realloc if there aren't
+			 *  place.
 			 *
 			 * @return void*/
 
 			inline void	resize( size_type sz, T c = T() )
 			{
+				if ( sz > max_size() )
+					throw std::length_error("std::length_error");
 				if ( sz > capacity() )
-				{
-					vector<T> tmp(*this);
-					size_type n = 0;
-
-					for ( iterator it = begin(); it != end(); it++ )
-						this->_alloc.destroy( &(*it) );
-					this->_alloc.deallocate( this->_start, capacity() );
-					this->_start = _alloc.allocate( sz );
-					this->_end_of_storage = this->_start + sz;
-					for ( iterator it = begin(); n < sz; it++, n++ )
-					{
-						if ( n < tmp.size() )
-							this->_alloc.construct( &(*it), tmp[n] );
-						else
-							this->_alloc.construct( &(*it), c );
-					}
-					this->_finish = this->_start + n;
-				}
+					_realloc( sz, true, c );
 				else
 				{
-					if ( size() > sz )
-					{
 						while ( size() > sz )
 						{
 							this->_alloc.destroy( this->_finish - 1 );
-							this->_alloc.construct( this->_finish - 1, c );
 							(this->_finish)--;
 						}
-					}
-					else
-					{
+
 						while ( size() < sz )
 						{
 							this->_alloc.construct( this->_finish, c );
 							(this->_finish)++;
 						}
-					}
 				}
 			}
 
@@ -235,11 +244,18 @@ namespace ft {
 
 			/* @member reserve()
 			 *
-			 * @brief
+			 * @brief change the capacity of the vector and realloc if there
+			 *	aren't place
 			 *
 			 * @return void*/
 
-			inline void	reserve( size_type n );
+			inline void	reserve( size_type n )
+			{
+				if ( n > max_size() )
+					throw std::length_error("std::length_error");
+				if ( n > capacity() )
+					_realloc( n, false );
+			}
 
 
 			// ===== ELEMENT ACCESS =====
@@ -357,7 +373,12 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			void push_back( const T& x );
+			inline void push_back( const T& x )
+			{
+				if ( size() == capacity() )
+					reserve( _hdlCapacity( size() + 1 ) );
+				this->_alloc.construct( this->_finish++, x );
+			}
 
 			/* @member pop_back()
 			 *
@@ -365,15 +386,35 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			void pop_back( void );
+			inline void pop_back( void )
+			{
+				if ( begin() != end() )
+					this->_alloc.destroy( --(this->_finish) );
+			}
 
 			/* @member insert()
 			 *
-			 * @brief insert at an iterator position
+			 * @brief insert value before the position
 			 *
 			 * @return iterator*/
 
-			iterator	insert( iterator position, const T& x );
+			iterator	insert( iterator position, const T& x )
+			{
+				const size_type n = position - begin();
+
+				push_back(T());
+				
+				reverse_iterator	pos( iterator( this->_start + n ) );
+
+				for ( reverse_iterator rit = rbegin() + 1; rit != pos; rit++ )
+				{
+					this->_alloc.destroy( &(*(rit.base())) );
+					this->_alloc.construct( &(*rit.base()), *rit );
+				}
+				this->_alloc.destroy( &(*pos.base()) );
+				this->_alloc.construct( &(*pos.base()), x );
+				return this->_start + n;
+			}
 
 			/* @member erase()
 			 *
