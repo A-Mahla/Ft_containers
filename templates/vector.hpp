@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/03 14:10:40 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/03 14:16:44 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,8 @@ namespace ft {
 					for ( iterator it = begin(); it != end(); it++ )
 						this->_alloc.destroy( &(*it) );
 					this->_alloc.deallocate( this->_start, capacity() );
-					this->_start = _alloc.allocate( sz * 2 );
-					this->_end_of_storage = this->_start + sz * 2;
+					this->_start = _alloc.allocate( sz );
+					this->_end_of_storage = this->_start + sz;
 					for ( iterator it = begin(); n < sz; it++, n++ )
 					{
 						if ( n < tmp.size() )

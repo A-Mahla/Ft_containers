@@ -42,6 +42,7 @@ void	beginAndEnd( void )
 
 }
 
+#include<vector>
 void	capacityTest( void )
 {
 	std::cout << "\t\tTEST size() / max_size() / capacity() / empty()\n\n";
@@ -130,7 +131,6 @@ void	accessConstruct( void )
 
 }
 
-#include<vector>
 void	modifier( void )
 {
 
