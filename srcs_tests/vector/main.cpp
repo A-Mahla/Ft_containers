@@ -20,19 +20,51 @@ void	vectorConstruct( void )
 	vector<double> c(10000, 10);
 	vector<std::string> d(10000000, "");
 
-	vector<int >::const_iterator	it = a.end();
+	vector<int> e(10, 999);
+	vector<int> f;
+
+	f = e;
+	for ( vector<int>::iterator it = f.begin(); it != f.end(); it++ )
+		std::cout << *it << std::endl;
+
+	std::cout << std::endl;
+
+	for ( vector<int>::iterator it = e.begin(); it != e.end(); it++ )
+		std::cout << *it << std::endl;
+
+	std::cout << std::endl << "test assign" << std::endl << std::endl;
+	vector<char> characters;
+	std::cout << "capacity character : " << characters.capacity() << std::endl;
+	std::cout << "size character : " << characters.size() << std::endl;
+ 
+
+    characters.assign(6, 'a');
+	for ( vector<char>::iterator it = characters.begin(); it != characters.end(); it++ )
+		std::cout << *it << std::endl;
+	std::cout << "capacity character : " << characters.capacity() << std::endl;
+	std::cout << "size character : " << characters.size() << std::endl;
+ 
+	const std::string extra(100000000, 'b');
+	characters.assign(extra.begin(), extra.end());
+	std::cout << "capacity character : " << characters.capacity() << std::endl;
+	std::cout << "size character : " << characters.size() << std::endl;
+ 
+	vector<char> g(extra.begin(), extra.end());
+	std::cout << "capacity g : " << g.capacity() << std::endl;
+	std::cout << "size g : " << g.size() << std::endl;
+
 }
 
 void	beginAndEnd( void )
 {
 	std::cout << "\t\tTEST begin() / end()\n\n";
 	vector<int> a(10000, 10);
-	for ( vector<int>::iterator it = a.end(); it != a.begin(); --it )
+	for ( vector<int>::iterator it = a.end() - 1; it != a.begin(); it-- )
 		std::cout << *it;
 	std::cout << std::endl;
 	
 	vector<std::string> b(1000, "yo");
-	for ( vector<std::string>::iterator it = b.end(); --it != b.begin();)
+	for ( vector<std::string>::iterator it = b.begin(); it != b.end(); it++ )
 		std::cout << *it;
 	std::cout << std::endl;
 
@@ -42,7 +74,6 @@ void	beginAndEnd( void )
 
 }
 
-#include<vector>
 void	capacityTest( void )
 {
 	std::cout << "\t\tTEST size() / max_size() / capacity() / empty()\n\n";
@@ -213,6 +244,8 @@ void	modifier( void )
 	std::cout << "capacity d : " << d.capacity() << std::endl;
 	std::cout << "size d : " << d.size() << std::endl;
 
+	std::cout << "test pop_back()" << std::endl;
+
 	for ( int i = 0; i < 10; i++ )
 		d.pop_back();
 	for ( vector<int>::iterator it = d.begin(); it != d.end(); it++ )
@@ -220,27 +253,48 @@ void	modifier( void )
 	std::cout << "capacity d : " << d.capacity() << std::endl;
 	std::cout << "size d : " << d.size() << std::endl;
 
+	std::cout << "test insert(pos, x) " << std::endl;
+
 	d.insert(d.begin(), 400);
 	for ( vector<int>::iterator it = d.begin(); it != d.end(); it++ )
 		std::cout << *it << std::endl;
 	std::cout << "capacity d : " << d.capacity() << std::endl;
 	std::cout << "size d : " << d.size() << std::endl;
 
+	std::cout << std::endl << "test insert(pos, x) " << std::endl;
 	d.insert(d.end(), 9800);
 	for ( vector<int>::iterator it = d.begin(); it != d.end(); it++ )
 		std::cout << *it << std::endl;
 	std::cout << "capacity d : " << d.capacity() << std::endl;
 	std::cout << "size d : " << d.size() << std::endl;
 
+	std::cout << std::endl << "test insert(pos, x) " << std::endl;
 	vector<int>::iterator it = d.begin();
 	for ( int i = 5; i; i--, it++ )
 		;
-	std::cout << *d.insert(it, 11111) << std::endl;
+	std::cout << *it << std::endl;
+	d.insert(it, 6, 11111);
+	std::cout << "last" << std::endl;
 	for ( vector<int>::iterator it = d.begin(); it != d.end(); it++ )
 		std::cout << *it << std::endl;
 	std::cout << "capacity d : " << d.capacity() << std::endl;
 	std::cout << "size d : " << d.size() << std::endl;
 
+	std::cout << std::endl << "test insert(pos, n, x) " << std::endl;
+
+	it = d.begin();
+	for ( int i = 5; i; i--, it++ )
+		;
+	
+	d.insert(it, 1000000, 999);
+	std::cout << "capacity d : " << d.capacity() << std::endl;
+	std::cout << "size d : " << d.size() << std::endl;
+
+	vector<int> e;
+
+	e.insert( e.begin(), d.begin(), d.end() );
+	std::cout << "capacity e : " << e.capacity() << std::endl;
+	std::cout << "size e : " << e.size() << std::endl;
 	
 
 
@@ -248,10 +302,11 @@ void	modifier( void )
 
 int main(void)
 {
-//	vectorConstruct();
-//	beginAndEnd();
-//	capacityTest();
-//	accessConstruct();
+	vectorConstruct();
+	beginAndEnd();
+	capacityTest();
+	accessConstruct();
 	modifier();
 	return 0;
 }
+

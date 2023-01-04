@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/03 21:05:36 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/04 20:39:13 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,46 +74,95 @@ namespace ft {
 				if ( capacity() == 0 )
 					return 1;
 				else if ( n > capacity() * 2 )
-					return n + capacity();
+					return n;
 				else
 					return capacity() * 2;
 			}
 
-		public:
+		protected:
 
-			vector( const Allocator& = Allocator() )
-				: _start(NULL), _finish(NULL), _end_of_storage(NULL)
+			/* @member get_allocator()
+			 *
+			 * @brief replaces the contents of the container by n * u 
+			 *
+			 * @return allocator_type*/
+
+			allocator_type	get_allocator( void ) const
 			{
-				_start = NULL;
-				_finish = NULL;
-				_end_of_storage = NULL;
+				return ( this->_alloc );
 			}
 
-			explicit	vector( size_type n, const T& value = T(),
-					const Allocator& = Allocator() )
+		public:
+
+			// ===== CONSTRUCT/COPY/DESTROY =====
+
+			/* @member vector()
+			 *
+			 * @brief construct by default
+			 *
+			 * @return NO*/
+
+			inline explicit	vector( const Allocator& alloc = Allocator() )
+				: _alloc(alloc), _start(NULL), _finish(NULL), _end_of_storage(NULL)
+			{ }
+
+			/* @member vector()
+			 *
+			 * @brief construct with size and value
+			 *
+			 * @return NO*/
+
+			inline explicit	vector( size_type n, const T& value = T(),
+					const Allocator& alloc = Allocator() )
 			{
+				this->_alloc = alloc;
 				this->_start = this->_alloc.allocate(n);
-				this->_finish = _start + n;
+				this->_finish = this->_start + n;
 				for ( pointer x = this->_start; x != this->_finish; x++ )
 					this->_alloc.construct(x, value);
 				this->_end_of_storage = _finish;
 			}
 
-//			template <class InputIterator>
-//				vector(InputIterator first, InputIterator last,
-//				const Allocator& = Allocator())
-//			{}
+			/* @member vector()
+			 *
+			 * @brief construct with a range of iterators
+			 *
+			 * @return NO*/
 
-			vector( const vector<T, Allocator>&	x )
+			template <class InputIterator>
+			inline	vector(InputIterator first,
+				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
+				const Allocator& alloc = Allocator())
 			{
-				this->_start = this->_alloc.allocate(x.size());
-				pointer	p = this->_start;
+				this->_alloc = alloc;
+				this->_start = this->_alloc.allocate( last - first );
+				this->_finish = this->_start;
+				this->_end_of_storage = this->_start + (last - first );
+				insert( begin(), first, last );
+			}
 
-  				for (const_iterator i = x.begin(); i != x.end(); i++, p++)
-					this->_alloc.construct(p, *i);
+			/* @member vector()
+			 *
+			 * @brief construct by copy
+			 *
+			 * @return NO*/
+
+			inline	vector( const vector<T, Allocator>&	x )
+			{
+				pointer p = this->_alloc.allocate(x.size());
+
+  				for ( size_type i = 0; i < x.size(); i++ )
+					this->_alloc.construct(p + i, x[i]);
+				this->_start = p;
   				this->_finish = this->_start + x.size();
   				this->_end_of_storage = this->_finish;
 			}
+
+			/* @member ~vector()
+			 *
+			 * @brief destruct by default
+			 *
+			 * @return NO*/
 
 			inline	~vector( void )
 			{
@@ -121,6 +170,54 @@ namespace ft {
 					this->_alloc.destroy(p);
 				this->_alloc.deallocate(this->_start, capacity());
 			}
+
+			/* @member operator=()
+			 *
+			 * @brief Vector assignment operator
+			 *
+			 * @return NO*/
+
+			vector<T,Allocator>&	operator=( const vector<T,Allocator>& x )
+			{
+				if ( this != &x )
+				{
+					vector<T ,Allocator> tmp(x);
+
+					swap(tmp);
+				}
+				return *this;
+			}
+
+			/* @member assign()
+			 *
+			 * @brief replaces the contents of the container by a range of iterators 
+			 *
+			 * @return void*/
+
+			template <class InputIterator>
+			inline void	assign(InputIterator first,
+				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last)
+			{
+				for ( pointer p = this->_start; p != this->_finish; p++ )
+					this->_alloc.destroy( p );
+				this->_finish = this->_start;
+				insert( begin(), first, last );
+			}
+
+			/* @member assign()
+			 *
+			 * @brief replaces the contents of the container by n * u 
+			 *
+			 * @return void*/
+
+			inline void	assign( size_type n, const T& u )
+			{
+				for ( pointer p = this->_start; p != this->_finish; p++ )
+					this->_alloc.destroy( p );
+				this->_finish = this->_start;
+				insert( begin(), n, u );
+			}
+
 
 			// ===== ITERATORS =====
 
@@ -400,20 +497,99 @@ namespace ft {
 
 			iterator	insert( iterator position, const T& x )
 			{
+
 				const size_type n = position - begin();
 
 				push_back(T());
 				
+				// iterator position in new vector()
 				reverse_iterator	pos( iterator( this->_start + n ) );
 
+				// memmove all data from position to position + n at the end
 				for ( reverse_iterator rit = rbegin() + 1; rit != pos; rit++ )
 				{
 					this->_alloc.destroy( &(*(rit.base())) );
 					this->_alloc.construct( &(*rit.base()), *rit );
 				}
+
+				// insert data x
 				this->_alloc.destroy( &(*pos.base()) );
 				this->_alloc.construct( &(*pos.base()), x );
 				return this->_start + n;
+			}
+
+			/* @member insert()
+			 *
+			 * @brief insert n * value before the position
+			 *
+			 * @return iterator*/
+
+			inline void	insert( iterator position, size_type n, const T& x )
+			{
+				const size_type	nPos = position - begin();
+				size_type		nEnd = end() - begin();
+
+				// resize if > capacity() and construct
+				if ( nEnd + n > capacity() )
+					reserve( nEnd + n );
+				for ( size_type	i = 0; i < n; i++ )
+					this->_alloc.construct( this->_finish++, x );
+
+				// iterator position in new vector()
+				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
+
+				// memmove all data from position to position + n at the end
+				std::cout << std::endl;
+				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
+				{
+					this->_alloc.destroy( &*rit );
+					this->_alloc.construct( &*rit, *(this->_start + --nEnd ) );
+				}
+
+				// insert data n * x
+				while ( n-- )
+				{
+					this->_alloc.destroy( this->_start + nPos + n);
+					this->_alloc.construct( this->_start + nPos + n, x );
+				}
+			}
+
+			/* @member insert()
+			 *
+			 * @brief insert n * value before the position
+			 *
+			 * @return iterator*/
+
+			template < typename InputIterator >
+			inline void	insert( iterator position, InputIterator first,
+				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last )
+			{
+				const size_type	nPos = position - begin();
+				size_type		n = last - first;
+				size_type		nEnd = end() - begin();
+
+				// resize if > capacity() and construct
+				if ( nEnd + n > capacity() )
+					reserve( nEnd + n );
+				for ( size_type	i = 0; i < n; i++ )
+					this->_alloc.construct( this->_finish++, T() );
+
+				// iterator position in new vector()
+				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
+
+				// memmove all data from position to position + n at the end
+				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
+				{
+					this->_alloc.destroy( &*rit );
+					this->_alloc.construct( &*rit, *(this->_start + --nEnd ) );
+				}
+
+				// insert range of iterator [first, last)
+				while ( n-- )
+				{
+					this->_alloc.destroy( this->_start + nPos + n);
+					this->_alloc.construct( this->_start + nPos + n, *(--last) );
+				}
 			}
 
 			/* @member erase()
@@ -456,8 +632,22 @@ namespace ft {
 			 *
 			 * @return void*/
 
+			inline void	swap( vector<T, Allocator>	& other )
+			{
+				pointer	tmp[3] = { other._start, other._finish, other._end_of_storage };
+				allocator_type	tmpAlloc = other._alloc;
 
-			void	swap( vector<T, Allocator>	& other );
+				other._start = this->_start;
+				other._finish = this->_finish;
+				other._end_of_storage = this->_end_of_storage;
+				other._alloc = this->_alloc;
+
+				this->_start = tmp[0];
+				this->_finish = tmp[1];
+				this->_end_of_storage = tmp[2];
+				this->_alloc = tmpAlloc;
+
+			}
 
 			/* @member clear()
 			 *
@@ -472,8 +662,37 @@ namespace ft {
 				this->_finish = this->_start;
 			}
 
-
 	};
+
+		template <class T, class Allocator>
+		bool operator==(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+		template <class T, class Allocator>
+		bool operator< (const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+		template <class T, class Allocator>
+		bool operator!=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+		template <class T, class Allocator>
+		bool operator> (const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+		template <class T, class Allocator>
+		bool operator>=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+		template <class T, class Allocator>
+		bool operator<=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y);
+
+
+		//===== SPECIALISED ALGORITHMS =====
+
+		template <class T, class Allocator>
+		void swap(vector<T,Allocator>& x, vector<T,Allocator>& y);
 }
 
 #endif
