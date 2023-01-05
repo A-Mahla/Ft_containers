@@ -6,7 +6,7 @@
 /*   By: amahla <amahla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 08:09:59 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/04 15:20:21 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/05 11:26:24 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,6 @@ namespace ft {
 		for ( ; first1 != last1 && p(*first1, *first2); ++first1, ++first2 )
 			;
 		return first1 == last1;
-	}
-
-	template< typename T >
-	void	swap( T &a, T &b )
-	{
-		T	tmp = a;
-		a = b;
-		b = tmp;
 	}
 
 }

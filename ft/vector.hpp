@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/04 20:39:13 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/05 11:28:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -539,7 +539,6 @@ namespace ft {
 				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
 
 				// memmove all data from position to position + n at the end
-				std::cout << std::endl;
 				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
 				{
 					this->_alloc.destroy( &*rit );
@@ -665,34 +664,55 @@ namespace ft {
 	};
 
 		template <class T, class Allocator>
-		bool operator==(const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
+		inline bool operator==( const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y )
+		{
+			return x.size() == y.size()
+				&& ft::equal(x.begin(), x.end(), y.begin());
+		}
 
 		template <class T, class Allocator>
-		bool operator< (const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
+		inline bool	operator<( const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y )
+		{
+			return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+		}
 
 		template <class T, class Allocator>
-		bool operator!=(const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
+		inline bool	operator!=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y)
+		{
+			return !(x == y);
+		}
 
 		template <class T, class Allocator>
-		bool operator> (const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
+		inline bool	operator>(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y)
+		{
+			return lexicographical_compare(y.begin(), y.end(), x.begin(), x.end());
+		}
 
 		template <class T, class Allocator>
-		bool operator>=(const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
+		inline bool	operator>=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y)
+		{
+			return !(x < y);
+		}
 
 		template <class T, class Allocator>
-		bool operator<=(const vector<T,Allocator>& x,
-			const vector<T,Allocator>& y);
-
+		inline bool	operator<=(const vector<T,Allocator>& x,
+			const vector<T,Allocator>& y)
+		{
+			return !(x > y);
+		}
 
 		//===== SPECIALISED ALGORITHMS =====
 
 		template <class T, class Allocator>
-		void swap(vector<T,Allocator>& x, vector<T,Allocator>& y);
+		inline void	swap(vector<T,Allocator>& x, vector<T,Allocator>& y)
+		{
+			x.swap(y);
+		}
 }
 
 #endif

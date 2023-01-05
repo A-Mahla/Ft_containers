@@ -1,19 +1,37 @@
-# include <iostream>
-# include "metaprog.hpp"
+#include <iostream>
+#include <string>
+#include <deque>
 
-//using namespace std;
-//# include <vector> 
+#include <ctime>
 
-# include "vector.hpp"
-using namespace ft;
-//
+#if USE_STL
+
+	#include <map>
+	#include <stack>
+	#include <vector>
+	using namespace std;
+	#define X 1
+
+#else
+
+//	#include <map.hpp>
+	#include <stack.hpp>
+	#include <vector.hpp>
+	using namespace ft;
+	#define X 0
+
+#endif
+
+#include <stdlib.h>
+
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
 
 struct Test {};
 
-
 /*====================VECTOR_TEST=======================*/
 
-void	vectorConstruct( void )
+void	vectorConstructVector( void )
 {
 	vector<float> b(1);
 	vector< int >	a(10);
@@ -55,7 +73,7 @@ void	vectorConstruct( void )
 
 }
 
-void	beginAndEnd( void )
+void	beginAndEndVector( void )
 {
 	std::cout << "\t\tTEST begin() / end()\n\n";
 	vector<int> a(10000, 10);
@@ -74,7 +92,7 @@ void	beginAndEnd( void )
 
 }
 
-void	capacityTest( void )
+void	capacityTestVector( void )
 {
 	std::cout << "\t\tTEST size() / max_size() / capacity() / empty()\n\n";
 	vector<char> a(10000, 10);
@@ -170,7 +188,7 @@ void	capacityTest( void )
 	std::cout << "capacity : " << g.capacity() << std::endl;
 }
 
-void	accessConstruct( void )
+void	accessConstructVector( void )
 {
 	std::cout << "\t\tTEST operator[]() / at()\n\n";
 
@@ -195,7 +213,7 @@ void	accessConstruct( void )
 
 }
 
-void	modifier( void )
+void	modifierVector( void )
 {
 
 	std::cout << "test cleared" << std::endl;
@@ -300,13 +318,96 @@ void	modifier( void )
 
 }
 
+void	comparisonVector( void )
+{
+	vector<int> a(10, 9);
+	vector<int> b(10, 8);
+	vector<int> d(11, 9);
+	vector<int> e(10, 9);
+
+	if ( a == e )
+		std::cout << "a and e is same (right)" << std::endl;
+	else
+		std::cout << "a and e is not same" << std::endl;
+	if ( a != b )
+		std::cout << "a and b is not same (right)" << std::endl;
+	else
+		std::cout << "a and b is same" << std::endl;
+	if ( b < a )
+		std::cout << "b < a (right)" << std::endl;
+	else
+		std::cout << "a < b" << std::endl;
+	if ( d > a )
+		std::cout << "d > a (right)" << std::endl;
+	else
+		std::cout << "d < a" << std::endl;
+	if ( a >= e )
+		std::cout << "a >= e (right)" << std::endl;
+	else
+		std::cout << "a < e" << std::endl;
+	if ( a <= e )
+		std::cout << "a <= e (right)" << std::endl;
+	else
+		std::cout << "a > e" << std::endl;
+	if ( b <= a )
+		std::cout << "b <= a (right)" << std::endl;
+	else
+		std::cout << "a < b" << std::endl;
+	if ( d >= a )
+		std::cout << "d >= a (right)" << std::endl;
+	else
+		std::cout << "d < a" << std::endl;
+
+}
+
+/*=====================STAC==============================*/
+
+void	stackTest( void )
+{
+	stack<std::string>	test;
+
+	if ( test.empty() )
+		std::cout << "test is empty (right)" << std::endl;
+
+	test.push( "yoooooooo" );
+	std::cout << test.top() << std::endl;
+	test.push( "Bien ou bien" );
+	std::cout << test.top() << std::endl;
+	std::cout << test.size() << std::endl;
+	test.pop();
+	std::cout << test.top() << std::endl;
+	std::cout << test.size() << std::endl;
+}
+
 int main(void)
 {
-	vectorConstruct();
-	beginAndEnd();
-	capacityTest();
-	accessConstruct();
-	modifier();
+	clock_t start = clock();
+
+
+	// ==== VECTOR ====
+
+	vectorConstructVector();
+	beginAndEndVector();
+	capacityTestVector();
+	accessConstructVector();
+	modifierVector();
+	comparisonVector();
+
+	// ==== STACK ====
+
+	stackTest();
+
+	clock_t end = clock();
+
+	double elapsed_time = double(end - start) / CLOCKS_PER_SEC;
+
+	if ( X )
+		std::cout <<  "STL :";
+	else
+		std::cout <<  "MY CUSTOM CONTAINER :";
+	std::cout << "Elapsed time: ";
+	std::cout << elapsed_time << " seconds" << std::endl;
+
 	return 0;
 }
 
