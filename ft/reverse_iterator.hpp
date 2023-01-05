@@ -6,12 +6,12 @@
 /*   By: amahla <amahla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 08:24:04 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/04 20:35:08 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/05 13:27:19 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __REVERSE_ITERATOR__
-# define __REVERSE_ITERATOR__
+#ifndef __REVERSE_ITERATOR_HPP
+# define __REVERSE_ITERATOR_HPP
 
 # include "metaprog.hpp"
 # include <iterator>

@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/02 14:53:21 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/05 13:28:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace ft {
 
 
 	template< typename T >
-	class randomIterator {
+	class random_iterator {
 
 		public:
 
@@ -34,15 +34,15 @@ namespace ft {
 
 		public:
 
-			randomIterator( void ) : it(NULL) { }
+			random_iterator( void ) : it(NULL) { }
 
-			randomIterator( pointer rhs ) : it(rhs) { }
+			random_iterator( pointer rhs ) : it(rhs) { }
 
-			randomIterator( const randomIterator & rhs ) : it(rhs.it) { }
+			random_iterator( const random_iterator & rhs ) : it(rhs.it) { }
 
-			~randomIterator() {}
+			~random_iterator() {}
 
-			inline randomIterator	& operator=( const randomIterator & rhs )
+			inline random_iterator	& operator=( const random_iterator & rhs )
 			{
 				if ( this != &rhs )
 					this->it = rhs.it;
@@ -59,45 +59,45 @@ namespace ft {
 				 return this->it;
 			}
 
-			inline bool		operator==( const randomIterator & rhs ) const
+			inline bool		operator==( const random_iterator & rhs ) const
 			{
 				return this->it == rhs.it;
 			}
 
-			inline bool		operator!=( const randomIterator & rhs ) const
+			inline bool		operator!=( const random_iterator & rhs ) const
 			{
 				return !(this->it == rhs.it);
 			}
 
-			inline randomIterator	& operator++( void )
+			inline random_iterator	& operator++( void )
 			{
 				this->it++;
 				return *this;
 			}
 
-			inline randomIterator	operator++( int )
+			inline random_iterator	operator++( int )
 			{
-				randomIterator	tmp = it;
+				random_iterator	tmp = it;
 
 				this->it++;
 				return tmp;
 			}
 
-			inline randomIterator	& operator--( void )
+			inline random_iterator	& operator--( void )
 			{
 				this->it--;
 				return *this;
 			}
 
-			inline randomIterator	operator--( int )
+			inline random_iterator	operator--( int )
 			{
-				randomIterator	tmp = it;
+				random_iterator	tmp = it;
 
 				this->it--;
 				return tmp;
 			}
 
-			inline randomIterator	& operator+=( const long int n )
+			inline random_iterator	& operator+=( const long int n )
 			{
 				difference_type	m = n;
 
@@ -115,34 +115,34 @@ namespace ft {
 				return *this;
 			}
 
-			inline randomIterator	& operator-=( const long int n )
+			inline random_iterator	& operator-=( const long int n )
 			{
 				return *this += -n;
 			}
 
-			inline randomIterator	operator+( const long int n ) const
+			inline random_iterator	operator+( const long int n ) const
 			{
-				randomIterator	tmp = this->it;
+				random_iterator	tmp = this->it;
 
 				return tmp += n;
 			}
 
-			friend inline randomIterator	operator+( const long int n,
-				const randomIterator & lhs )
+			friend inline random_iterator	operator+( const long int n,
+				const random_iterator & lhs )
 			{
-				randomIterator	tmp = lhs.it;
+				random_iterator	tmp = lhs.it;
 
 				return tmp += n;
 			}
 
-			inline randomIterator	operator-( const long int n ) const
+			inline random_iterator	operator-( const long int n ) const
 			{
-				randomIterator tmp = this->it;
+				random_iterator tmp = this->it;
 
 				return tmp -= n;
 			}
 
-			inline difference_type	operator-( const randomIterator & rhs ) const
+			inline difference_type	operator-( const random_iterator & rhs ) const
 			{
 				return this->it - rhs.it;
 			}
@@ -152,29 +152,29 @@ namespace ft {
 				return *(this->it + n);
 			}
 
-			inline bool		operator<( const randomIterator & rhs ) const
+			inline bool		operator<( const random_iterator & rhs ) const
 			{
 				return rhs.it - this->it > 0;
 			}
 
-			inline bool		operator>( const randomIterator & rhs ) const
+			inline bool		operator>( const random_iterator & rhs ) const
 			{
 				return rhs < *this;
 			}
 
-			inline bool		operator>=( const randomIterator & rhs ) const
+			inline bool		operator>=( const random_iterator & rhs ) const
 			{
 				return !(rhs < *this);
 			}
 
-			inline bool		operator<=( const randomIterator & rhs ) const
+			inline bool		operator<=( const random_iterator & rhs ) const
 			{
 				return !(rhs > *this);
 			}
 
-			operator randomIterator< const T >( void ) const
+			operator random_iterator< const T >( void ) const
 			{
-				return randomIterator< const T >(this->it);
+				return random_iterator< const T >(this->it);
 			}
 
 	};

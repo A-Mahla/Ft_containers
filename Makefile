@@ -6,7 +6,7 @@
 #    By: meudier <meudier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/17 21:07:29 by amahla            #+#    #+#              #
-#    Updated: 2023/01/05 13:25:46 by amahla           ###   ########.fr        #
+#    Updated: 2023/01/05 17:28:33 by amahla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,5 +84,5 @@ re					:	fclean
 
 .PHONY				:	all clean fclean re debug diff
 
--include	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR:.cpp=.d))
--include	$(addprefix $(OUTDIR)/,$(SRCS_VECTOR_STD:.cpp=_custom.d))
+-include	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=.d))
+-include	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=_custom.d))

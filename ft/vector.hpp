@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/05 11:28:29 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/05 13:29:07 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ namespace ft {
 			typedef std::ptrdiff_t									difference_type;
 			typedef typename Allocator::pointer						pointer;
 			typedef typename Allocator::const_pointer				const_pointer;
-			typedef typename ft::randomIterator<T>					iterator;
-			typedef typename ft::randomIterator<const T>			const_iterator;
+			typedef typename ft::random_iterator<T>					iterator;
+			typedef typename ft::random_iterator<const T>			const_iterator;
 			typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
