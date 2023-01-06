@@ -6,12 +6,14 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/05 17:54:06 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/06 16:51:35 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __MAP_HPP__
 # define __MAP_HPP__
+
+# include "rb_tree.hpp"
 
 namespace ft {
 
@@ -81,22 +83,18 @@ namespace ft {
 
 
 	template< class Key, class T, class Compare = std::less<Key>,
-		class Allocator = std::allocator<std::pair<const Key, T> > >
+		class Allocator = std::allocator< std::pair<const Key, T> > >
 	class map {
 
 		public:
 			typedef Key									key_type;
 			typedef T									mapped_type;
 			typedef pair<const Key, T>					value_type;
-			typedef std::size_t							size_type;
-			typedef std::ptrdiff_t						difference_type;
 			typedef Compare								key_compare;
 			typedef Allocator							allocator_type;
-			typedef typename Allocator::reference		reference;
-			typedef typename Allocator::const_reference	const_reference;
 	
 			class value_compare
-				: public std::binary_function<value_type, value_type, bool>
+				: public std::binary_function< value_type, value_type, bool >
 			{
 	
 				friend class map;
@@ -117,10 +115,26 @@ namespace ft {
 
 		private:
 
-//			typedef typename rb_tree< key_type, mapped_type, 
-	
-			explicit map(const Compare& comp = Compare(),
-				const Allocator& = Allocator());
+			typedef rb_tree< key_type, mapped_type, std::_Select1st<value_type>,
+				key_compare, allocator_type >	btree;
+
+			btree	_tree;
+
+		public:
+
+			typedef typename Allocator::reference		reference;
+			typedef typename Allocator::const_reference	const_reference;
+			typedef typename Allocator::pointer			pointer;
+			typedef typename Allocator::const_pointer	const_pointer;
+			typedef typename btree::size_type			size_type;
+			typedef typename btree::difference_type		difference_type;
+
+			explicit map( const Compare& comp = Compare(),
+				const Allocator& alloc = Allocator() ) : _tree( comp, alloc )
+			{ }
+
+			map(const map<Key, T, Compare, Allocator>&	x ) : _tree( x._tree )
+			{ }
 
 	};
 

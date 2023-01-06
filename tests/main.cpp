@@ -6,7 +6,7 @@
 
 #if USE_STL
 
-//	#include <map>
+	#include <map>
 	#include <stack>
 	#include <vector>
 	using namespace std;
@@ -32,7 +32,7 @@ struct Test {};
 
 /*====================VECTOR_TEST=======================*/
 
-void	vectorConstructVector( void )
+void	constructVector( void )
 {
 	vector<float> b(1);
 	vector< int >	a(10);
@@ -380,6 +380,13 @@ void	stackTest( void )
 	std::cout << test.size() << std::endl;
 }
 
+/*=====================MAP===============================*/
+
+void	constructMap( void )
+{
+	map<char, int> a;
+}
+
 int main(void)
 {
 	clock_t start = clock();
@@ -387,7 +394,7 @@ int main(void)
 
 	// ==== VECTOR ====
 
-	vectorConstructVector();
+/*	constructVector();
 	beginAndEndVector();
 	capacityTestVector();
 	accessConstructVector();
@@ -397,6 +404,11 @@ int main(void)
 	// ==== STACK ====
 
 	stackTest();
+*/
+	// ==== MAP ====
+
+	constructMap();
+
 
 	clock_t end = clock();
 
