@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 14:22:21 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/09 16:31:18 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ namespace ft {
 		Node( const T& x ) : color(black), parent(NULL), left(NULL),
 			right(NULL), content(x)
 		{
+		}
+
+		Node&	operator=( const T& rhs )
+		{
+			if ( this != &rhs )
+			{
+				this->color = rhs.color;
+				this->parent = rhs.parent;
+				this->left = rhs.left;
+				this->right = rhs.right;
+				this->content = rhs.content;
+			}
+			return *this;
 		}
 
 	};
@@ -148,7 +161,7 @@ namespace ft {
 			link_type	_prev( link_type node )
 			{
 				if ( node->left )
-					return _maxTree(node->_left);
+					return _maxTree(node->left);
 				while ( node->parent && node->parent->left == node )
 					node = node->parent;
 				return node->parent;
@@ -157,7 +170,7 @@ namespace ft {
 			link_type	_prev( link_type node ) const
 			{
 				if ( node->left )
-					return _maxTree(node->_left);
+					return _maxTree(node->left);
 				while ( node->parent && node->parent->left == node )
 					node = node->parent;
 				return node->parent;
@@ -215,9 +228,9 @@ namespace ft {
 			{
 				link_type	x = this->_root;
 
-				while ( x && KeyFirst()(x->value) != k )
+				while ( x && KeyFirst()(x->content) != k )
 				{
-					if ( KeyFirst()(x->value) > k )
+					if ( KeyFirst()(x->content) > k )
 						x = x->left;
 					else
 						x = x->right;
@@ -229,9 +242,9 @@ namespace ft {
 			{
 				link_type	x = this->_root;
 
-				while ( x && KeyFirst()(x->value) != k )
+				while ( x && KeyFirst()(x->content) != k )
 				{
-					if ( KeyFirst()(x->value) > k )
+					if ( KeyFirst()(x->content) > k )
 						x = x->left;
 					else
 						x = x->right;
@@ -266,8 +279,9 @@ namespace ft {
 				}
 			}
 
-			void	_deleteNode( link_type node )
+			void	_deleteNode( key_type k )
 			{
+				link_type	node = _find(k);
 				link_type	y;
 				link_type	x;
 
@@ -324,9 +338,11 @@ void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 	const std::string	e_type = "NODE";
 	const std::string	e_colors[2] = {"\x1b[32m", "\x1b[33m"};
 
-	if (is_left)
+	if (is_left == 2)
+		std::cout << " ──";
+	if (is_left == 1)
 		std::cout << prefix << "├──";
-	else
+	else if (is_left == 0 )
 		std::cout << prefix << "└──";
 	if (!node)
 		std::cout << "\x1b[31mNULL\x1b[0m\n";
@@ -348,6 +364,8 @@ void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
 	if (node)
 	{
 		display_tree_content(prefix, node, is_left);
+		if ( is_left == 2 )
+			is_left = 0;
 		if (!is_left)
 		{
 			new_prefix = prefix + "    ";
