@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 16:31:18 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/09 19:23:52 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft {
 		base_pointer	right;
 		T				content;
 
-		Node( const T& x ) : color(black), parent(NULL), left(NULL),
+		Node( const T& x ) : color(red), parent(NULL), left(NULL),
 			right(NULL), content(x)
 		{
 		}
@@ -83,7 +83,18 @@ namespace ft {
 			link_type					_nil;
 			link_type					_root;
 			size_type					_sizeTree;
+			Key							_min;
+			Key							_max;
 
+			inline link_type	_initNil( void )
+			{
+				link_type init = this->_alloc.allocate(1);
+				init->color = black;
+				init->parent = NULL;
+				init->left = NULL;
+				init->right = NULL;
+				return init;
+			}
 
 			inline link_type	_create_node( const value_type x )
 			{
@@ -103,75 +114,91 @@ namespace ft {
 
 			inline void	_deleteTree( link_type& root )
 			{
-				if ( !root )
+				if ( root == this->_nil )
 					return ;
-				if ( root && root->left )
+				if ( root->left != this->_nil )
 					_deleteTree( root->left );
-				if ( root && root->right )
+				if ( root->right != this->_nil )
 					_deleteTree( root->right );
 				_destroyNode( root );
 			}
 
 			link_type	_maxTree( link_type x )
 			{
-				while ( x->right )
+				if ( x == this->_nil )
+					return this->_nil;
+				while ( x->right != this->_nil )
 					x = x->right;
 				return x;
 			}
 
 			link_type	_maxTree( link_type x ) const
 			{
-				while ( x->right )
+				if ( x == this->_nil )
+					return this->_nil;
+				while ( x->right != this->_nil )
 					x = x->right;
 				return x;
 			}
 
 			link_type	_minTree( link_type x )
 			{
-				while ( x->left )
+				if ( x == this->_nil )
+					return this->_nil;
+				while ( x->left != this->_nil )
 					x = x->left;
 				return x;
 			}
 
 			link_type	_minTree( link_type x ) const
 			{
-				while ( x->left )
+				if ( x == this->_nil )
+					return this->_nil;
+				while ( x->left != this->_nil )
 					x = x->left;
 				return x;
 			}
 
 			link_type	_next( link_type node )
 			{
-				if ( node->right )
+				if ( node == this->_nil || KeyFirst()(node->content) == this->_max )
+					return this->_nil;
+				if ( node->right != this->_nil )
 					return _minTree(node->right);
-				while ( node->parent && node->parent->right == node )
+				while ( node->parent != this->_nil && node->parent->right == node )
 					node = node->parent;
 				return node->parent;
 			}
 
 			link_type	_next( link_type node ) const
 			{
-				if ( node->right )
+				if ( node == this->_nil || KeyFirst()(node->content) == this->_max )
+					return this->_nil;
+				if ( node->right != this->_nil )
 					return _minTree(node->right);
-				while ( node->parent && node->parent->right == node )
+				while ( node->parent != this->_nil && node->parent->right == node )
 					node = node->parent;
 				return node->parent;
 			}
 
 			link_type	_prev( link_type node )
 			{
-				if ( node->left )
+				if ( node == this->_nil || KeyFirst()(node->content) == this->_min )
+					return this->_nil;
+				if ( node->left != this->_nil )
 					return _maxTree(node->left);
-				while ( node->parent && node->parent->left == node )
+				while ( node->parent != this->_nil && node->parent->left == node )
 					node = node->parent;
 				return node->parent;
 			}
 
 			link_type	_prev( link_type node ) const
 			{
-				if ( node->left )
+				if ( node == this->_nil || KeyFirst()(node->content) == this->_min )
+					return this->_nil;
+				if ( node->left != this->_nil )
 					return _maxTree(node->left);
-				while ( node->parent && node->parent->left == node )
+				while ( node->parent != this->_nil && node->parent->left == node )
 					node = node->parent;
 				return node->parent;
 			}
@@ -180,14 +207,14 @@ namespace ft {
 			{
 				link_type	x = node->right;
 
-				if ( !x )
+				if ( x == this->_nil )
 					return ;
 
 				node->right = x->left;
-				if ( x->left )
+				if ( x->left != this->_nil )
 					x->left->parent = node;
 				x->parent = node->parent;
-				if ( node->parent )
+				if ( node->parent != this->_nil )
 				{
 					if ( node->parent->left == node )
 						node->parent->left = x;
@@ -204,14 +231,14 @@ namespace ft {
 			{
 				link_type	x = node->left;
 
-				if ( !x )
+				if ( x == this->_nil )
 					return;
 
 				node->left = x->right;
-				if ( x->right )
+				if ( x->right != this->_nil )
 					x->right->parent = node;
 				x->parent = node->parent;
-				if ( node->parent )
+				if ( node->parent != this->_nil )
 				{
 					if ( node->parent->left == node )
 						node->parent->left = x;
@@ -228,7 +255,7 @@ namespace ft {
 			{
 				link_type	x = this->_root;
 
-				while ( x && KeyFirst()(x->content) != k )
+				while ( x != this->_nil && KeyFirst()(x->content) != k )
 				{
 					if ( KeyFirst()(x->content) > k )
 						x = x->left;
@@ -242,7 +269,7 @@ namespace ft {
 			{
 				link_type	x = this->_root;
 
-				while ( x && KeyFirst()(x->content) != k )
+				while ( x != this->_nil && KeyFirst()(x->content) != k )
 				{
 					if ( KeyFirst()(x->content) > k )
 						x = x->left;
@@ -257,7 +284,7 @@ namespace ft {
 				link_type	y = this->_nil;
 				link_type	x = this->_root;
 
-				while ( x )
+				while ( x != this->_nil )
 				{
 					y = x;
 					if ( KeyFirst()(x->content) > KeyFirst()(node->content) )
@@ -266,17 +293,27 @@ namespace ft {
 						x = x->right;
 				}
 
+
 				node->parent = y;
 
-				if ( !y )
+				if ( y == this->_nil )
+				{
 					this->_root = node;
+					this->_min = KeyFirst()(node->content);
+					this->_max = KeyFirst()(node->content);
+				}
 				else
 				{
 					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
 						y->left = node;
 					else
 						y->right = node;
+					if ( KeyFirst()(node->content) < this->_min )
+						this->_min = KeyFirst()(node->content);
+					else if ( KeyFirst()(node->content) > this->_max )
+						this->_max = KeyFirst()(node->content);
 				}
+				this->_sizeTree++;
 			}
 
 			void	_deleteNode( key_type k )
@@ -285,20 +322,20 @@ namespace ft {
 				link_type	y;
 				link_type	x;
 
-				if ( !(node->left) || !(node->right) )
+				if ( node->left == this->_nil || node->right == this->_nil )
 					y = node;
 				else
 					y = _next( node );
 
-				if ( y->left )
+				if ( y->left != this->_nil )
 					x = y->left;
 				else
 					x = y->right;
 
-				if ( x )
+				if ( x != this->_nil )
 					x->parent = y->parent;
 
-				if ( y->parent )
+				if ( y->parent != this->_nil )
 				{
 					if ( y->parent->left == y )
 						y->parent->left = x;
@@ -308,24 +345,34 @@ namespace ft {
 				else
 					this->_root = x;
 
+
+				this->_sizeTree--;
+				if ( this->_sizeTree && this->_max == KeyFirst()(node->content) )
+					this->_max = KeyFirst()(_minTree(this->_root));
+				else if ( this->_sizeTree && this->_min == KeyFirst()(node->content) )
+					this->_min = KeyFirst()(_maxTree(this->_root));
+
 				if ( y != node )
 					node->content = y->content;
 
 				_destroyNode( y );
+
 			}
 
 		public:
 
 			rb_tree( const Compare& comp = Compare(),
 				const Allocator& alloc = Allocator() )
-				: _comp(comp), _alloc(alloc), _nil(NULL), _root(_nil),
-					_sizeTree(0) { }
+				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil),
+					_sizeTree(0), _min(), _max()
+			{ }
 
 			rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>&	x );
 
 			~rb_tree( void )
 			{
 				_deleteTree( this->_root );
+				this->_alloc.deallocate( this->_nil, 1 );
 			}
 
 	};
@@ -336,7 +383,7 @@ template< typename T >
 void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 {
 	const std::string	e_type = "NODE";
-	const std::string	e_colors[2] = {"\x1b[32m", "\x1b[33m"};
+	const std::string	e_colors[2] = {"\x1b[33m", "\x1b[32m"};
 
 	if (is_left == 2)
 		std::cout << " ──";
@@ -344,10 +391,11 @@ void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 		std::cout << prefix << "├──";
 	else if (is_left == 0 )
 		std::cout << prefix << "└──";
-	if (!node)
+	if ( node->parent == NULL && node->left == NULL && node->right == NULL )
 		std::cout << "\x1b[31mNULL\x1b[0m\n";
 	else
 	{
+		
 		std::cout << e_colors[node->color] << e_type;
 		std::cout << " ( key : " << node->content.first;
 		std::cout << ")\x1b[0m\n";
