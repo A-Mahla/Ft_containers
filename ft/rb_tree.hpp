@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 11:06:37 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/09 14:00:06 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft {
 		base_pointer	right;
 		T				content;
 
-		Node( const T x ) : color(black), parent(NULL), left(NULL),
+		Node( const T& x ) : color(black), parent(NULL), left(NULL),
 			right(NULL), content(x)
 		{
 		}
@@ -62,7 +62,8 @@ namespace ft {
 
 			typedef typename Allocator::template rebind< Node<T> >::other	allocNode;
 
-		private:
+//		private:
+		public: //TO TEST JUST FOR TEST
 
 			Compare						_comp;
 			allocNode					_alloc;
@@ -71,7 +72,7 @@ namespace ft {
 			size_type					_sizeTree;
 
 
-			inline link_type	_create_node( const value_type& x )
+			inline link_type	_create_node( const value_type x )
 			{
 				link_type	node = this->_alloc.allocate(1);
 				this->_alloc.construct(node, x);
@@ -81,7 +82,7 @@ namespace ft {
 				return	node;
 			}
 
-			inline void	_deleteNode( link_type& node )
+			inline void	_destroyNode( link_type& node )
 			{
 				this->_alloc.destroy( node );
 				this->_alloc.deallocate( node, 1 );
@@ -95,7 +96,14 @@ namespace ft {
 					_deleteTree( root->left );
 				if ( root && root->right )
 					_deleteTree( root->right );
-				_deleteNode( root );
+				_destroyNode( root );
+			}
+
+			link_type	_maxTree( link_type x )
+			{
+				while ( x->right )
+					x = x->right;
+				return x;
 			}
 
 			link_type	_maxTree( link_type x ) const
@@ -105,10 +113,10 @@ namespace ft {
 				return x;
 			}
 
-			const_link_type	_maxTree( const_link_type x ) const
+			link_type	_minTree( link_type x )
 			{
-				while ( x->right )
-					x = x->right;
+				while ( x->left )
+					x = x->left;
 				return x;
 			}
 
@@ -119,11 +127,40 @@ namespace ft {
 				return x;
 			}
 
-			const_link_type	_minTree( const_link_type x ) const
+			link_type	_next( link_type node )
 			{
-				while ( x->left )
-					x = x->left;
-				return x;
+				if ( node->right )
+					return _minTree(node->right);
+				while ( node->parent && node->parent->right == node )
+					node = node->parent;
+				return node->parent;
+			}
+
+			link_type	_next( link_type node ) const
+			{
+				if ( node->right )
+					return _minTree(node->right);
+				while ( node->parent && node->parent->right == node )
+					node = node->parent;
+				return node->parent;
+			}
+
+			link_type	_prev( link_type node )
+			{
+				if ( node->left )
+					return _maxTree(node->_left);
+				while ( node->parent && node->parent->left == node )
+					node = node->parent;
+				return node->parent;
+			}
+
+			link_type	_prev( link_type node ) const
+			{
+				if ( node->left )
+					return _maxTree(node->_left);
+				while ( node->parent && node->parent->left == node )
+					node = node->parent;
+				return node->parent;
 			}
 
 			void	_rotateLeft( link_type& node )
@@ -174,11 +211,94 @@ namespace ft {
 				x->right = node;
 			}
 
-			void	_insert( link_type& x )
+			link_type	_find( key_type& k )
 			{
-				(void)x;
+				link_type	x = this->_root;
+
+				while ( x && KeyFirst()(x->value) != k )
+				{
+					if ( KeyFirst()(x->value) > k )
+						x = x->left;
+					else
+						x = x->right;
+				}
+				return x;
 			}
 
+			link_type	_find( key_type& k ) const
+			{
+				link_type	x = this->_root;
+
+				while ( x && KeyFirst()(x->value) != k )
+				{
+					if ( KeyFirst()(x->value) > k )
+						x = x->left;
+					else
+						x = x->right;
+				}
+				return x;
+			}
+
+			void	_insertNode( link_type& node )
+			{
+				link_type	y = this->_nil;
+				link_type	x = this->_root;
+
+				while ( x )
+				{
+					y = x;
+					if ( KeyFirst()(x->content) > KeyFirst()(node->content) )
+						x = x->left;
+					else
+						x = x->right;
+				}
+
+				node->parent = y;
+
+				if ( !y )
+					this->_root = node;
+				else
+				{
+					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
+						y->left = node;
+					else
+						y->right = node;
+				}
+			}
+
+			void	_deleteNode( link_type& node )
+			{
+				link_type	y;
+				link_type	x;
+
+				if ( !(node->left) || !(node->right) )
+					y = node;
+				else
+					y = _next( node );
+
+				if ( y->left )
+					x = y->left;
+				else
+					x = y->right;
+
+				if ( x )
+					x->parent = y->parent;
+
+				if ( y->parent )
+				{
+					if ( y->parent->left == y )
+						y->parent->left = x;
+					else
+						y->parent->right = x;
+				}
+				else
+					this->_root = x;
+
+				if ( y != node )
+					node->content = y->content;
+
+				_destroyNode( y );
+			}
 
 		public:
 
@@ -194,9 +314,57 @@ namespace ft {
 				_deleteTree( this->_root );
 			}
 
-
 	};
 
+}
+
+template< typename T >
+void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
+{
+	const std::string	e_type = "NODE";
+	const std::string	e_colors[2] = {"\x1b[32m", "\x1b[33m"};
+
+	if (is_left)
+		std::cout << prefix << "├──";
+	else
+		std::cout << prefix << "└──";
+	if (!node)
+		std::cout << "\x1b[31mNULL\x1b[0m\n";
+	else
+	{
+		std::cout << e_colors[node->color] << e_type;
+		std::cout << " ( key : " << node->content.first;
+		std::cout << ")\x1b[0m\n";
+//		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
+	}
+}
+
+template< typename T >
+void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
+{
+
+	std::string	new_prefix;
+
+	if (node)
+	{
+		display_tree_content(prefix, node, is_left);
+		if (is_left)
+		{
+			new_prefix = prefix + "│   ";
+			print_tree(new_prefix, node->left, 1);
+			print_tree(new_prefix, node->right, 0);
+//			if (!node->right && !node->vol)
+//				display_tree_content(new_prefix, node->right, 0);
+		}
+		else
+		{
+			new_prefix = prefix + "    ";
+			print_tree(new_prefix, node->left, 1);
+			print_tree(new_prefix, node->right, 0);
+//			if (!node->right && !node->vol)
+//				display_tree_content(new_prefix, node->right, 0);
+		}
+	}
 }
 
 #endif

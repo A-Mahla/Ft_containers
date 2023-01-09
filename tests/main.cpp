@@ -387,9 +387,27 @@ void	constructMap( void )
 	map<char, int> a;
 }
 
+// ==== Test_tree ====
+
+void treeTest( void )
+{
+	map<int, std::string> a;
+	
+
+	Node<pair<const int, std::string> > *test = a._tree._create_node( pair<const int, std::string>(5, "Yo") );
+//	std::cout << "key : " << test->content.first << std::endl;
+//	std::cout << "value : " << test->content.second << std::endl;
+
+	a._tree._insertNode( test );
+//	a._tree._insertNode( pair<const int, std::string>(5, "Yo") );
+	print_tree<pair<const int, std::string> >("", a._tree._root, 1);
+}
+
+// =================
+
 int main(void)
 {
-	clock_t start = clock();
+//	clock_t start = clock();
 
 
 	// ==== VECTOR ====
@@ -407,7 +425,13 @@ int main(void)
 */
 	// ==== MAP ====
 
-	constructMap();
+	// ==== Test_tree ====
+
+	treeTest();
+
+	// ====================
+
+/*	constructMap();
 
 
 	clock_t end = clock();
@@ -420,7 +444,7 @@ int main(void)
 		std::cout <<  "MY CUSTOM CONTAINER :";
 	std::cout << "Elapsed time: ";
 	std::cout << elapsed_time << " seconds" << std::endl;
-
+*/
 	return 0;
 }
 
