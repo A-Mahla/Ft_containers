@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 14:00:06 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/09 14:22:21 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ namespace ft {
 				return	node;
 			}
 
-			inline void	_destroyNode( link_type& node )
+			inline void	_destroyNode( link_type node )
 			{
 				this->_alloc.destroy( node );
 				this->_alloc.deallocate( node, 1 );
@@ -163,7 +163,7 @@ namespace ft {
 				return node->parent;
 			}
 
-			void	_rotateLeft( link_type& node )
+			void	_rotateLeft( link_type node )
 			{
 				link_type	x = node->right;
 
@@ -187,7 +187,7 @@ namespace ft {
 				x->left = node;
 			}
 
-			void	_rotateRight( link_type& node )
+			void	_rotateRight( link_type node )
 			{
 				link_type	x = node->left;
 
@@ -211,7 +211,7 @@ namespace ft {
 				x->right = node;
 			}
 
-			link_type	_find( key_type& k )
+			link_type	_find( key_type k )
 			{
 				link_type	x = this->_root;
 
@@ -225,7 +225,7 @@ namespace ft {
 				return x;
 			}
 
-			link_type	_find( key_type& k ) const
+			link_type	_find( key_type k ) const
 			{
 				link_type	x = this->_root;
 
@@ -239,7 +239,7 @@ namespace ft {
 				return x;
 			}
 
-			void	_insertNode( link_type& node )
+			void	_insertNode( link_type node )
 			{
 				link_type	y = this->_nil;
 				link_type	x = this->_root;
@@ -266,7 +266,7 @@ namespace ft {
 				}
 			}
 
-			void	_deleteNode( link_type& node )
+			void	_deleteNode( link_type node )
 			{
 				link_type	y;
 				link_type	x;
@@ -348,21 +348,25 @@ void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
 	if (node)
 	{
 		display_tree_content(prefix, node, is_left);
-		if (is_left)
+		if (!is_left)
 		{
-			new_prefix = prefix + "│   ";
-			print_tree(new_prefix, node->left, 1);
-			print_tree(new_prefix, node->right, 0);
-//			if (!node->right && !node->vol)
-//				display_tree_content(new_prefix, node->right, 0);
+			new_prefix = prefix + "    ";
+			print_tree(new_prefix, node->right, 1);
+			print_tree(new_prefix, node->left, 0);
+//			if (!node->right)
+//				display_tree_content(new_prefix, node->right, 1);
+//			if (!node->left)
+//				display_tree_content(new_prefix, node->left, 0);
 		}
 		else
 		{
-			new_prefix = prefix + "    ";
-			print_tree(new_prefix, node->left, 1);
-			print_tree(new_prefix, node->right, 0);
-//			if (!node->right && !node->vol)
-//				display_tree_content(new_prefix, node->right, 0);
+			new_prefix = prefix + "│   ";
+			print_tree(new_prefix, node->right, 1);
+			print_tree(new_prefix, node->left, 0);
+//			if (!node->right)
+//				display_tree_content(new_prefix, node->right, 1);
+//			if (!node->left)
+//				display_tree_content(new_prefix, node->left, 0);
 		}
 	}
 }

@@ -394,13 +394,20 @@ void treeTest( void )
 	map<int, std::string> a;
 	
 
-	Node<pair<const int, std::string> > *test = a._tree._create_node( pair<const int, std::string>(5, "Yo") );
+	Node<pair<const int, std::string> > *test = a._tree._create_node( pair<const int, std::string>(26, "") );
 //	std::cout << "key : " << test->content.first << std::endl;
 //	std::cout << "value : " << test->content.second << std::endl;
 
 	a._tree._insertNode( test );
-//	a._tree._insertNode( pair<const int, std::string>(5, "Yo") );
-	print_tree<pair<const int, std::string> >("", a._tree._root, 1);
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(41, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(47, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(30, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(28, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(38, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(35, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(39, "") ) );
+	print_tree<pair<const int, std::string> >("", a._tree._root, 0);
 }
 
 // =================
