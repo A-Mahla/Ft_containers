@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 19:23:52 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/09 20:29:03 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ namespace ft {
 			link_type					_nil;
 			link_type					_root;
 			size_type					_sizeTree;
-			Key							_min;
-			Key							_max;
 
 			inline link_type	_initNil( void )
 			{
@@ -161,7 +159,7 @@ namespace ft {
 
 			link_type	_next( link_type node )
 			{
-				if ( node == this->_nil || KeyFirst()(node->content) == this->_max )
+				if ( node == this->_nil )
 					return this->_nil;
 				if ( node->right != this->_nil )
 					return _minTree(node->right);
@@ -172,7 +170,7 @@ namespace ft {
 
 			link_type	_next( link_type node ) const
 			{
-				if ( node == this->_nil || KeyFirst()(node->content) == this->_max )
+				if ( node == this->_nil )
 					return this->_nil;
 				if ( node->right != this->_nil )
 					return _minTree(node->right);
@@ -183,7 +181,7 @@ namespace ft {
 
 			link_type	_prev( link_type node )
 			{
-				if ( node == this->_nil || KeyFirst()(node->content) == this->_min )
+				if ( node == this->_nil )
 					return this->_nil;
 				if ( node->left != this->_nil )
 					return _maxTree(node->left);
@@ -194,7 +192,7 @@ namespace ft {
 
 			link_type	_prev( link_type node ) const
 			{
-				if ( node == this->_nil || KeyFirst()(node->content) == this->_min )
+				if ( node == this->_nil )
 					return this->_nil;
 				if ( node->left != this->_nil )
 					return _maxTree(node->left);
@@ -297,21 +295,13 @@ namespace ft {
 				node->parent = y;
 
 				if ( y == this->_nil )
-				{
 					this->_root = node;
-					this->_min = KeyFirst()(node->content);
-					this->_max = KeyFirst()(node->content);
-				}
 				else
 				{
 					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
 						y->left = node;
 					else
 						y->right = node;
-					if ( KeyFirst()(node->content) < this->_min )
-						this->_min = KeyFirst()(node->content);
-					else if ( KeyFirst()(node->content) > this->_max )
-						this->_max = KeyFirst()(node->content);
 				}
 				this->_sizeTree++;
 			}
@@ -321,6 +311,9 @@ namespace ft {
 				link_type	node = _find(k);
 				link_type	y;
 				link_type	x;
+
+				if ( node == this->_nil )
+					return ;
 
 				if ( node->left == this->_nil || node->right == this->_nil )
 					y = node;
@@ -345,16 +338,10 @@ namespace ft {
 				else
 					this->_root = x;
 
-
-				this->_sizeTree--;
-				if ( this->_sizeTree && this->_max == KeyFirst()(node->content) )
-					this->_max = KeyFirst()(_minTree(this->_root));
-				else if ( this->_sizeTree && this->_min == KeyFirst()(node->content) )
-					this->_min = KeyFirst()(_maxTree(this->_root));
-
 				if ( y != node )
 					node->content = y->content;
 
+				this->_sizeTree--;
 				_destroyNode( y );
 
 			}
@@ -364,7 +351,7 @@ namespace ft {
 			rb_tree( const Compare& comp = Compare(),
 				const Allocator& alloc = Allocator() )
 				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil),
-					_sizeTree(0), _min(), _max()
+					_sizeTree(0)
 			{ }
 
 			rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>&	x );
