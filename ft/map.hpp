@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 17:42:21 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 20:35:40 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,44 +47,44 @@ namespace ft {
 	}
 
 	template< class T1, class T2 >
-	bool	operator==( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator==( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return lhs.first == rhs.first && lhs.second == rhs.second;
 	}
 
 	template< class T1, class T2 >
-	bool	operator!=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator!=( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return !(lhs == rhs);
 	}
 
 	template< class T1, class T2 >
-	bool	operator<( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator<( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return lhs.first < rhs.first && lhs.second < rhs.second;
 	}
 
 	template< class T1, class T2 >
-	bool	operator>=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator>=( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return !(lhs < rhs);
 	}
 
 	template< class T1, class T2 >
-	bool	operator>( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator>( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return rhs < lhs;
 	}
 
 	template< class T1, class T2 >
-	bool	operator<=( const std::pair<T1,T2>& lhs, const std::pair<T1,T2>& rhs )
+	bool	operator<=( const ft::pair<T1,T2>& lhs, const ft::pair<T1,T2>& rhs )
 	{
 		return !(lhs < rhs);
 	}
 
 
 	template< class Key, class T, class Compare = std::less<Key>,
-		class Allocator = std::allocator< std::pair<const Key, T> > >
+		class Allocator = std::allocator< ft::pair<const Key, T> > >
 	class map {
 
 		public:
@@ -135,30 +135,107 @@ namespace ft {
 			typedef typename btree::reverse_iterator		reverse_iterator;
 			typedef typename btree::const_reverse_iterator	const_reverse_iterator;
 
-			explicit map( const Compare& comp = Compare(),
+			// ===== CONSTRUCT/COPY/DESTROY =====
+
+			/* @member map()
+			 *
+			 * @brief construct by default
+			 *
+			 * @return NO*/
+
+			inline explicit	map( const Compare& comp = Compare(),
 				const Allocator& = Allocator() ) : _tree( comp )
 			{ }
 
+			/* @member map()
+			 *
+			 * @brief construct by copy
+			 *
+			 * @return NO*/
+
+			inline	map( const map<Key, T, Compare, Allocator>&	x ) : _tree( x._tree )
+			{ }
+
+			/* @member map()
+			 *
+			 * @brief construct with a range of iterators
+			 *
+			 * @return NO*/
+
 			template <class InputIterator>
-			map(InputIterator first,
+			inline	map(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
 				const Compare& comp = Compare(), const Allocator& = Allocator());
 
-			map( const map<Key, T, Compare, Allocator>&	x ) : _tree( x._tree )
+			/* @member ~map()
+			 *
+			 * @brief destruct by default
+			 *
+			 * @return NO*/
+
+			inline	~map( void )
 			{ }
 
-			~map( void )
-			{
-			//	this->_tree.~rb_tree();
-			}
+			/* @member operator=()
+			 *
+			 * @brief map assignment operator
+			 *
+			 * @return NO*/
 
-			map<Key,T,Compare,Allocator>&
-				operator=( const map<Key,T,Compare,Allocator>& rhs )
+			inline	map<Key,T,Compare,Allocator>&
+				operator=( const map<Key, T, Compare, Allocator>& rhs )
 			{
 				if ( this != &rhs )
 					this->_tree = rhs._tree;
 				return *this;
 			}
+
+			// ===== ITERATORS =====
+
+			/* @member begin() / end() / rbegin() / rend()
+			 *
+			 * @return iterator*/
+
+			inline iterator					begin( void )
+			{
+				return this->_tree.begin();
+			}
+
+			inline const_iterator			begin( void ) const
+			{
+				return this->_tree.begin();
+			}
+
+			inline iterator					end( void )
+			{
+				return this->_tree.end();
+			}
+
+			inline const_iterator			end( void ) const
+			{
+				return this->_tree.end();
+			}
+
+			inline reverse_iterator			rbegin( void )
+			{
+				return this->_tree.rbegin();
+			}
+
+			inline const_reverse_iterator	rbegin( void ) const
+			{
+				return this->_tree.rbegin();
+			}
+
+			inline reverse_iterator			rend( void )
+			{
+				return this->_tree.rend();
+			}
+
+			inline const_reverse_iterator	rend( void ) const
+			{
+				return this->_tree.rend();
+			}
+
 	};
 
 }

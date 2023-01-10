@@ -441,6 +441,9 @@ void treeTest( void )
 	std::cout << std::endl;
 	print_tree<pair<const int, std::string> >("", c._tree._root, 2);
 
+	for ( map< int, std::string>::iterator it(c.end()); it != c.begin(); )
+		std::cout << (--it)->first << std::endl;
+
 
 }
 
