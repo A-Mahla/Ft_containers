@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 01:35:35 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 13:47:16 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,7 +354,6 @@ namespace ft {
 
 			void	_insertCorrect( link_type node )
 			{
-
 				while ( node->parent->color == red )
 				{
 					if ( node->parent->parent->left == node->parent  )
@@ -363,7 +362,78 @@ namespace ft {
 						_insertCorrectRight( node );
 				}
 				this->_root->color = black;
-
+			}
+	
+			void	_deleteCorrect( link_type x )
+			{
+				link_type	w;
+				while ( x->parent != this->_nil && x->color == black )
+				{
+					if ( x == x->parent->left )
+					{
+						w = x->parent->right;
+						if ( w->color == red )
+						{
+							w->color = black;
+							x->parent->color = red;
+							_rotateLeft( x->parent );
+							w = x->parent->right;
+						}
+						if ( w->right->color == black && w->left->color == black )
+						{
+							w->color = red;
+							x = x->parent;
+						}
+						else
+						{
+							if ( w->right->color == black )
+							{
+								w->color = red;
+								w->left->color = black;
+								_rotateRight( w );
+								w = x->parent->right;
+							}
+							w->color = w->parent->color;
+							w->right->color = black;
+							w->parent->color = black;
+							_rotateLeft( w->parent );
+							x = this->_root;
+						}
+						
+					}
+					else
+					{
+						w = x->parent->left;
+						if ( w->color == red )
+						{
+							w->color = black;
+							x->parent->color = red;
+							_rotateRight( x->parent );
+							w = x->parent->left;
+						}
+						if ( w->right->color == black && w->left->color == black )
+						{
+							w->color = red;
+							x = x->parent;
+						}
+						else
+						{
+							if ( w->left->color == black )
+							{
+								w->color = red;
+								w->right->color = black;
+								_rotateLeft( w );
+								w = x->parent->left;
+							}
+							w->color = w->parent->color;
+							w->left->color = black;
+							w->parent->color = black;
+							_rotateRight( x->parent );
+							x = this->_root;
+						}
+					}
+				}
+				x->color = black;
 			}
 
 			void	_deleteNode( key_type k )
@@ -385,8 +455,7 @@ namespace ft {
 				else
 					x = y->right;
 
-				if ( x != this->_nil )
-					x->parent = y->parent;
+				x->parent = y->parent;
 
 				if ( y->parent != this->_nil )
 				{
@@ -401,8 +470,13 @@ namespace ft {
 				if ( y != node )
 					node->content = y->content;
 
+				if ( y->color == black )
+					_deleteCorrect(x);
+
+				if ( x == this->_nil )
+					x->parent = NULL;
 				this->_sizeTree--;
-				_destroyNode( y );
+				_destroyNode(y);
 			}
 
 		public:

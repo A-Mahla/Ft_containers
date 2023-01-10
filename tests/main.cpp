@@ -394,7 +394,7 @@ void treeTest( void )
 	// TO TEST MAP ATTRIBUT AND RBTREE MUST BE PUBLIC
 	map<int, std::string> a;
 
-
+/*
 
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
@@ -416,12 +416,37 @@ void treeTest( void )
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(39, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
-
+*/
 	std::cout << std::endl;
 
+	std::cout << std::endl << "\tRb_Tree" << std::endl << std::endl;
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(13, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(8, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(1, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(11, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(15, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(25, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(22, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(27, "") ) );
 
+	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
-//	a._tree._deleteNode( 26 );
+	std::cout << std::endl << "\tDeleted '6'" << std::endl << std::endl;
+	a._tree._deleteNode( 6 );
+	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
+	std::cout << std::endl << "\tReinitialise Tree..." << std::endl << std::endl;
+	std::cout << std::endl << "\tDeleted '1'" << std::endl << std::endl;
+	a._tree._deleteNode( 1 );
+	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
+	a._tree._deleteNode( 6 );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(1, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
+	std::cout << std::endl << "\tReinitialise Tree..." << std::endl << std::endl;
+	std::cout << std::endl << "\tDeleted '17'" << std::endl << std::endl;
+	a._tree._deleteNode( 17 );
 
 
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
