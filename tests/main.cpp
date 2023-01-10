@@ -420,37 +420,21 @@ void treeTest( void )
 	std::cout << std::endl;
 
 	std::cout << std::endl << "\tRb_Tree" << std::endl << std::endl;
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(13, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(8, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(1, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(11, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(15, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(25, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(18, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(22, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(27, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(8, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(11, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
 
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
-	std::cout << std::endl << "\tDeleted '6'" << std::endl << std::endl;
-	a._tree._deleteNode( 6 );
-	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
-	std::cout << std::endl << "\tReinitialise Tree..." << std::endl << std::endl;
-	std::cout << std::endl << "\tDeleted '1'" << std::endl << std::endl;
-	a._tree._deleteNode( 1 );
-	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
-	a._tree._deleteNode( 6 );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(1, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(6, "") ) );
-	std::cout << std::endl << "\tReinitialise Tree..." << std::endl << std::endl;
-	std::cout << std::endl << "\tDeleted '17'" << std::endl << std::endl;
-	a._tree._deleteNode( 17 );
+	std::cout << std::endl;
+	a._tree._deleteNode( 3 );
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
-
-	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
 	std::cout << std::endl << "\tList in order" << std::endl << std::endl;
 	for ( Node<pair<const int, std::string> >* i = a._tree._minTree( a._tree._root );

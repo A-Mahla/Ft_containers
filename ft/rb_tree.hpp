@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 13:47:16 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 14:18:40 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,75 +363,81 @@ namespace ft {
 				}
 				this->_root->color = black;
 			}
-	
+
+			void	_deleteCorrectLeft( link_type& x )
+			{
+				link_type	w = x->parent->right;
+				if ( w->color == red )
+				{
+					w->color = black;
+					x->parent->color = red;
+					_rotateLeft( x->parent );
+					w = x->parent->right;
+				}
+				if ( w->right->color == black && w->left->color == black )
+				{
+					w->color = red;
+					x = x->parent;
+				}
+				else
+				{
+					if ( w->right->color == black )
+					{
+						w->color = red;
+						w->left->color = black;
+						_rotateRight( w );
+						w = x->parent->right;
+					}
+					w->color = w->parent->color;
+					w->right->color = black;
+					w->parent->color = black;
+					_rotateLeft( w->parent );
+					x = this->_root;
+				}
+
+			}
+
+			void	_deleteCorrectRight( link_type& x )
+			{
+				link_type	w = x->parent->left;
+				if ( w->color == red )
+				{
+					w->color = black;
+					x->parent->color = red;
+					_rotateRight( x->parent );
+					w = x->parent->left;
+				}
+				if ( w->right->color == black && w->left->color == black )
+				{
+					w->color = red;
+					x = x->parent;
+				}
+				else
+				{
+					if ( w->left->color == black )
+					{
+						w->color = red;
+						w->right->color = black;
+						_rotateLeft( w );
+						w = x->parent->left;
+					}
+					w->color = w->parent->color;
+					w->left->color = black;
+					w->parent->color = black;
+					_rotateRight( x->parent );
+					x = this->_root;
+				}
+
+			}
+
 			void	_deleteCorrect( link_type x )
 			{
-				link_type	w;
 				while ( x->parent != this->_nil && x->color == black )
 				{
 					if ( x == x->parent->left )
-					{
-						w = x->parent->right;
-						if ( w->color == red )
-						{
-							w->color = black;
-							x->parent->color = red;
-							_rotateLeft( x->parent );
-							w = x->parent->right;
-						}
-						if ( w->right->color == black && w->left->color == black )
-						{
-							w->color = red;
-							x = x->parent;
-						}
-						else
-						{
-							if ( w->right->color == black )
-							{
-								w->color = red;
-								w->left->color = black;
-								_rotateRight( w );
-								w = x->parent->right;
-							}
-							w->color = w->parent->color;
-							w->right->color = black;
-							w->parent->color = black;
-							_rotateLeft( w->parent );
-							x = this->_root;
-						}
-						
-					}
+						_deleteCorrectLeft( x );
 					else
-					{
-						w = x->parent->left;
-						if ( w->color == red )
-						{
-							w->color = black;
-							x->parent->color = red;
-							_rotateRight( x->parent );
-							w = x->parent->left;
-						}
-						if ( w->right->color == black && w->left->color == black )
-						{
-							w->color = red;
-							x = x->parent;
-						}
-						else
-						{
-							if ( w->left->color == black )
-							{
-								w->color = red;
-								w->right->color = black;
-								_rotateLeft( w );
-								w = x->parent->left;
-							}
-							w->color = w->parent->color;
-							w->left->color = black;
-							w->parent->color = black;
-							_rotateRight( x->parent );
-							x = this->_root;
-						}
-					}
+						_deleteCorrectRight( x );
 				}
 				x->color = black;
 			}
@@ -482,10 +488,10 @@ namespace ft {
 		public:
 
 			rb_tree( const Compare& comp = Compare(),
-				const Allocator& alloc = Allocator() )
+					const Allocator& alloc = Allocator() )
 				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil),
-					_sizeTree(0)
-			{ }
+				_sizeTree(0)
+		{ }
 
 			rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>&	x );
 
@@ -499,7 +505,7 @@ namespace ft {
 
 }
 
-template< typename T >
+	template< typename T >
 void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 {
 	const std::string	e_type = "NODE";
@@ -513,24 +519,24 @@ void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 		std::cout << prefix << "└──";
 	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
 	{
-		
+
 		std::cout << e_colors[node->color] << e_type;
 		std::cout << " ( key : " << node->content.first;
 		std::cout << " )\x1b[0m\n";
-//		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
+		//		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
 	}
 	else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
 		std::cout << "\x1b[31mNULL\x1b[0m\n";
 }
 
-template< typename T >
+	template< typename T >
 void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
 {
 
 	std::string	new_prefix;
 
 	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
-//	if ( node )
+		//	if ( node )
 	{
 		display_tree_content(prefix, node, is_left);
 		if ( is_left == 2 )
