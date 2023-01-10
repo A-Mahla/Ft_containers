@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/05 13:28:29 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 14:24:45 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ namespace ft {
 		private:
 
 			pointer	 it;
+
+			operator random_iterator< const T >( void ) const
+			{
+				return random_iterator< const T >(this->it);
+			}
+
 
 		public:
 
@@ -170,11 +176,6 @@ namespace ft {
 			inline bool		operator<=( const random_iterator & rhs ) const
 			{
 				return !(rhs > *this);
-			}
-
-			operator random_iterator< const T >( void ) const
-			{
-				return random_iterator< const T >(this->it);
 			}
 
 	};
