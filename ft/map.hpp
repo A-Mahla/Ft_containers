@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 15:52:35 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 17:42:21 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,20 +124,41 @@ namespace ft {
 
 		public:
 
-			typedef typename Allocator::reference		reference;
-			typedef typename Allocator::const_reference	const_reference;
-			typedef typename Allocator::pointer			pointer;
-			typedef typename Allocator::const_pointer	const_pointer;
-			typedef typename btree::size_type			size_type;
-			typedef typename btree::difference_type		difference_type;
+			typedef typename Allocator::reference			reference;
+			typedef typename Allocator::const_reference		const_reference;
+			typedef typename Allocator::pointer				pointer;
+			typedef typename Allocator::const_pointer		const_pointer;
+			typedef typename btree::size_type				size_type;
+			typedef typename btree::difference_type			difference_type;
+			typedef typename btree::iterator				iterator;
+			typedef typename btree::const_iterator			const_iterator;
+			typedef typename btree::reverse_iterator		reverse_iterator;
+			typedef typename btree::const_reverse_iterator	const_reverse_iterator;
 
 			explicit map( const Compare& comp = Compare(),
-				const Allocator& alloc = Allocator() ) : _tree( comp, alloc )
+				const Allocator& = Allocator() ) : _tree( comp )
 			{ }
 
-			map(const map<Key, T, Compare, Allocator>&	x ) : _tree( x._tree )
+			template <class InputIterator>
+			map(InputIterator first,
+				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
+				const Compare& comp = Compare(), const Allocator& = Allocator());
+
+			map( const map<Key, T, Compare, Allocator>&	x ) : _tree( x._tree )
 			{ }
 
+			~map( void )
+			{
+			//	this->_tree.~rb_tree();
+			}
+
+			map<Key,T,Compare,Allocator>&
+				operator=( const map<Key,T,Compare,Allocator>& rhs )
+			{
+				if ( this != &rhs )
+					this->_tree = rhs._tree;
+				return *this;
+			}
 	};
 
 }

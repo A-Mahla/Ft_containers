@@ -432,22 +432,16 @@ void treeTest( void )
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
 	std::cout << std::endl;
-	a._tree._deleteNode( 3 );
-	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
+	map<int, std::string> b(a);
+	print_tree<pair<const int, std::string> >("", b._tree._root, 2);
 
+	map<int, std::string> c;
 
-	std::cout << std::endl << "\tList in order" << std::endl << std::endl;
-	for ( Node<pair<const int, std::string> >* i = a._tree._minTree( a._tree._root );
-			i->content.first != a._tree._maxTree( a._tree._root )->content.first;
-			i = a._tree._next( i ) )
-		std::cout << "  " << i->content.first << std::endl;
-	std::cout << "  " << a._tree._maxTree(a._tree._root)->content.first << std::endl;
+	c = b;
 	std::cout << std::endl;
+	print_tree<pair<const int, std::string> >("", c._tree._root, 2);
 
-/*	for ( Node<pair<const int, std::string> >* i = a._tree._maxTree( a._tree._root );
-			i->content.first != a._tree._minTree( a._tree._root )->content.first;
-			i = a._tree._prev( i ) )
-		std::cout << i->content.first << std::endl; */
+
 }
 
 // =================

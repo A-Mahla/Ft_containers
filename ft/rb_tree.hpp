@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 14:29:27 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 18:00:43 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define __RB_TREE_HPP__
 
 # include "metaprog.hpp"
+# include "reverse_iterator.hpp"
 
 namespace ft {
 
@@ -51,6 +52,86 @@ namespace ft {
 			return *this;
 		}
 
+		static base_pointer	maxTree( base_pointer x )
+		{
+			if ( !(x->parent) )
+				return x;
+			while ( x->right->parent )
+				x = x->right;
+			return x;
+		}
+
+		static const_base_pointer	maxTree( const_base_pointer x )
+		{
+			if ( !(x->parent) )
+				return x;
+			while ( x->right->parent )
+				x = x->right;
+			return x;
+		}
+
+		static base_pointer	minTree( base_pointer x )
+		{
+			if ( !(x->parent) )
+				return x;
+			while ( x->left->parent )
+				x = x->left;
+			return x;
+		}
+
+		static const_base_pointer	minTree( const_base_pointer x )
+		{
+			if ( !(x->parent) )
+				return x;
+			while ( x->left->parent )
+				x = x->left;
+			return x;
+		}
+
+		static base_pointer	next( base_pointer node )
+		{
+			if ( !(node->parent) )
+				return node;
+			if ( node->right->parent )
+				return minTree(node->right);
+			while ( node->parent->parent && node->parent->right == node )
+				node = node->parent;
+			return node->parent;
+		}
+
+		static const_base_pointer	next( const_base_pointer node )
+		{
+			if ( !(node->parent) )
+				return node;
+			if ( node->right->parent )
+				return minTree(node->right);
+			while ( node->parent->parent && node->parent->right == node )
+				node = node->parent;
+			return node->parent;
+		}
+
+		static base_pointer	prev( base_pointer node )
+		{
+			if ( !(node->parent) )
+				return node;
+			if ( node->left->parent )
+				return maxTree(node->left);
+			while ( node->parent->parent && node->parent->left == node )
+				node = node->parent;
+			return node->parent;
+		}
+
+		static const_base_pointer	prev( const_base_pointer node )
+		{
+			if ( !(node->parent) )
+				return node;
+			if ( node->left->parent )
+				return maxTree(node->left);
+			while ( node->parent->parent && node->parent->left == node )
+				node = node->parent;
+			return node->parent;
+		}
+
 	};
 
 	template< typename T >
@@ -64,11 +145,12 @@ namespace ft {
 			typedef T*								pointer;
 			typedef std::ptrdiff_t					difference_type;
 			typedef std::bidirectional_iterator_tag	iterator_category;
+			typedef Node<T>							node_type;
 			typedef typename Node<T>::base_pointer	link_type;
 
 		private:
 
-			pointer	it;
+			link_type	it;
 
 			operator rb_iterator< const T >( void ) const
 			{
@@ -85,6 +167,60 @@ namespace ft {
 
 			~rb_iterator() {}
 
+			inline rb_iterator	& operator=( const rb_iterator & rhs )
+			{
+				if ( this != &rhs )
+					this->it = rhs.it;
+				return *this;
+			}
+
+			inline reference	operator*( void ) const
+			{
+				return this->it->content;
+			}
+
+			inline pointer	operator->( void ) const
+			{
+				 return &(this->it->content);
+			}
+
+			inline bool		operator==( const rb_iterator & rhs ) const
+			{
+				return this->it->content == rhs.it->content;
+			}
+
+			inline bool		operator!=( const rb_iterator & rhs ) const
+			{
+				return !(*this == rhs);
+			}
+
+			inline rb_iterator	& operator++( void )
+			{
+				this->it = node_type::next( this->it );
+				return *this;
+			}
+
+			inline rb_iterator	operator++( int )
+			{
+				rb_iterator	tmp = this->it;
+
+				this->it = node_type::next( this->it );
+				return tmp;
+			}
+
+			inline rb_iterator	& operator--( void )
+			{
+				this->it = node_type::prev( this->it );
+				return *this;
+			}
+
+			inline rb_iterator	operator--( int )
+			{
+				rb_iterator	tmp = this->it;
+
+				this->it = node_type::prev( this->it );
+				return tmp;
+			}
 
 	};
 
@@ -97,18 +233,23 @@ namespace ft {
 		
 		public:
 
-			typedef Key										key_type;
-			typedef T										value_type;
-			typedef T&										reference;
-			typedef const T									const_reference;
-			typedef T*										pointer;
-			typedef const T*								const_pointer;
-			typedef typename Node<T>::base_pointer			link_type;
-			typedef typename Node<T>::const_base_pointer	const_link_type;
-			typedef std::size_t								size_type;
-			typedef std::ptrdiff_t							difference_type;
-
+			typedef Key											key_type;
+			typedef T											value_type;
+			typedef T&											reference;
+			typedef const T										const_reference;
+			typedef T*											pointer;
+			typedef const T*									const_pointer;
+			typedef Node<T>										node_type;
+			typedef typename ft::Node<T>::base_pointer			link_type;
+			typedef typename ft::Node<T>::const_base_pointer	const_link_type;
+			typedef std::size_t									size_type;
+			typedef std::ptrdiff_t								difference_type;
+			typedef typename ft::rb_iterator<T>					iterator;
+			typedef typename ft::rb_iterator<const T>			const_iterator;
+			typedef typename ft::reverse_iterator<iterator>		reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef typename Allocator::template rebind< Node<T> >::other	allocNode;
+
 
 //		private:
 		public: //TO TEST JUST FOR TEST
@@ -154,86 +295,6 @@ namespace ft {
 				if ( root->right != this->_nil )
 					_deleteTree( root->right );
 				_destroyNode( root );
-			}
-
-			link_type	_maxTree( link_type x )
-			{
-				if ( x == this->_nil )
-					return this->_nil;
-				while ( x->right != this->_nil )
-					x = x->right;
-				return x;
-			}
-
-			link_type	_maxTree( link_type x ) const
-			{
-				if ( x == this->_nil )
-					return this->_nil;
-				while ( x->right != this->_nil )
-					x = x->right;
-				return x;
-			}
-
-			link_type	_minTree( link_type x )
-			{
-				if ( x == this->_nil )
-					return this->_nil;
-				while ( x->left != this->_nil )
-					x = x->left;
-				return x;
-			}
-
-			link_type	_minTree( link_type x ) const
-			{
-				if ( x == this->_nil )
-					return this->_nil;
-				while ( x->left != this->_nil )
-					x = x->left;
-				return x;
-			}
-
-			link_type	_next( link_type node )
-			{
-				if ( node == this->_nil )
-					return this->_nil;
-				if ( node->right != this->_nil )
-					return _minTree(node->right);
-				while ( node->parent != this->_nil && node->parent->right == node )
-					node = node->parent;
-				return node->parent;
-			}
-
-			link_type	_next( link_type node ) const
-			{
-				if ( node == this->_nil )
-					return this->_nil;
-				if ( node->right != this->_nil )
-					return _minTree(node->right);
-				while ( node->parent != this->_nil && node->parent->right == node )
-					node = node->parent;
-				return node->parent;
-			}
-
-			link_type	_prev( link_type node )
-			{
-				if ( node == this->_nil )
-					return this->_nil;
-				if ( node->left != this->_nil )
-					return _maxTree(node->left);
-				while ( node->parent != this->_nil && node->parent->left == node )
-					node = node->parent;
-				return node->parent;
-			}
-
-			link_type	_prev( link_type node ) const
-			{
-				if ( node == this->_nil )
-					return this->_nil;
-				if ( node->left != this->_nil )
-					return _maxTree(node->left);
-				while ( node->parent != this->_nil && node->parent->left == node )
-					node = node->parent;
-				return node->parent;
 			}
 
 			void	_rotateLeft( link_type node )
@@ -489,7 +550,7 @@ namespace ft {
 				if ( node->left == this->_nil || node->right == this->_nil )
 					y = node;
 				else
-					y = _next( node );
+					y = node_type::next( node );
 
 				if ( y->left != this->_nil )
 					x = y->left;
@@ -526,14 +587,47 @@ namespace ft {
 					const Allocator& alloc = Allocator() )
 				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil),
 				_sizeTree(0)
-		{ }
+			{ }
 
-			rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>&	x );
+			rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>& x )
+				: _comp(x._comp), _alloc(x._alloc), _nil(_initNil()), _root(_nil),
+				_sizeTree(x._sizeTree)
+			{
+				link_type	top = node_type::minTree( x._root );
 
+				for ( ; top != x._nil; top = node_type::next(top) )
+					_insertNode(_create_node(top->content));
+			}
+
+/*			template <class InputIterator>
+			rb_tree(InputIterator first,
+				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
+				const Compare& comp = Compare(), const Allocator& = Allocator())
+			{
+				iterator	top = node_type::minTree( x._root );
+				
+			}
+*/
 			~rb_tree( void )
 			{
 				_deleteTree( this->_root );
 				this->_alloc.deallocate( this->_nil, 1 );
+			}
+
+			rb_tree<Key, T, KeyFirst, Compare, Allocator>&
+				operator=( const rb_tree<Key, T, KeyFirst, Compare, Allocator>& rhs )
+			{
+				if ( this != &rhs )
+				{
+					rb_tree	tmp(rhs);
+
+					std::swap( this->_comp, tmp._comp );
+					std::swap( this->_alloc, tmp._alloc );
+					std::swap( this->_nil, tmp._nil );
+					std::swap( this->_root, tmp._root );
+					std::swap( this->_sizeTree, tmp._sizeTree );
+				}
+				return *this;
 			}
 
 	};
