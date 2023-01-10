@@ -447,6 +447,7 @@ void treeTest( void )
 	std::cout << std::endl << "\tReinitialise Tree..." << std::endl << std::endl;
 	std::cout << std::endl << "\tDeleted '17'" << std::endl << std::endl;
 	a._tree._deleteNode( 17 );
+	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
 
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
