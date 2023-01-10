@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 20:47:19 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 23:56:23 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ namespace ft {
 
 		static base_pointer	maxTree( base_pointer x )
 		{
-			if ( !(x->parent) )
-				return x;
+//			if ( !(x->parent) )
+//				return x;
 			while ( x->right->parent )
 				x = x->right;
 			return x;
@@ -63,8 +63,8 @@ namespace ft {
 
 		static const_base_pointer	maxTree( const_base_pointer x )
 		{
-			if ( !(x->parent) )
-				return x;
+//			if ( !(x->parent) )
+//				return x;
 			while ( x->right->parent )
 				x = x->right;
 			return x;
@@ -72,8 +72,8 @@ namespace ft {
 
 		static base_pointer	minTree( base_pointer x )
 		{
-			if ( !(x->parent) )
-				return x;
+//			if ( !(x->parent) )
+//				return x;
 			while ( x->left->parent )
 				x = x->left;
 			return x;
@@ -81,8 +81,8 @@ namespace ft {
 
 		static const_base_pointer	minTree( const_base_pointer x )
 		{
-			if ( !(x->parent) )
-				return x;
+//			if ( !(x->parent) )
+//				return x;
 			while ( x->left->parent )
 				x = x->left;
 			return x;
@@ -90,8 +90,8 @@ namespace ft {
 
 		static base_pointer	next( base_pointer node )
 		{
-			if ( !(node->parent) )
-				return node->left;
+//			if ( !(node->parent) )
+//				return node->left;
 			if ( node->right->parent )
 				return minTree(node->right);
 			while ( node->parent->parent && node->parent->right == node )
@@ -101,8 +101,8 @@ namespace ft {
 
 		static const_base_pointer	next( const_base_pointer node )
 		{
-			if ( !(node->parent) )
-				return node->left;
+//			if ( !(node->parent) )
+//				return node->left;
 			if ( node->right->parent )
 				return minTree(node->right);
 			while ( node->parent->parent && node->parent->right == node )
@@ -112,8 +112,8 @@ namespace ft {
 
 		static base_pointer	prev( base_pointer node )
 		{
-			if ( !(node->parent) )
-				return node->right;
+//			if ( !(node->parent) )
+//				return node->right;
 			if ( node->left->parent )
 				return maxTree(node->left);
 			while ( node->parent->parent && node->parent->left == node )
@@ -123,8 +123,8 @@ namespace ft {
 
 		static const_base_pointer	prev( const_base_pointer node )
 		{
-			if ( !(node->parent) )
-				return node->right;
+//			if ( !(node->parent) )
+//				return node->right;
 			if ( node->left->parent )
 				return maxTree(node->left);
 			while ( node->parent->parent && node->parent->left == node )
@@ -265,9 +265,15 @@ namespace ft {
 				link_type init = this->_alloc.allocate(1);
 				init->color = black;
 				init->parent = NULL;
-				init->left = NULL;
-				init->right = NULL;
+				init->left = _nil;
+				init->right = _nil;
 				return init;
+			}
+
+			inline void		_majNil( void )
+			{
+				this->_nil->left = this->_root;
+				this->_nil->right = this->_root;
 			}
 
 			inline link_type	_create_node( const value_type x )
@@ -400,6 +406,7 @@ namespace ft {
 				}
 				this->_sizeTree++;
 				_insertCorrect(node);
+				_majNil();
 			}
 
 			void	_insertCorrectLeft( link_type& node )
@@ -579,6 +586,7 @@ namespace ft {
 					x->parent = NULL;
 				this->_sizeTree--;
 				_destroyNode(y);
+				_majNil();
 			}
 
 		public:
@@ -642,40 +650,40 @@ namespace ft {
 
 			inline iterator					end( void )
 			{
-				this->_nil->left = node_type::minTree( this->_root );
-				this->_nil->right = node_type::maxTree( this->_root );
+			//	this->_nil->left = node_type::minTree( this->_root );
+			//	this->_nil->right = node_type::maxTree( this->_root );
 				return iterator(this->_nil);
 			}
 
 			inline const_iterator			end( void ) const
 			{
-				this->_nil->left = node_type::minTree( this->_root );
-				this->_nil->right = node_type::maxTree( this->_root );
+			//	this->_nil->left = node_type::minTree( this->_root );
+			//	this->_nil->right = node_type::maxTree( this->_root );
 				return iterator(this->_nil);
 			}
 
 			inline reverse_iterator			rbegin( void )
 			{
-				return reverse_iterator(node_type::maxTree( this->_root ));
+				return reverse_iterator(this->_nil);
 			}
 
 			inline const_reverse_iterator	rbegin( void ) const
 			{
-				return const_reverse_iterator(node_type::maxTree( this->_root ));
+				return reverse_iterator(this->_nil);
 			}
 
 			inline reverse_iterator			rend( void )
 			{
-				this->_nil->left = node_type::minTree( this->_root );
-				this->_nil->right = node_type::maxTree( this->_root );
-				return reverse_iterator(this->_nil);
+			//	this->_nil->left = node_type::minTree( this->_root );
+			//	this->_nil->right = node_type::maxTree( this->_root );
+				return reverse_iterator(node_type::minTree( this->_root ));
 			}
 
 			inline const_reverse_iterator	rend( void ) const
 			{
-				this->_nil->left = node_type::minTree( this->_root );
-				this->_nil->right = node_type::maxTree( this->_root );
-				return const_reverse_iterator(this->_nil);
+			//	this->_nil->left = node_type::minTree( this->_root );
+			//	this->_nil->right = node_type::maxTree( this->_root );
+				return reverse_iterator(node_type::minTree( this->_root ));
 			}
 
 	};
