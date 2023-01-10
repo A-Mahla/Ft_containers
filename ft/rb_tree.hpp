@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 20:29:03 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/10 01:35:35 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,6 @@ namespace ft {
 						x = x->right;
 				}
 
-
 				node->parent = y;
 
 				if ( y == this->_nil )
@@ -304,6 +303,67 @@ namespace ft {
 						y->right = node;
 				}
 				this->_sizeTree++;
+				_insertCorrect(node);
+			}
+
+			void	_insertCorrectLeft( link_type& node )
+			{
+				link_type y = node->parent->parent->right;
+				if ( y->color == red )
+				{
+					node->parent->parent->color = red;
+					node->parent->color = black;
+					y->color = black;
+					node = node->parent->parent;
+				}
+				else
+				{
+					if ( node == node->parent->right )
+					{
+						node = node->parent;
+						_rotateLeft( node );
+					}
+					node->parent->color = black;
+					node->parent->parent->color = red;
+					_rotateRight( node->parent->parent );
+				}
+			}
+
+			void	_insertCorrectRight( link_type& node )
+			{
+				link_type	y = node->parent->parent->left;
+				if ( y->color == red )
+				{
+					node->parent->parent->color = red;
+					node->parent->color = black;
+					y->color = black;
+					node = node->parent->parent;
+				}
+				else
+				{
+					if ( node == node->parent->left )
+					{
+						node = node->parent;
+						_rotateRight( node );
+					}
+					node->parent->color = black;
+					node->parent->parent->color = red;
+					_rotateLeft( node->parent->parent );
+				}
+			}
+
+			void	_insertCorrect( link_type node )
+			{
+
+				while ( node->parent->color == red )
+				{
+					if ( node->parent->parent->left == node->parent  )
+						_insertCorrectLeft( node );
+					else
+						_insertCorrectRight( node );
+				}
+				this->_root->color = black;
+
 			}
 
 			void	_deleteNode( key_type k )
@@ -343,7 +403,6 @@ namespace ft {
 
 				this->_sizeTree--;
 				_destroyNode( y );
-
 			}
 
 		public:
@@ -378,16 +437,16 @@ void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 		std::cout << prefix << "├──";
 	else if (is_left == 0 )
 		std::cout << prefix << "└──";
-	if ( node->parent == NULL && node->left == NULL && node->right == NULL )
-		std::cout << "\x1b[31mNULL\x1b[0m\n";
-	else
+	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
 	{
 		
 		std::cout << e_colors[node->color] << e_type;
 		std::cout << " ( key : " << node->content.first;
-		std::cout << ")\x1b[0m\n";
+		std::cout << " )\x1b[0m\n";
 //		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
 	}
+	else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
+		std::cout << "\x1b[31mNULL\x1b[0m\n";
 }
 
 template< typename T >
@@ -396,7 +455,8 @@ void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
 
 	std::string	new_prefix;
 
-	if (node)
+	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
+//	if ( node )
 	{
 		display_tree_content(prefix, node, is_left);
 		if ( is_left == 2 )
@@ -406,20 +466,12 @@ void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
 			new_prefix = prefix + "    ";
 			print_tree(new_prefix, node->right, 1);
 			print_tree(new_prefix, node->left, 0);
-//			if (!node->right)
-//				display_tree_content(new_prefix, node->right, 1);
-//			if (!node->left)
-//				display_tree_content(new_prefix, node->left, 0);
 		}
 		else
 		{
 			new_prefix = prefix + "│   ";
 			print_tree(new_prefix, node->right, 1);
 			print_tree(new_prefix, node->left, 0);
-//			if (!node->right)
-//				display_tree_content(new_prefix, node->right, 1);
-//			if (!node->left)
-//				display_tree_content(new_prefix, node->left, 0);
 		}
 	}
 }

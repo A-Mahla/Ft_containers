@@ -395,52 +395,49 @@ void treeTest( void )
 	map<int, std::string> a;
 
 
-	Node<pair<const int, std::string> > *test = a._tree._create_node( pair<const int, std::string>(26, "") );
-//	std::cout << "key : " << test->content.first << std::endl;
-//	std::cout << "value : " << test->content.second << std::endl;
 
-	a._tree._insertNode( test );
-/*	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(14, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(21, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(23, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(19, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(20, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(16, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(15, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(12, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(41, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(47, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(21, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(30, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(28, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(14, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(38, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(23, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(28, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(19, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(16, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(20, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(15, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(12, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(35, "") ) );
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(39, "") ) );
-	print_tree<pair<const int, std::string> >("", a._tree._root, 0);
+	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
 
 	std::cout << std::endl;
 
-	a._tree._rotateRight( a._tree._find(26) );
 
-*/
-	a._tree._deleteNode( 26 );
 
-	std::cout << a._tree._sizeTree << std::endl;
+//	a._tree._deleteNode( 26 );
+
 
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
+	std::cout << std::endl << "\tList in order" << std::endl << std::endl;
 	for ( Node<pair<const int, std::string> >* i = a._tree._minTree( a._tree._root );
 			i->content.first != a._tree._maxTree( a._tree._root )->content.first;
 			i = a._tree._next( i ) )
-		std::cout << i->content.first << std::endl;
+		std::cout << "  " << i->content.first << std::endl;
+	std::cout << "  " << a._tree._maxTree(a._tree._root)->content.first << std::endl;
+	std::cout << std::endl;
 
-	for ( Node<pair<const int, std::string> >* i = a._tree._maxTree( a._tree._root );
+/*	for ( Node<pair<const int, std::string> >* i = a._tree._maxTree( a._tree._root );
 			i->content.first != a._tree._minTree( a._tree._root )->content.first;
 			i = a._tree._prev( i ) )
-		std::cout << i->content.first << std::endl;
+		std::cout << i->content.first << std::endl; */
 }
 
 // =================
