@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 04:28:37 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:05:56 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ namespace ft {
 	template< typename T1, typename T2 >
 	struct pair {
 
-//		typedef typename remove_cv<T1>::type	first_type;
-//		typedef typename remove_cv<T2>::type	second_type;
 		typedef T1	first_type;
 		typedef T2	second_type;
 
@@ -291,11 +289,7 @@ namespace ft {
 
 			inline ft::pair<iterator, bool>	insert( const value_type& x)
 			{
-				bool	check = true;
-
-				if ( this->_tree.findContent(x.first) )
-					check = false;
-				return ft::make_pair<iterator, bool>(this->_tree.insert(x), check);
+				return this->_tree.insert(x);
 			}
 
 	};

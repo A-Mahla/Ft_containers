@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 04:27:00 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 14:18:01 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 
 namespace ft {
 
+	template< typename T1, typename T2 >
+	struct pair;
+
+	template< class T1, class T2 >
+	ft::pair<T1,T2>	make_pair( T1 t, T2 u );
 
 	enum e_color { black = true, red = false };
 
@@ -178,12 +183,12 @@ namespace ft {
 
 			inline bool		operator==( const rb_iterator & rhs ) const
 			{
-				return this->it->content == rhs.it->content;
+				return this->it == rhs.it;
 			}
 
 			inline bool		operator!=( const rb_iterator & rhs ) const
 			{
-				return !(*this == rhs);
+				return this->it != rhs.it;
 			}
 
 			inline rb_iterator	& operator++( void )
@@ -371,7 +376,7 @@ namespace ft {
 				}
 				return x;
 			}
-
+/*
 			link_type	_insertNode( link_type node )
 			{
 				link_type	y = this->_nil;
@@ -406,6 +411,42 @@ namespace ft {
 				_insertCorrect(node);
 				_majNil();
 				return node;
+			}
+*/
+
+			ft::pair<iterator, bool>	_insertNode( const value_type& k )
+			{
+				link_type	y = this->_nil;
+				link_type	x = this->_root;
+				link_type	node = NULL;
+
+				while ( x != this->_nil )
+				{
+					y = x;
+					if ( KeyFirst()(x->content) == k.first )
+						return ft::make_pair<iterator, bool>(iterator(x), false);
+					if ( KeyFirst()(x->content) > k.first )
+						x = x->left;
+					else
+						x = x->right;
+				}
+
+				node = _create_node( k );
+				node->parent = y;
+
+				if ( y == this->_nil )
+					this->_root = node;
+				else
+				{
+					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
+						y->left = node;
+					else
+						y->right = node;
+				}
+				this->_sizeTree++;
+				_insertCorrect(node);
+				_majNil();
+				return ft::make_pair<iterator, bool>(iterator(node), false);
 			}
 
 			void	_insertCorrectLeft( link_type& node )
@@ -603,7 +644,7 @@ namespace ft {
 				link_type	top = node_type::minTree( x._root );
 
 				for ( ; top != x._nil; top = node_type::next(top) )
-					_insertNode(_create_node(top->content));
+					_insertNode( top->content );
 			}
 
 /*			template <class InputIterator>
@@ -712,33 +753,32 @@ namespace ft {
 
 			// ===== ELEMENT ACCESS =====
 
-			inline bool	findContent( const Key& k )
-			{
-				if ( _find(k) != this->_nil )
-					return false;
-				return true;
-			}
-
-			/* @member operator[]()
+			/* @member findContent()
 			 *
-			 * @brief access operator read/write
+			 * @brief pointer (T*) to content read/write
 			 *
 			 * @return reference*/
-/*
-			inline reference	operator[]( const Key& key )
+
+			inline pointer	findContent( const Key& k )
 			{
-				link_type	tmp = _find( key )
-				if ( tmp == this->_nil )
-					tmp = 
+				link_type	node = _find(k);
+				if ( node == this->_nil )
+					return NULL;
+				return &(node->content);
 			}
-*/
 
 			// ===== MODIFIERS =====
 
-			inline iterator	insert( const value_type x )
+			/* @member findContent()
+			 *
+			 * @brief pointer (T*) to content read/write
+			 *
+			 * @return reference*/
+
+
+			inline ft::pair<iterator, bool>	insert( const value_type x )
 			{
-				link_type	tmp = _insertNode( _create_node(x)); // leaks... if already there
-				return iterator(tmp);
+				return _insertNode( x );
 			}
 
 	};
@@ -762,8 +802,8 @@ void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
 
 		std::cout << e_colors[node->color] << e_type;
 		std::cout << " ( key : " << node->content.first;
-		std::cout << " )\x1b[0m\n";
-		//		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
+//		std::cout << " )\x1b[0m\n";
+		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
 	}
 	else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
 		std::cout << "\x1b[31mNULL\x1b[0m\n";

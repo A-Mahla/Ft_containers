@@ -384,17 +384,34 @@ void	stackTest( void )
 
 void	constructMap( void )
 {
-	map<char, int> a;
+	map<int, std::string> a;
+
+	a[7] = "";
+	a[8];
+	a[9];
+	a[9];
+	a[9] = "yo";
+	a[45];
+	a[-45];
+
+	map<int, std::string> b(a);
+
+	map<int, std::string> c;
+
+	c = a;
+	for ( int n(0); n < 100000000; n++ )
+		c[n];
 }
 
 // ==== Test_tree ====
 
+/*
 void treeTest( void )
 {
 	// TO TEST MAP ATTRIBUT AND RBTREE MUST BE PUBLIC
 	map<int, std::string> a;
 
-/*
+
 
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
@@ -416,29 +433,23 @@ void treeTest( void )
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(39, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
-*/
+
 	std::cout << std::endl;
 
-	std::cout << std::endl << "\tRb_Tree" << std::endl << std::endl;
-/*	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(18, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(22, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(8, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(11, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
-*/
-//	a[7];
-//	a[3];
-	a[18] = "yo";
-	a[18];
-//	a.insert(pair<const int, std::string>(9, ""));
+	a[7] = "";
+	a[8];
+	a[9];
+	a[9];
+	a[9] = "yo";
+	a[45];
+	a[-45];
+
 	std::cout << a._tree._sizeTree << std::endl;
 //	a._tree._deleteNode( 7 );
 	std::cout << a._tree._sizeTree << std::endl;
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
+	a[18] = "what";
 	std::cout << std::endl;
 	map<int, std::string> b(a);
 	print_tree<pair<const int, std::string> >("", b._tree._root, 2);
@@ -454,7 +465,7 @@ void treeTest( void )
 
 
 }
-
+*/
 // =================
 
 int main(void)
@@ -479,13 +490,13 @@ int main(void)
 
 	// ==== Test_tree ====
 
-	treeTest();
+//	treeTest();
 
 	// ====================
 
-/*	constructMap();
+	constructMap();
 
-
+/*
 	clock_t end = clock();
 
 	double elapsed_time = double(end - start) / CLOCKS_PER_SEC;

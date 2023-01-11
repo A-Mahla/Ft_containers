@@ -6,7 +6,7 @@
 #    By: meudier <meudier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/17 21:07:29 by amahla            #+#    #+#              #
-#    Updated: 2023/01/09 13:04:06 by amahla           ###   ########.fr        #
+#    Updated: 2023/01/11 14:29:52 by amahla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,8 @@ ifdef DEBUG
 	OUTDIR			:=	$(DEBUGDIR)
 endif
 
-all					:	$(addprefix $(PROG), $(NAME))	#\
-#						$(addprefix $(PROG_STD), $(NAME))
+all					:	$(addprefix $(PROG), $(NAME))	\
+						$(addprefix $(PROG_STD), $(NAME))
 
 debug				:
 ifndef DEBUG
@@ -53,12 +53,12 @@ $(OUTDIR)/%_custom.o		:	$(SRCDIR)/%.cpp | $(OUTDIR)
 	@mkdir -p $(dir $@)
 	$(CC) -c -MMD -MP $(CCFLAGS) $(OPTFLAG) $(addprefix -I ,$(INCLUDEDIR)) $< -o $@
 
-#$(OUTDIR)/%.o		:	$(SRCDIR)/%.cpp | $(OUTDIR)
-#	@mkdir -p $(dir $@)
-#	$(CC) -c -MMD -MP $(CCFLAGS) $(OPTFLAG) -DUSE_STL $(addprefix -I ,$(INCLUDEDIR)) $< -o $@
+$(OUTDIR)/%.o		:	$(SRCDIR)/%.cpp | $(OUTDIR)
+	@mkdir -p $(dir $@)
+	$(CC) -c -MMD -MP $(CCFLAGS) $(OPTFLAG) -DUSE_STL $(addprefix -I ,$(INCLUDEDIR)) $< -o $@
 
-#$(addprefix $(PROG_STD), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=.o))
-#										$(CC) $(CCFLAGS) $(OPTFLAG) -o $@ $^
+$(addprefix $(PROG_STD), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=.o))
+										$(CC) $(CCFLAGS) $(OPTFLAG) -o $@ $^
 
 $(addprefix $(PROG), $(NAME))		:	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=_custom.o))
 										$(CC) $(CCFLAGS) $(OPTFLAG) -o $@ $^
