@@ -399,7 +399,7 @@ void	constructMap( void )
 	map<int, std::string> c;
 
 	c = a;
-	for ( int n(0); n < 100000000; n++ )
+	for ( int n(0); n < 10000000; n++ )
 		c[n];
 }
 
@@ -470,12 +470,12 @@ void treeTest( void )
 
 int main(void)
 {
-//	clock_t start = clock();
+	clock_t start = clock();
 
-
+/*
 	// ==== VECTOR ====
 
-/*	constructVector();
+	constructVector();
 	beginAndEndVector();
 	capacityTestVector();
 	accessConstructVector();
@@ -496,7 +496,7 @@ int main(void)
 
 	constructMap();
 
-/*
+
 	clock_t end = clock();
 
 	double elapsed_time = double(end - start) / CLOCKS_PER_SEC;
@@ -507,7 +507,7 @@ int main(void)
 		std::cout <<  "MY CUSTOM CONTAINER :";
 	std::cout << "Elapsed time: ";
 	std::cout << elapsed_time << " seconds" << std::endl;
-*/
+
 	return 0;
 }
 
