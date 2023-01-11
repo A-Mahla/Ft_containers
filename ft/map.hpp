@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 20:15:50 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 00:51:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,10 @@ namespace ft {
 			template <class InputIterator>
 			inline	map(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
-				const Compare& comp = Compare(), const Allocator& = Allocator());
+				const Compare& comp = Compare(), const Allocator& = Allocator())
+				{
+					this->_tree(first, last);
+				}
 
 			/* @member ~map()
 			 *
@@ -358,7 +361,11 @@ namespace ft {
 			 * @return iterator*/
 
 			template <class InputIterator>
-			void insert(InputIterator first, InputIterator last);
+			void insert(InputIterator first,
+				typename enable_if< !is_integral<InputIterator>::value, InputIterator>::type last)
+			{
+				this->_tree.insert(first, last);
+			}
 
 			/* @member erase()
 			 *
@@ -414,6 +421,120 @@ namespace ft {
 			void clear( void )
 			{
 				this->_tree.deleteTree();
+			}
+
+			// ===== OBSERVERS =====
+
+			/* @member key_comp()
+			 *
+			 * @brief return the compare fonction from map constructor
+			 *
+			 * @return key_compare*/
+
+			key_compare	key_comp( void ) const
+			{
+				return this->_tree.key_comp();
+			}
+
+			/* @member value_comp()
+			 *
+			 * @brief return fonction that compare key from map pair
+			 *
+			 * @return value_compare*/
+
+			value_compare value_comp( void ) const
+			{
+				return value_compare(this->_tree.key_comp());
+			}
+
+			// ===== MAP OPERATIONS =====
+
+			/* @member find()
+			 *
+			 * @brief return the elem sought or end() if not
+			 *
+			 * @return iterator*/
+
+			inline iterator	find( const key_type& x )
+			{
+				return this->_tree.find();
+			}
+
+			inline const_iterator	find( const key_type& x ) const
+			{
+				return this->_tree.find();
+			}
+
+			/* @member count()
+			 *
+			 * @brief the number of elements with key that compares
+			 * equivalent to the specified argument
+			 *
+			 * @return size_type*/
+
+			size_type	count( const key_type& x ) const
+			{
+				return this->_tree.findCheck(x);
+			}
+
+			/* @member lower_bound()
+			 *
+			 * @brief Returns an iterator pointing to the first element
+			 * that is not less than (i.e. greater or equal to) key.
+			 *
+			 * @return iterator*/
+
+			iterator lower_bound( const key_type& x )
+			{
+				return this->_tree.lower_bound(x);
+			}
+
+			const_iterator lower_bound( const key_type& x ) const
+			{
+				return this->_tree.lower_bound(x);
+			}
+
+			/* @member upper_bound()
+			 *
+			 * @brief Returns an iterator pointing to the first element
+			 * that is greater than key.
+			 *
+			 * @return iterator*/
+
+			iterator upper_bound( const key_type& x )
+			{
+				return this->_tree.upper_bound(x);
+			}
+
+			const_iterator upper_bound( const key_type& x ) const
+			{
+				return this->_tree.upper_bound(x);
+			}
+
+			/* @member equal_range()
+			 *
+			 * @brief Returns a range containing all elements with
+			 * the given key in the container.
+			 * The range is defined by two iterators,
+			 * one pointing to the first element that is not less than
+			 * key and another pointing to the first element
+			 * greater than key. 
+			 *
+			 * @return pair<iterator, iterator>*/
+
+			ft::pair<iterator,iterator>	equal_range( const key_type& x )
+			{
+				return ft::make_pair<iterator, iterator>(
+					lower_bound(x), upper_bound(x)
+				);
+			}
+
+			ft::pair<const iterator,const iterator>
+				equal_range( const key_type& x ) const
+			{
+				return ft::make_pair<iterator, iterator>(
+					lower_bound(x), upper_bound(x)
+				);
 			}
 
 			#if VIEWER

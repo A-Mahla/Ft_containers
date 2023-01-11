@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 20:20:18 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 00:37:14 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -589,8 +589,6 @@ namespace ft {
 				if ( y->color == black )
 					_deleteCorrect(x);
 
-//				if ( x == this->_nil )
-//					x->parent = NULL;
 				this->_sizeTree--;
 				_destroyNode(y);
 				_majNil();
@@ -633,8 +631,6 @@ namespace ft {
 				if ( y->color == black )
 					_deleteCorrect(x);
 
-//				if ( x == this->_nil )
-//					x->parent = NULL;
 				this->_sizeTree--;
 				_destroyNode(y);
 				_majNil();
@@ -678,15 +674,15 @@ namespace ft {
 			 *
 			 * @return NO*/
 
-/*			template <class InputIterator>
+			template <class InputIterator>
 			rb_tree(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
 				const Compare& comp = Compare(), const Allocator& = Allocator())
 			{
-				iterator	top = node_type::minTree( x._root );
-				
+				while ( first != last )
+					_insertNode(*(first++));
 			}
-*/
+
 			/* @member ~rb_tree()
 			 *
 			 * @brief destruct by default
@@ -836,6 +832,13 @@ namespace ft {
 				return const_iterator(node);
 			}
 
+			inline size_type	findCheck( const Key& k ) const
+			{
+				if ( _find(k) == this->_nil )
+					return 0;
+				return 1;
+			}
+
 			// ===== MODIFIERS =====
 
 			/* @member insert()
@@ -901,18 +904,76 @@ namespace ft {
 				_deleteTree( this->_root );
 			}
 
+			// ===== OBSERVERS =====
 
+			/* @member key_comp()
+			 *
+			 * @brief clear all elem in rb_tree
+			 *
+			 * @return key_compare*/
 
+			Compare	key_comp( void ) const
+			{
+				return this->_comp;
+			}
 
+			/* @member lower_bound()
+			 *
+			 * @brief Returns an iterator pointing to the first element
+			 * that is not less than (i.e. greater or equal to) key.
+			 *
+			 * @return iterator*/
 
+			iterator lower_bound( const key_type& x )
+			{
+				node_type	node = node_type::minTree( this->_root );
 
+				for ( ; node != this->_nil
+						&& node->content.first < x.first;
+						node = node_type::next(node) )
+					;
+				return iterator(node);
+			}
 
+			const_iterator lower_bound( const key_type& x ) const
+			{
+				node_type	node = node_type::minTree( this->_root );
 
+				for ( ; node != this->_nil
+						&& node->content.first < x.first;
+						node = node_type::next(node) )
+					;
+				return const_iterator(node);
+			}
 
+			/* @member upper_bound()
+			 *
+			 * @brief Returns an iterator pointing to the first element
+			 * that is greater than key.
+			 *
+			 * @return iterator*/
 
+			iterator upper_bound( const key_type& x )
+			{
+				node_type	node = node_type::minTree( this->_root );
 
+				for ( ; node != this->_nil
+						&& node->content.first <= x.first;
+						node = node_type::next(node) )
+					;
+				return iterator(node);
+			}
 
+			const_iterator upper_bound( const key_type& x ) const
+			{
+				node_type	node = node_type::minTree( this->_root );
 
+				for ( ; node != this->_nil
+						&& node->content.first <= x.first;
+						node = node_type::next(node) )
+					;
+				return const_iterator(node);
+			}
 
 
 
@@ -974,17 +1035,6 @@ namespace ft {
 				}
 			
 			#endif
-
-
-
-
-
-
-
-
-
-
-
 
 
 
