@@ -420,7 +420,7 @@ void treeTest( void )
 	std::cout << std::endl;
 
 	std::cout << std::endl << "\tRb_Tree" << std::endl << std::endl;
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
+/*	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(18, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
@@ -428,7 +428,15 @@ void treeTest( void )
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(8, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(11, "") ) );
 	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
-
+*/
+//	a[7];
+//	a[3];
+	a[18] = "yo";
+	a[18];
+//	a.insert(pair<const int, std::string>(9, ""));
+	std::cout << a._tree._sizeTree << std::endl;
+//	a._tree._deleteNode( 7 );
+	std::cout << a._tree._sizeTree << std::endl;
 	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
 
 	std::cout << std::endl;

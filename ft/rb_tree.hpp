@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 23:56:23 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 04:27:00 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ namespace ft {
 
 		static base_pointer	maxTree( base_pointer x )
 		{
-//			if ( !(x->parent) )
-//				return x;
+			if ( !(x->parent) )
+				return x;
 			while ( x->right->parent )
 				x = x->right;
 			return x;
@@ -63,8 +63,8 @@ namespace ft {
 
 		static const_base_pointer	maxTree( const_base_pointer x )
 		{
-//			if ( !(x->parent) )
-//				return x;
+			if ( !(x->parent) )
+				return x;
 			while ( x->right->parent )
 				x = x->right;
 			return x;
@@ -72,8 +72,8 @@ namespace ft {
 
 		static base_pointer	minTree( base_pointer x )
 		{
-//			if ( !(x->parent) )
-//				return x;
+			if ( !(x->parent) )
+				return x;
 			while ( x->left->parent )
 				x = x->left;
 			return x;
@@ -81,8 +81,8 @@ namespace ft {
 
 		static const_base_pointer	minTree( const_base_pointer x )
 		{
-//			if ( !(x->parent) )
-//				return x;
+			if ( !(x->parent) )
+				return x;
 			while ( x->left->parent )
 				x = x->left;
 			return x;
@@ -90,8 +90,6 @@ namespace ft {
 
 		static base_pointer	next( base_pointer node )
 		{
-//			if ( !(node->parent) )
-//				return node->left;
 			if ( node->right->parent )
 				return minTree(node->right);
 			while ( node->parent->parent && node->parent->right == node )
@@ -101,8 +99,6 @@ namespace ft {
 
 		static const_base_pointer	next( const_base_pointer node )
 		{
-//			if ( !(node->parent) )
-//				return node->left;
 			if ( node->right->parent )
 				return minTree(node->right);
 			while ( node->parent->parent && node->parent->right == node )
@@ -112,8 +108,6 @@ namespace ft {
 
 		static base_pointer	prev( base_pointer node )
 		{
-//			if ( !(node->parent) )
-//				return node->right;
 			if ( node->left->parent )
 				return maxTree(node->left);
 			while ( node->parent->parent && node->parent->left == node )
@@ -123,8 +117,6 @@ namespace ft {
 
 		static const_base_pointer	prev( const_base_pointer node )
 		{
-//			if ( !(node->parent) )
-//				return node->right;
 			if ( node->left->parent )
 				return maxTree(node->left);
 			while ( node->parent->parent && node->parent->left == node )
@@ -272,11 +264,12 @@ namespace ft {
 
 			inline void		_majNil( void )
 			{
+				this->_nil->parent = NULL;
 				this->_nil->left = this->_root;
 				this->_nil->right = this->_root;
 			}
 
-			inline link_type	_create_node( const value_type x )
+			inline link_type	_create_node( const value_type& x )
 			{
 				link_type	node = this->_alloc.allocate(1);
 				this->_alloc.construct(node, x);
@@ -351,7 +344,7 @@ namespace ft {
 				x->right = node;
 			}
 
-			link_type	_find( key_type k )
+			link_type	_find( const key_type& k )
 			{
 				link_type	x = this->_root;
 
@@ -365,7 +358,7 @@ namespace ft {
 				return x;
 			}
 
-			link_type	_find( key_type k ) const
+			link_type	_find( const key_type& k ) const
 			{
 				link_type	x = this->_root;
 
@@ -379,7 +372,7 @@ namespace ft {
 				return x;
 			}
 
-			void	_insertNode( link_type node )
+			link_type	_insertNode( link_type node )
 			{
 				link_type	y = this->_nil;
 				link_type	x = this->_root;
@@ -387,7 +380,12 @@ namespace ft {
 				while ( x != this->_nil )
 				{
 					y = x;
-					if ( KeyFirst()(x->content) > KeyFirst()(node->content) )
+					if ( KeyFirst()(x->content) == KeyFirst()(node->content) )
+					{
+						_destroyNode( node );
+						return x;
+					}
+					else if ( KeyFirst()(x->content) > KeyFirst()(node->content) )
 						x = x->left;
 					else
 						x = x->right;
@@ -407,6 +405,7 @@ namespace ft {
 				this->_sizeTree++;
 				_insertCorrect(node);
 				_majNil();
+				return node;
 			}
 
 			void	_insertCorrectLeft( link_type& node )
@@ -582,8 +581,8 @@ namespace ft {
 				if ( y->color == black )
 					_deleteCorrect(x);
 
-				if ( x == this->_nil )
-					x->parent = NULL;
+//				if ( x == this->_nil )
+//					x->parent = NULL;
 				this->_sizeTree--;
 				_destroyNode(y);
 				_majNil();
@@ -650,15 +649,11 @@ namespace ft {
 
 			inline iterator					end( void )
 			{
-			//	this->_nil->left = node_type::minTree( this->_root );
-			//	this->_nil->right = node_type::maxTree( this->_root );
 				return iterator(this->_nil);
 			}
 
 			inline const_iterator			end( void ) const
 			{
-			//	this->_nil->left = node_type::minTree( this->_root );
-			//	this->_nil->right = node_type::maxTree( this->_root );
 				return iterator(this->_nil);
 			}
 
@@ -674,16 +669,76 @@ namespace ft {
 
 			inline reverse_iterator			rend( void )
 			{
-			//	this->_nil->left = node_type::minTree( this->_root );
-			//	this->_nil->right = node_type::maxTree( this->_root );
 				return reverse_iterator(node_type::minTree( this->_root ));
 			}
 
 			inline const_reverse_iterator	rend( void ) const
 			{
-			//	this->_nil->left = node_type::minTree( this->_root );
-			//	this->_nil->right = node_type::maxTree( this->_root );
 				return reverse_iterator(node_type::minTree( this->_root ));
+			}
+
+			// ===== CAPACITY =====
+
+			/* @member getSize()
+			 *
+			 * @brief the size of current instance is return
+			 *
+			 * @return size_type*/
+
+			inline size_type	getSize( void ) const
+			{
+				return this->_sizeTree;
+			}
+
+			/* @brief the max_size can be stored in this instance
+			 *
+			 * @return size_type*/
+
+			inline size_type	max_size( void ) const
+			{
+				return this->_alloc.max_size();
+			}
+
+			/* @member empty()
+			 *
+			 * @brief boolean statement about getsize()==0 of current instance
+			 *
+			 * @return size_type*/
+
+			inline bool	empty( void ) const
+			{
+				return !(this->_sizeTree);
+			}
+
+			// ===== ELEMENT ACCESS =====
+
+			inline bool	findContent( const Key& k )
+			{
+				if ( _find(k) != this->_nil )
+					return false;
+				return true;
+			}
+
+			/* @member operator[]()
+			 *
+			 * @brief access operator read/write
+			 *
+			 * @return reference*/
+/*
+			inline reference	operator[]( const Key& key )
+			{
+				link_type	tmp = _find( key )
+				if ( tmp == this->_nil )
+					tmp = 
+			}
+*/
+
+			// ===== MODIFIERS =====
+
+			inline iterator	insert( const value_type x )
+			{
+				link_type	tmp = _insertNode( _create_node(x)); // leaks... if already there
+				return iterator(tmp);
 			}
 
 	};

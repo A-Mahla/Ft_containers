@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 20:35:40 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 04:28:37 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ namespace ft {
 	template< typename T1, typename T2 >
 	struct pair {
 
-		typedef typename remove_cv<T1>::type	first_type;
-		typedef typename remove_cv<T2>::type	second_type;
+//		typedef typename remove_cv<T1>::type	first_type;
+//		typedef typename remove_cv<T2>::type	second_type;
+		typedef T1	first_type;
+		typedef T2	second_type;
 
 		first_type	first;
 		second_type	second;
@@ -30,6 +32,9 @@ namespace ft {
 		pair( void ) : first(), second() { }
 
 		pair( const T1& x, const T2& y ) : first(x), second(y) { }
+
+		template< class U1, class U2 >
+		pair( const pair<U1, U2>& x ) : first(x.first), second(x.second) { }
 
 		pair	& operator=( const pair& other )
 		{
@@ -41,9 +46,9 @@ namespace ft {
 	};
 
 	template< class T1, class T2 >
-	pair<T1,T2>	make_pair( T1 t, T2 u )
+	ft::pair<T1,T2>	make_pair( T1 t, T2 u )
 	{
-		return pair<T1, T2>(t, u);
+		return ft::pair<T1, T2>(t, u);
 	}
 
 	template< class T1, class T2 >
@@ -234,6 +239,63 @@ namespace ft {
 			inline const_reverse_iterator	rend( void ) const
 			{
 				return this->_tree.rend();
+			}
+
+			// ===== CAPACITY =====
+
+			/* @member size()
+			 *
+			 * @brief the size of current instance is return
+			 *
+			 * @return size_type*/
+
+			inline size_type	size( void ) const
+			{
+				return this->_tree.getSize();
+			}
+
+			/* @brief the max_size can be stored in this instance
+			 *
+			 * @return size_type*/
+
+			inline size_type	max_size( void ) const
+			{
+				return this->_tree.max_size();
+			}
+
+			/* @member empty()
+			 *
+			 * @brief boolean statement about size()==0 of current instance
+			 *
+			 * @return size_type*/
+
+			inline bool	empty( void ) const
+			{
+				return this->_tree.empty();
+			}
+
+			// ===== ELEMENT ACCESS =====
+
+			/* @member operator[]()
+			 *
+			 * @brief access operator read/write
+			 *
+			 * @return reference*/
+
+			inline T&	operator[]( const Key& key )
+			{
+				return insert(ft::make_pair(key, T())).first->second;
+			}
+
+			// ===== MODIFIERS =====
+
+			inline ft::pair<iterator, bool>	insert( const value_type& x)
+			{
+				bool	check = true;
+
+				if ( this->_tree.findContent(x.first) )
+					check = false;
+				return ft::make_pair<iterator, bool>(this->_tree.insert(x), check);
 			}
 
 	};
