@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 18:07:47 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 20:15:50 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,13 @@ namespace ft {
 
 		pair	& operator=( const pair& other )
 		{
-			*(const_cast<typename remove_cv<T1>::type *>(&this->first)) = other.first;
-			*(const_cast<typename remove_cv<T2>::type *>(&this->second)) = other.second;
+			pair	tmp(other);
+
+			if ( this != &other )
+			{
+				*(const_cast<typename remove_cv<T1>::type *>(&this->first)) = other.first;
+				*(const_cast<typename remove_cv<T2>::type *>(&this->second)) = other.second;
+			}
 			return *this;
 		}
 
@@ -355,9 +360,60 @@ namespace ft {
 			template <class InputIterator>
 			void insert(InputIterator first, InputIterator last);
 
+			/* @member erase()
+			 *
+			 * @brief erase an elem (iterator) from current instance
+			 *
+			 * @return void*/
+
 			void	erase( iterator position )
 			{
 				this->_tree.deleteNode(position);
+			}
+
+			/* @member erase()
+			 *
+			 * @brief erase an elem (iterator) from current instance
+			 *
+			 * @return size_type ( 0 if not deleted / 1 if deleted)*/
+
+			size_type	erase( const key_type& x )
+			{
+				return this->_tree.deleteNode(x);
+			}
+
+			/* @member erase()
+			 *
+			 * @brief erase a range of iterator from current instance
+			 *
+			 * @return void*/
+
+			inline void	erase( iterator first, iterator last )
+			{
+				while ( first != last )
+					erase(first++);
+			}
+
+			/* @member swap()
+			 *
+			 * @brief swap 2 map
+			 *
+			 * @return void*/
+
+			void	swap( map<Key, T, Compare, Allocator>& other )
+			{
+				this->_tree.swap(other._tree);
+			}
+
+			/* @member clear()
+			 *
+			 * @brief clear all elem in map
+			 *
+			 * @return void*/
+
+			void clear( void )
+			{
+				this->_tree.deleteTree();
 			}
 
 			#if VIEWER

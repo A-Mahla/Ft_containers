@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 18:48:05 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 20:20:18 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,11 @@ namespace ft {
 
 			~rb_iterator() {}
 
+			inline link_type	base( void )
+			{
+				return this->it;
+			}
+
 			inline rb_iterator	& operator=( const rb_iterator & rhs )
 			{
 				if ( this != &rhs )
@@ -217,11 +222,6 @@ namespace ft {
 
 				this->it = node_type::prev( this->it );
 				return tmp;
-			}
-
-			inline link_type	base( void )
-			{
-				return this->it;
 			}
 
 	};
@@ -552,14 +552,14 @@ namespace ft {
 				x->color = black;
 			}
 
-			void	_deleteNode( key_type k )
+			bool	_deleteNode( key_type k )
 			{
 				link_type	node = _find(k);
 				link_type	y;
 				link_type	x;
 
 				if ( node == this->_nil )
-					return ;
+					return false;
 
 				if ( node->left == this->_nil || node->right == this->_nil )
 					y = node;
@@ -594,6 +594,7 @@ namespace ft {
 				this->_sizeTree--;
 				_destroyNode(y);
 				_majNil();
+				return true;
 			}
 
 			void	_deleteNode( link_type node )
@@ -850,11 +851,55 @@ namespace ft {
 				return _insertNode(x);
 			}
 
+			/* @member deleteNode()
+			 *
+			 * @brief erase a node (iterator) from current instance
+			 *
+			 * @return iterator*/
+
 			inline void	deleteNode( iterator position )
 			{
 				_deleteNode(position.base());
 			}
 
+			/* @member deleteNode()
+			 *
+			 * @brief erase a node (iterator) from current instance
+			 *
+			 * @return iterator*/
+
+			inline size_type	deleteNode( const key_type& x )
+			{
+				if( _deleteNode(x) )
+					return 1;
+				return 0;
+			}
+
+			/* @member swap()
+			 *
+			 * @brief swap 2 tree
+			 *
+			 * @return void*/
+
+			inline void	swap( rb_tree<Key, T, KeyFirst, Compare, Allocator>& other )
+			{
+				std::swap( this->_comp, other._comp );
+				std::swap( this->_alloc, other._alloc );
+				std::swap( this->_nil, other._nil );
+				std::swap( this->_root, other._root );
+				std::swap( this->_sizeTree, other._sizeTree );
+			}
+
+			/* @member deleteTree()
+			 *
+			 * @brief clear all elem in rb_tree
+			 *
+			 * @return void*/
+
+			void	deleteTree( void )
+			{
+				_deleteTree( this->_root );
+			}
 
 
 

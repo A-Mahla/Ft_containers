@@ -445,7 +445,7 @@ void	accessMap( void )
 
 void	modifierMap( void )
 {
-	map<int, std::string> a;
+	map<int, std::string>	a;
 
 	a[1];
 	a[7] = "";
@@ -462,15 +462,40 @@ void	modifierMap( void )
 	a.insert(--(a.end()), pair<int, std::string>(9, "yooo"));
 
 	#if VIEWER
+		std::cout << "tree a" << std::endl;
 		a.print();
 	#endif
 
 	std::cout << std::endl;
 	a.erase(a.begin());
 	std::cout << std::endl;
+	a.erase(10);
 
 	#if VIEWER
+		std::cout << "tree a" << std::endl;
 		a.print();
+		std::cout << a.size() << std::endl;
+	#endif
+
+	map<int, std::string>	b;
+
+	b.swap(a);
+	#if VIEWER
+		std::cout << "tree a" << std::endl;
+		a.print();
+		std::cout << a.size() << std::endl;
+		std::cout << "tree b" << std::endl;
+		b.print();
+		std::cout << b.size() << std::endl;
+	#endif
+	b.erase(b.begin(), b.end());
+	#if VIEWER
+		std::cout << "tree a" << std::endl;
+		a.print();
+		std::cout << b.size() << std::endl;
+		std::cout << "tree b" << std::endl;
+		b.print();
+		std::cout << b.size() << std::endl;
 	#endif
 }
 
