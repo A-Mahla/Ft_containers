@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 14:05:56 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 18:07:47 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ namespace ft {
 	template< typename T1, typename T2 >
 	struct pair {
 
-		typedef T1	first_type;
-		typedef T2	second_type;
+		typedef T1								first_type;
+		typedef T2								second_type;
 
 		first_type	first;
 		second_type	second;
@@ -34,10 +34,12 @@ namespace ft {
 		template< class U1, class U2 >
 		pair( const pair<U1, U2>& x ) : first(x.first), second(x.second) { }
 
+		pair( const pair& x ) : first(x.first), second(x.second) { }
+
 		pair	& operator=( const pair& other )
 		{
-			this->first = other.first;
-			this->second = other.second;
+			*(const_cast<typename remove_cv<T1>::type *>(&this->first)) = other.first;
+			*(const_cast<typename remove_cv<T2>::type *>(&this->second)) = other.second;
 			return *this;
 		}
 
@@ -117,8 +119,7 @@ namespace ft {
 					}
 			};
 
-//		private:
-		public: // TO CHANGE JUST FOR TEST
+		private:
 
 			typedef rb_tree< key_type, value_type, std::_Select1st<value_type>,
 				key_compare, allocator_type >	btree;
@@ -191,6 +192,17 @@ namespace ft {
 				if ( this != &rhs )
 					this->_tree = rhs._tree;
 				return *this;
+			}
+
+			/* @member get_allocator()
+			 *
+			 * @brief return allocator used
+			 *
+			 * @return allocator_type*/
+
+			allocator_type get_allocator() const
+			{
+				return this->_tree.get_allocator();
 			}
 
 			// ===== ITERATORS =====
@@ -278,19 +290,84 @@ namespace ft {
 			 *
 			 * @brief access operator read/write
 			 *
-			 * @return reference*/
+			 * @return T&*/
 
 			inline T&	operator[]( const Key& key )
 			{
 				return insert(ft::make_pair(key, T())).first->second;
 			}
 
+			/* @member at()
+			 *
+			 * @brief access operator read/write
+			 *
+			 * @return T&*/
+
+			T&	at( const Key& key )
+			{
+				iterator	tmp = this->_tree.find(key);
+				if ( tmp == end() )
+					throw std::out_of_range("map::at");
+				return	tmp->second;
+			}
+
+			const T&	at( const Key& key ) const
+			{
+				iterator	tmp = this->_tree.find(key);
+				if ( tmp == end() )
+					throw std::out_of_range("map::at");
+				return	tmp->second;
+			}
+
 			// ===== MODIFIERS =====
+
+			/* @member insert()
+			 *
+			 * @brief catch an iterator to content
+			 * a find (false) or create (true) element 
+			 * and return a pair of both (read/write)
+			 *
+			 * @return reference*/
 
 			inline ft::pair<iterator, bool>	insert( const value_type& x)
 			{
 				return this->_tree.insert(x);
 			}
+
+			/* @member insert()
+			 *
+			 * @brief iterator to  read/write
+			 *
+			 * @return ft::pair<iterator, bool>*/
+
+			inline iterator insert( iterator position, const value_type& x )
+			{
+				(void)position;
+				return this->_tree.insert(x).first;
+			}
+
+			/* @member insert()
+			 *
+			 * @brief insert range of iterator before the position
+			 *
+			 * @return iterator*/
+
+			template <class InputIterator>
+			void insert(InputIterator first, InputIterator last);
+
+			void	erase( iterator position )
+			{
+				this->_tree.deleteNode(position);
+			}
+
+			#if VIEWER
+
+				void	print( void )
+				{
+					this->_tree.print();
+				}
+
+			#endif
 
 	};
 

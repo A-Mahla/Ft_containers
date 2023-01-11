@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/06 12:10:38 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 17:36:02 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -555,7 +555,7 @@ namespace ft {
 
 			/* @member insert()
 			 *
-			 * @brief insert n * value before the position
+			 * @brief insert range of iterator before the position
 			 *
 			 * @return iterator*/
 

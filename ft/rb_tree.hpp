@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 14:18:01 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/11 18:48:05 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,11 @@ namespace ft {
 				return tmp;
 			}
 
+			inline link_type	base( void )
+			{
+				return this->it;
+			}
+
 	};
 
 
@@ -245,14 +250,13 @@ namespace ft {
 			typedef typename ft::rb_iterator<const T>			const_iterator;
 			typedef typename ft::reverse_iterator<iterator>		reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-			typedef typename Allocator::template rebind< Node<T> >::other	allocNode;
+			typedef typename Allocator::template rebind< Node<T> >::other	allocator_type;
 
 
-//		private:
-		public: //TO TEST JUST FOR TEST
+		private:
 
 			Compare						_comp;
-			allocNode					_alloc;
+			allocator_type				_alloc;
 			link_type					_nil;
 			link_type					_root;
 			size_type					_sizeTree;
@@ -376,43 +380,6 @@ namespace ft {
 				}
 				return x;
 			}
-/*
-			link_type	_insertNode( link_type node )
-			{
-				link_type	y = this->_nil;
-				link_type	x = this->_root;
-
-				while ( x != this->_nil )
-				{
-					y = x;
-					if ( KeyFirst()(x->content) == KeyFirst()(node->content) )
-					{
-						_destroyNode( node );
-						return x;
-					}
-					else if ( KeyFirst()(x->content) > KeyFirst()(node->content) )
-						x = x->left;
-					else
-						x = x->right;
-				}
-
-				node->parent = y;
-
-				if ( y == this->_nil )
-					this->_root = node;
-				else
-				{
-					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
-						y->left = node;
-					else
-						y->right = node;
-				}
-				this->_sizeTree++;
-				_insertCorrect(node);
-				_majNil();
-				return node;
-			}
-*/
 
 			ft::pair<iterator, bool>	_insertNode( const value_type& k )
 			{
@@ -629,13 +596,70 @@ namespace ft {
 				_majNil();
 			}
 
+			void	_deleteNode( link_type node )
+			{
+				link_type	y;
+				link_type	x;
+
+				if ( node == this->_nil )
+					return ;
+
+				if ( node->left == this->_nil || node->right == this->_nil )
+					y = node;
+				else
+					y = node_type::next( node );
+
+				if ( y->left != this->_nil )
+					x = y->left;
+				else
+					x = y->right;
+
+				x->parent = y->parent;
+
+				if ( y->parent != this->_nil )
+				{
+					if ( y->parent->left == y )
+						y->parent->left = x;
+					else
+						y->parent->right = x;
+				}
+				else
+					this->_root = x;
+
+				if ( y != node )
+					node->content = y->content;
+
+				if ( y->color == black )
+					_deleteCorrect(x);
+
+//				if ( x == this->_nil )
+//					x->parent = NULL;
+				this->_sizeTree--;
+				_destroyNode(y);
+				_majNil();
+			}
+
 		public:
+
+			// ===== CONSTRUCT/COPY/DESTROY =====
+
+			/* @member rb_tree()
+			 *
+			 * @brief construct by default
+			 *
+			 * @return NO*/
 
 			inline rb_tree( const Compare& comp = Compare(),
 					const Allocator& alloc = Allocator() )
 				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil)
 				,_sizeTree(0)
 			{ }
+
+			/* @member rb_tree()
+			 *
+			 * @brief construct by copy
+			 *
+			 * @return NO*/
 
 			inline rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>& x )
 				: _comp(x._comp), _alloc(x._alloc), _nil(_initNil()), _root(_nil)
@@ -647,6 +671,12 @@ namespace ft {
 					_insertNode( top->content );
 			}
 
+			/* @member rb_tree()
+			 *
+			 * @brief construct with a range of iterators
+			 *
+			 * @return NO*/
+
 /*			template <class InputIterator>
 			rb_tree(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
@@ -656,11 +686,23 @@ namespace ft {
 				
 			}
 */
-			~rb_tree( void )
+			/* @member ~rb_tree()
+			 *
+			 * @brief destruct by default
+			 *
+			 * @return NO*/
+
+			inline ~rb_tree( void )
 			{
 				_deleteTree( this->_root );
 				this->_alloc.deallocate( this->_nil, 1 );
 			}
+
+			/* @member operator=()
+			 *
+			 * @brief map assignment operator
+			 *
+			 * @return NO*/
 
 			inline rb_tree<Key, T, KeyFirst, Compare, Allocator>&
 				operator=( const rb_tree<Key, T, KeyFirst, Compare, Allocator>& rhs )
@@ -677,6 +719,24 @@ namespace ft {
 				}
 				return *this;
 			}
+
+			/* @member get_allocator()
+			 *
+			 * @brief return allocator used
+			 *
+			 * @return allocator_type*/
+
+			inline allocator_type get_allocator( void ) const
+			{
+				return this->_tree._alloc;
+			}
+
+			// ===== ITERATORS =====
+
+			/* @member begin() / end() / rbegin() / rend()
+			 *
+			 * @return iterator*/
+
 
 			inline iterator					begin( void )
 			{
@@ -755,85 +815,140 @@ namespace ft {
 
 			/* @member findContent()
 			 *
-			 * @brief pointer (T*) to content read/write
+			 * @brief iterator to content read/write
 			 *
 			 * @return reference*/
 
-			inline pointer	findContent( const Key& k )
+			inline iterator	find( const Key& k )
 			{
 				link_type	node = _find(k);
 				if ( node == this->_nil )
-					return NULL;
-				return &(node->content);
+					return end();
+				return iterator(node);
+			}
+
+			inline const_iterator	find( const Key& k ) const
+			{
+				link_type	node = _find(k);
+				if ( node == this->_nil )
+					return end();
+				return const_iterator(node);
 			}
 
 			// ===== MODIFIERS =====
 
-			/* @member findContent()
+			/* @member insert()
 			 *
-			 * @brief pointer (T*) to content read/write
+			 * @brief catch an iterator to content
+			 * a find (false) or create (true) element 
+			 * and return a pair of both (read/write)
 			 *
 			 * @return reference*/
 
-
-			inline ft::pair<iterator, bool>	insert( const value_type x )
+			inline ft::pair<iterator, bool>	insert( const value_type& x )
 			{
-				return _insertNode( x );
+				return _insertNode(x);
 			}
+
+			inline void	deleteNode( iterator position )
+			{
+				_deleteNode(position.base());
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			#if VIEWER
+
+				void	print( void )
+				{
+					print_tree("", this->_root, 2);
+				}
+
+				void	display_tree_content(std::string prefix, link_type node, int is_left)
+				{
+					const std::string	e_type = "NODE";
+					const std::string	e_colors[2] = {"\x1b[33m", "\x1b[32m"};
+				
+					if (is_left == 2)
+						std::cout << " ──";
+					if (is_left == 1)
+						std::cout << prefix << "├──";
+					else if (is_left == 0 )
+						std::cout << prefix << "└──";
+					if ( node->parent != NULL )
+					{
+				
+						std::cout << e_colors[node->color] << e_type;
+						std::cout << " ( key : " << node->content.first;
+				//		std::cout << " )\x1b[0m\n";
+						std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
+					}
+					else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
+						std::cout << "\x1b[31mNULL\x1b[0m\n";
+				}
+				
+				void	print_tree(std::string prefix, link_type node, int is_left)
+				{
+				
+					std::string	new_prefix;
+				
+					if ( node->parent != NULL && node->left != NULL && node->right != NULL )
+						//	if ( node )
+					{
+						display_tree_content(prefix, node, is_left);
+						if ( is_left == 2 )
+							is_left = 0;
+						if (!is_left)
+						{
+							new_prefix = prefix + "    ";
+							print_tree(new_prefix, node->right, 1);
+							print_tree(new_prefix, node->left, 0);
+						}
+						else
+						{
+							new_prefix = prefix + "│   ";
+							print_tree(new_prefix, node->right, 1);
+							print_tree(new_prefix, node->left, 0);
+						}
+					}
+				}
+			
+			#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	};
 
 }
 
-template< typename T >
-void	display_tree_content(std::string prefix, ft::Node<T>* node, int is_left)
-{
-	const std::string	e_type = "NODE";
-	const std::string	e_colors[2] = {"\x1b[33m", "\x1b[32m"};
+#if VIEWER
 
-	if (is_left == 2)
-		std::cout << " ──";
-	if (is_left == 1)
-		std::cout << prefix << "├──";
-	else if (is_left == 0 )
-		std::cout << prefix << "└──";
-	if ( node->parent != NULL )
-	{
-
-		std::cout << e_colors[node->color] << e_type;
-		std::cout << " ( key : " << node->content.first;
-//		std::cout << " )\x1b[0m\n";
-		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
-	}
-	else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
-		std::cout << "\x1b[31mNULL\x1b[0m\n";
-}
-
-	template< typename T >
-void	print_tree(std::string prefix, ft::Node<T> *node, int is_left)
-{
-
-	std::string	new_prefix;
-
-	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
-		//	if ( node )
-	{
-		display_tree_content(prefix, node, is_left);
-		if ( is_left == 2 )
-			is_left = 0;
-		if (!is_left)
-		{
-			new_prefix = prefix + "    ";
-			print_tree(new_prefix, node->right, 1);
-			print_tree(new_prefix, node->left, 0);
-		}
-		else
-		{
-			new_prefix = prefix + "│   ";
-			print_tree(new_prefix, node->right, 1);
-			print_tree(new_prefix, node->left, 0);
-		}
-	}
-}
+#endif
 
 #endif

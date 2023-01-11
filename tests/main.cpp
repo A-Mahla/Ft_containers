@@ -394,47 +394,19 @@ void	constructMap( void )
 	a[45];
 	a[-45];
 
+
 	map<int, std::string> b(a);
 
 	map<int, std::string> c;
 
 	c = a;
-	for ( int n(0); n < 10000000; n++ )
+	for ( int n(0); n < 100000; n++ )
 		c[n];
 }
 
-// ==== Test_tree ====
-
-/*
-void treeTest( void )
+void	capacityMap( void )
 {
-	// TO TEST MAP ATTRIBUT AND RBTREE MUST BE PUBLIC
 	map<int, std::string> a;
-
-
-
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(26, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(17, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(41, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(47, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(21, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(30, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(14, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(38, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(23, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(28, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(19, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(16, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(10, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(20, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(15, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(12, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(35, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(7, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(39, "") ) );
-	a._tree._insertNode( a._tree._create_node( pair<const int, std::string>(3, "") ) );
-
-	std::cout << std::endl;
 
 	a[7] = "";
 	a[8];
@@ -444,28 +416,65 @@ void treeTest( void )
 	a[45];
 	a[-45];
 
-	std::cout << a._tree._sizeTree << std::endl;
-//	a._tree._deleteNode( 7 );
-	std::cout << a._tree._sizeTree << std::endl;
-	print_tree<pair<const int, std::string> >("", a._tree._root, 2);
-
-	a[18] = "what";
-	std::cout << std::endl;
-	map<int, std::string> b(a);
-	print_tree<pair<const int, std::string> >("", b._tree._root, 2);
-
-	map<int, std::string> c;
-
-	c = b;
-	std::cout << std::endl;
-	print_tree<pair<const int, std::string> >("", c._tree._root, 2);
-
-	for ( map< int, std::string>::reverse_iterator it(c.rend()); it != c.rbegin(); )
-		std::cout << (--it)->first << std::endl;
-
-
+	std::cout << a.size() << std::endl;
+	std::cout << a.max_size() << std::endl;
+	std::cout << a.empty() << std::endl;
 }
-*/
+
+void	accessMap( void )
+{
+	
+	map<int, std::string> a;
+
+	a[7] = "";
+	a[9];
+	a[8];
+	a[45];
+	a[-45];
+
+	std::cout << a.at(9) << std::endl;
+	try
+	{
+		std::cout << a.at(66) << std::endl;
+	}
+	catch ( std::out_of_range & e )
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
+void	modifierMap( void )
+{
+	map<int, std::string> a;
+
+	a[1];
+	a[7] = "";
+	a[8];
+	a[10];
+	a[11];
+	a[12];
+	a[15];
+	a[45];
+	a[-45];
+
+//	a.insert(pair<int, std::string>(9, "yooo"));
+	a.insert(pair<int, std::string>(21, "yooo"));
+	a.insert(--(a.end()), pair<int, std::string>(9, "yooo"));
+
+	#if VIEWER
+		a.print();
+	#endif
+
+	std::cout << std::endl;
+	a.erase(a.begin());
+	std::cout << std::endl;
+
+	#if VIEWER
+		a.print();
+	#endif
+}
+
+
 // =================
 
 int main(void)
@@ -495,7 +504,9 @@ int main(void)
 	// ====================
 
 	constructMap();
-
+	accessMap();
+	capacityMap();
+	modifierMap();
 
 	clock_t end = clock();
 
