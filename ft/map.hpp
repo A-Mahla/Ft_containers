@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 00:51:29 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 01:28:23 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ namespace ft {
 			 *
 			 * @return T&*/
 
-			T&	at( const Key& key )
+			inline T&	at( const Key& key )
 			{
 				iterator	tmp = this->_tree.find(key);
 				if ( tmp == end() )
@@ -319,7 +319,7 @@ namespace ft {
 				return	tmp->second;
 			}
 
-			const T&	at( const Key& key ) const
+			inline const T&	at( const Key& key ) const
 			{
 				iterator	tmp = this->_tree.find(key);
 				if ( tmp == end() )
@@ -361,7 +361,7 @@ namespace ft {
 			 * @return iterator*/
 
 			template <class InputIterator>
-			void insert(InputIterator first,
+			inline void insert(InputIterator first,
 				typename enable_if< !is_integral<InputIterator>::value, InputIterator>::type last)
 			{
 				this->_tree.insert(first, last);
@@ -373,7 +373,7 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			void	erase( iterator position )
+			inline void	erase( iterator position )
 			{
 				this->_tree.deleteNode(position);
 			}
@@ -384,7 +384,7 @@ namespace ft {
 			 *
 			 * @return size_type ( 0 if not deleted / 1 if deleted)*/
 
-			size_type	erase( const key_type& x )
+			inline size_type	erase( const key_type& x )
 			{
 				return this->_tree.deleteNode(x);
 			}
@@ -407,7 +407,7 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			void	swap( map<Key, T, Compare, Allocator>& other )
+			inline void	swap( map<Key, T, Compare, Allocator>& other )
 			{
 				this->_tree.swap(other._tree);
 			}
@@ -418,7 +418,7 @@ namespace ft {
 			 *
 			 * @return void*/
 
-			void clear( void )
+			inline void clear( void )
 			{
 				this->_tree.deleteTree();
 			}
@@ -431,7 +431,7 @@ namespace ft {
 			 *
 			 * @return key_compare*/
 
-			key_compare	key_comp( void ) const
+			inline key_compare	key_comp( void ) const
 			{
 				return this->_tree.key_comp();
 			}
@@ -442,7 +442,7 @@ namespace ft {
 			 *
 			 * @return value_compare*/
 
-			value_compare value_comp( void ) const
+			inline value_compare value_comp( void ) const
 			{
 				return value_compare(this->_tree.key_comp());
 			}
@@ -472,7 +472,7 @@ namespace ft {
 			 *
 			 * @return size_type*/
 
-			size_type	count( const key_type& x ) const
+			inline size_type	count( const key_type& x ) const
 			{
 				return this->_tree.findCheck(x);
 			}
@@ -484,12 +484,12 @@ namespace ft {
 			 *
 			 * @return iterator*/
 
-			iterator lower_bound( const key_type& x )
+			inline iterator lower_bound( const key_type& x )
 			{
 				return this->_tree.lower_bound(x);
 			}
 
-			const_iterator lower_bound( const key_type& x ) const
+			inline const_iterator lower_bound( const key_type& x ) const
 			{
 				return this->_tree.lower_bound(x);
 			}
@@ -501,12 +501,12 @@ namespace ft {
 			 *
 			 * @return iterator*/
 
-			iterator upper_bound( const key_type& x )
+			inline iterator upper_bound( const key_type& x )
 			{
 				return this->_tree.upper_bound(x);
 			}
 
-			const_iterator upper_bound( const key_type& x ) const
+			inline const_iterator upper_bound( const key_type& x ) const
 			{
 				return this->_tree.upper_bound(x);
 			}
@@ -522,19 +522,31 @@ namespace ft {
 			 *
 			 * @return pair<iterator, iterator>*/
 
-			ft::pair<iterator,iterator>	equal_range( const key_type& x )
+			inline ft::pair<iterator,iterator>	equal_range( const key_type& x )
 			{
 				return ft::make_pair<iterator, iterator>(
 					lower_bound(x), upper_bound(x)
 				);
 			}
 
-			ft::pair<const iterator,const iterator>
+			inline ft::pair<const iterator,const iterator>
 				equal_range( const key_type& x ) const
 			{
 				return ft::make_pair<iterator, iterator>(
 					lower_bound(x), upper_bound(x)
 				);
+			}
+
+			friend bool	operator==( const map<Key, T, Compare, Allocator>& x,
+				const map<Key, T, Compare, Allocator>& y )
+			{
+				return x._tree == y._tree;
+			}
+
+			friend bool	operator<( const map<Key, T, Compare, Allocator>& x,
+				const map<Key, T, Compare, Allocator>& y )
+			{
+				return x._tree < y._tree;
 			}
 
 			#if VIEWER
@@ -547,6 +559,42 @@ namespace ft {
 			#endif
 
 	};
+
+	template <class Key, class T, class Compare, class Allocator>
+		bool	operator!=( const map<Key, T, Compare, Allocator>& x,
+		const map<Key, T, Compare, Allocator>& y )
+	{
+		return !(x == y);
+	}
+
+	template <class Key, class T, class Compare, class Allocator>
+		bool	operator>( const map<Key, T, Compare, Allocator>& x,
+		const map<Key, T, Compare, Allocator>& y )
+	{
+		return y < x;
+	}
+
+	template <class Key, class T, class Compare, class Allocator>
+		bool	operator>=( const map<Key, T, Compare, Allocator>& x,
+		const map<Key, T, Compare, Allocator>& y )
+		{
+			return !(x < y);
+		}
+
+	template <class Key, class T, class Compare, class Allocator>
+		bool	operator<=( const map<Key, T, Compare, Allocator>& x,
+		const map<Key, T, Compare, Allocator>& y )
+	{
+		return !(y < x);
+	}
+
+	template <class Key, class T, class Compare, class Allocator>
+	void	swap(map<Key, T, Compare, Allocator>& x,
+		map<Key, T, Compare, Allocator>& y)
+	{
+		x.swap(y);
+	}
+
 
 }
 

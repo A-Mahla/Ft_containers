@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 00:37:14 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 01:33:33 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define __RB_TREE_HPP__
 
 # include "metaprog.hpp"
+# include "algo.hpp"
 # include "reverse_iterator.hpp"
 
 namespace ft {
@@ -304,6 +305,7 @@ namespace ft {
 					_deleteTree( root->right );
 				_destroyNode( root );
 			}
+
 
 			void	_rotateLeft( link_type node )
 			{
@@ -844,10 +846,10 @@ namespace ft {
 			/* @member insert()
 			 *
 			 * @brief catch an iterator to content
-			 * a find (false) or create (true) element 
-			 * and return a pair of both (read/write)
+			 * if find (false) or create (true) element 
+			 * and return a pair of both
 			 *
-			 * @return reference*/
+			 * @return ft::pair<iterator, bool>*/
 
 			inline ft::pair<iterator, bool>	insert( const value_type& x )
 			{
@@ -1040,10 +1042,24 @@ namespace ft {
 
 	};
 
+
+	template <class Key, class T, class Compare, class KeyFirst, class Allocator>
+	inline bool	operator==( const rb_tree<Key, T, Compare, KeyFirst, Allocator>& x,
+		const rb_tree<Key, T, Compare, KeyFirst, Allocator>& y )
+	{
+		return x.getSize() == y.getSize()
+				&& ft::equal(x.begin(), x.end(), y.begin());
+	}
+
+	template <class Key, class T, class Compare, class KeyFirst, class Allocator>
+	inline bool	operator<( const rb_tree<Key, T, Compare, KeyFirst, Allocator>& x,
+		const rb_tree<Key, T, Compare, KeyFirst, Allocator>& y )
+	{
+		return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+	}
+
+
 }
 
-#if VIEWER
-
-#endif
 
 #endif
