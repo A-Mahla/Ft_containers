@@ -622,39 +622,72 @@ class foo {
 		bool		_verbose;
 };
 
-#define T1 char
-#define T2 foo<float>
-typedef map<T1, T2> _map;
-typedef _map::const_iterator const_it;
+# define _pair pair
 
-static unsigned int i = 0;
-
-void	ft_comp(const _map &mp, const const_it &it1, const const_it &it2)
+template <typename T>
+std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
-	bool res[2];
-
-	std::cout << "\t-- [" << ++i << "] --" << std::endl;
-	res[0] = mp.key_comp()(it1->first, it2->first);
-	res[1] = mp.value_comp()(*it1, *it2);
-	std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
-	std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
+	o << "key: " << iterator->first << " | value: " << iterator->second;
+	if (nl)
+		o << std::endl;
+	return ("");
 }
+
+
+template <typename T_MAP>
+void	printSize(T_MAP const &mp, bool print_content = 1)
+{
+	std::cout << "size: " << mp.size() << std::endl;
+	std::cout << "max_size: " << mp.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+#include <list>
+
+#define T1 int
+#define T2 int
+typedef _pair<const T1, T2> T3;
 
 void		othertest(void)
 {
-	_map	mp;
+	std::list<T3> lst;
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3(lst_size - i, i));
 
-	mp['a'] = 2.3;
-	mp['b'] = 1.4;
-	mp['c'] = 0.3;
-	mp['d'] = 4.2;
-	std::cout << mp.size() << std::endl;
+	map<T1, T2> mp(lst.begin(), lst.end());
+	map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
 
-	for (const_it it1 = mp.begin(); it1 != mp.end(); ++it1)
-		for (const_it it2 = mp.begin(); it2 != mp.end(); ++it2)
-			ft_comp(mp, it1, it2);
+	map<T1, T2> mp_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
+	
 
-	std::cout << mp.size() << std::endl;
+	it = mp.begin(); ite = --(--mp.end());
+	map<T1, T2> mp_copy(mp);
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
+
+	std::cout << "\t-- PART ONE --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
+
+	mp = mp_copy;
+	mp_copy = mp_range;
+	mp_range.clear();
+
+	std::cout << "\t-- PART TWO --" << std::endl;
+	printSize(mp);
+	printSize(mp_range);
+	printSize(mp_copy);
 }
 
 int main(void)

@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 22:57:24 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 23:32:03 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -493,13 +493,13 @@ namespace ft {
 				return	node;
 			}
 
-			inline void	_destroyNode( link_type node )
+			inline void	_destroyNode( link_type &node )
 			{
 				this->_alloc.destroy( node );
 				this->_alloc.deallocate( node, 1 );
 			}
 
-			inline void	_deleteTree( link_type& root )
+			inline void	_deleteTree( link_type & root )
 			{
 				if ( root == this->_nil )
 					return ;
@@ -892,7 +892,7 @@ namespace ft {
 
 			inline rb_tree( const rb_tree<Key, T, KeyFirst, Compare, Allocator>& x )
 				: _comp(x._comp), _alloc(x._alloc), _nil(_initNil()), _root(_nil)
-				,_sizeTree(x._sizeTree)
+				,_sizeTree(0)
 			{
 				link_type	top = node_type::minTree( x._root );
 
@@ -1135,6 +1135,8 @@ namespace ft {
 			void	deleteTree( void )
 			{
 				_deleteTree( this->_root );
+				this->_sizeTree = 0;
+				this->_root = this->_nil;
 			}
 
 			// ===== OBSERVERS =====
