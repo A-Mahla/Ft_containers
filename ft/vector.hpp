@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/11 17:36:02 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 03:35:00 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,18 +503,26 @@ namespace ft {
 				push_back(T());
 				
 				// iterator position in new vector()
-				reverse_iterator	pos( iterator( this->_start + n ) );
+//				reverse_iterator	pos( iterator( this->_start + n ) );
 
 				// memmove all data from position to position + n at the end
-				for ( reverse_iterator rit = rbegin() + 1; rit != pos; rit++ )
+/*				for ( reverse_iterator rit = rbegin() + 1; rit != pos; rit++ )
 				{
 					this->_alloc.destroy( &(*(rit.base())) );
 					this->_alloc.construct( &(*rit.base()), *rit );
+				} */
+				//test
+				for ( pointer p = this->_finish - 1; p != this->_start + n; p-- )
+				{
+					this->_alloc.destroy(p);
+					this->_alloc.construct( p, *(p - 1) );
 				}
 
 				// insert data x
-				this->_alloc.destroy( &(*pos.base()) );
-				this->_alloc.construct( &(*pos.base()), x );
+//				this->_alloc.destroy( &(*pos.base()) );
+//				this->_alloc.construct( &(*pos.base()), x );
+				this->_alloc.destroy( this->_start + n );
+				this->_alloc.construct( this->_start + n, x );
 				return this->_start + n;
 			}
 
@@ -536,20 +544,30 @@ namespace ft {
 					this->_alloc.construct( this->_finish++, x );
 
 				// iterator position in new vector()
-				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
+//				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
 
 				// memmove all data from position to position + n at the end
-				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
+		/*		for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
 				{
 					this->_alloc.destroy( &*rit );
 					this->_alloc.construct( &*rit, *(this->_start + --nEnd ) );
+				}*/
+				for ( pointer p = this->_finish - 1; p != this->_start + nPos + n - 1; p-- )
+				{
+					this->_alloc.destroy(p);
+					this->_alloc.construct( p, *(this->_start + --nEnd) );
 				}
 
 				// insert data n * x
-				while ( n-- )
+			/*	while ( n-- )
 				{
 					this->_alloc.destroy( this->_start + nPos + n);
 					this->_alloc.construct( this->_start + nPos + n, x );
+				}*/
+				for ( size_type i = 0; i < n; i++ )
+				{
+					this->_alloc.destroy( this->_start + nPos + i);
+					this->_alloc.construct( this->_start + nPos + i, x );
 				}
 			}
 
@@ -574,20 +592,30 @@ namespace ft {
 					this->_alloc.construct( this->_finish++, T() );
 
 				// iterator position in new vector()
-				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
+//				reverse_iterator	pos( iterator( this->_start + nPos + n ) );
 
 				// memmove all data from position to position + n at the end
-				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
+/*				for ( reverse_iterator rit = rbegin(); rit != pos; rit++ )
 				{
 					this->_alloc.destroy( &*rit );
 					this->_alloc.construct( &*rit, *(this->_start + --nEnd ) );
+				}*/
+				for ( pointer p = this->_finish - 1; p != this->_start + nPos + n - 1; p-- )
+				{
+					this->_alloc.destroy(p);
+					this->_alloc.construct( p, *(this->_start + --nEnd) );
 				}
 
 				// insert range of iterator [first, last)
-				while ( n-- )
+		/*		while ( n-- )
 				{
 					this->_alloc.destroy( this->_start + nPos + n);
 					this->_alloc.construct( this->_start + nPos + n, *(--last) );
+				}*/
+				for ( size_type i = 0; i < n; i++ )
+				{
+					this->_alloc.destroy( this->_start + nPos + i);
+					this->_alloc.construct( this->_start + nPos + i, *(first++) );
 				}
 			}
 

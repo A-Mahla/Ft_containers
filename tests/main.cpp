@@ -63,7 +63,7 @@ void	constructVector( void )
 	std::cout << "capacity character : " << characters.capacity() << std::endl;
 	std::cout << "size character : " << characters.size() << std::endl;
  
-	const std::string extra(100000000, 'b');
+	const std::string extra(10000000, 'b');
 	characters.assign(extra.begin(), extra.end());
 	std::cout << "capacity character : " << characters.capacity() << std::endl;
 	std::cout << "size character : " << characters.size() << std::endl;
@@ -506,7 +506,7 @@ int main(void)
 {
 	clock_t start = clock();
 
-/*
+
 	// ==== VECTOR ====
 
 	constructVector();
@@ -519,7 +519,7 @@ int main(void)
 	// ==== STACK ====
 
 	stackTest();
-*/
+
 	// ==== MAP ====
 
 	// ==== Test_tree ====
