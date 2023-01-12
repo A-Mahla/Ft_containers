@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 22:15:09 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 22:57:24 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,11 +193,6 @@ namespace ft {
 				return this->it != rhs.it;
 			}
 
-			operator rb_iterator< const T >( void ) const
-			{
-				return rb_iterator< const T >(this->it);
-			}
-
 			inline rb_iterator	& operator++( void )
 			{
 				this->it = node_type::next( this->it );
@@ -293,7 +288,7 @@ namespace ft {
 		public:
 
 			typedef T										value_type;
-			typedef T&										reference;
+			typedef const T&								reference;
 			typedef const T*								pointer;
 			typedef std::ptrdiff_t							difference_type;
 			typedef std::bidirectional_iterator_tag			iterator_category;
@@ -311,6 +306,9 @@ namespace ft {
 			const_rb_iterator( link_type rhs ) : it(rhs) { }
 
 			const_rb_iterator( const const_rb_iterator & rhs ) : it(rhs.it) { }
+
+			template< class U>
+			const_rb_iterator( const rb_iterator<U> & rhs ) : it(rhs.base()) { }
 
 			~const_rb_iterator() {}
 
