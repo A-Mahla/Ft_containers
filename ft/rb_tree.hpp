@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 01:33:33 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 03:12:56 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,6 @@ namespace ft {
 				_destroyNode( root );
 			}
 
-
 			void	_rotateLeft( link_type node )
 			{
 				link_type	x = node->right;
@@ -418,7 +417,7 @@ namespace ft {
 				return ft::make_pair<iterator, bool>(iterator(node), false);
 			}
 
-			void	_insertCorrectLeft( link_type& node )
+			inline void	_insertCorrectLeft( link_type& node )
 			{
 				link_type y = node->parent->parent->right;
 				if ( y->color == red )
@@ -441,7 +440,7 @@ namespace ft {
 				}
 			}
 
-			void	_insertCorrectRight( link_type& node )
+			inline void	_insertCorrectRight( link_type& node )
 			{
 				link_type	y = node->parent->parent->left;
 				if ( y->color == red )
@@ -464,7 +463,7 @@ namespace ft {
 				}
 			}
 
-			void	_insertCorrect( link_type node )
+			inline void	_insertCorrect( link_type node )
 			{
 				while ( node->parent->color == red )
 				{
@@ -476,7 +475,7 @@ namespace ft {
 				this->_root->color = black;
 			}
 
-			void	_deleteCorrectLeft( link_type& x )
+			inline void	_deleteCorrectLeft( link_type& x )
 			{
 				link_type	w = x->parent->right;
 				if ( w->color == red )
@@ -509,7 +508,7 @@ namespace ft {
 
 			}
 
-			void	_deleteCorrectRight( link_type& x )
+			inline void	_deleteCorrectRight( link_type& x )
 			{
 				link_type	w = x->parent->left;
 				if ( w->color == red )
@@ -542,7 +541,7 @@ namespace ft {
 
 			}
 
-			void	_deleteCorrect( link_type x )
+			inline void	_deleteCorrect( link_type x )
 			{
 				while ( x->parent != this->_nil && x->color == black )
 				{

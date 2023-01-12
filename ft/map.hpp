@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 01:28:23 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 03:13:52 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ namespace ft {
 
 		pair	& operator=( const pair& other )
 		{
-			pair	tmp(other);
-
 			if ( this != &other )
 			{
 				*(const_cast<typename remove_cv<T1>::type *>(&this->first)) = other.first;
