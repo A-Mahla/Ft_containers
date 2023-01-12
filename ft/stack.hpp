@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 11:43:22 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/05 12:10:12 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:31:55 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,48 +64,47 @@ namespace ft {
 				c.pop_back();
 			}
 
+			friend inline bool	operator==( const stack<T, Container>& x,
+					const stack<T, Container>& y )
+			{
+				return x.c == y.c;
+			}
+
+			friend inline bool	operator<(const stack<T, Container>& x,
+					const stack<T, Container>& y)
+			{
+				return x.c < y.c;
+			}
+
+
 	};
-
-	template <class T, class Container>
-	inline bool	operator==( const stack<T, Container>& x,
-		const stack<T, Container>& y )
-	{
-		return x == y;
-	}
-
-	template <class T, class Container>
-	inline bool	operator<(const stack<T, Container>& x,
-		const stack<T, Container>& y)
-	{
-		return x < y;
-	}
 
 	template <class T, class Container>
 	inline bool	operator!=(const stack<T, Container>& x,
 		const stack<T, Container>& y)
 	{
-		return x != y;
+		return !(x == y);
 	}
 
 	template <class T, class Container>
 	inline bool	operator>(const stack<T, Container>& x,
 		const stack<T, Container>& y)
 	{
-		return x > y;
+		return y < x;
 	}
 
 	template <class T, class Container>
 	inline bool	operator>=(const stack<T, Container>& x,
 		const stack<T, Container>& y)
 	{
-		return x >= y;
+		return !(x < y);
 	}
 
 	template <class T, class Container>
 	inline bool	operator<=(const stack<T, Container>& x,
 		const stack<T, Container>& y)
 	{
-		return x <= y;
+		return !(y < x);
 	}
 
 

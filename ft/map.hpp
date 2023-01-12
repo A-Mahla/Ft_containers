@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 13:56:45 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 21:59:44 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,10 +172,8 @@ namespace ft {
 			template <class InputIterator>
 			inline	map(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
-				const Compare& = Compare(), const Allocator& = Allocator())
-				{
-					this->_tree(first, last);
-				}
+				const Compare& = Compare(), const Allocator& = Allocator()) : _tree(first, last)
+				{ }
 
 			/* @member ~map()
 			 *
@@ -527,10 +525,10 @@ namespace ft {
 				);
 			}
 
-			inline ft::pair<const iterator,const iterator>
+			inline ft::pair<const_iterator,const_iterator>
 				equal_range( const key_type& x ) const
 			{
-				return ft::make_pair<iterator, iterator>(
+				return ft::make_pair<const_iterator, const_iterator>(
 					lower_bound(x), upper_bound(x)
 				);
 			}

@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 16:56:47 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 22:15:09 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ namespace ft {
 
 	};
 
+
 	template< typename T >
 	class	rb_iterator
 	{
@@ -160,7 +161,7 @@ namespace ft {
 
 			~rb_iterator() {}
 
-			inline link_type	base( void )
+			inline link_type	base( void ) const
 			{
 				return this->it;
 			}
@@ -227,6 +228,211 @@ namespace ft {
 
 	};
 
+	template <class Iterator1, class Iterator2>
+	inline bool	operator==( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() == y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() < y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator!=( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() != y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() > y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>=( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() >= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<=( const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() <= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline typename rb_iterator<Iterator1>::difference_type	operator-(
+		const rb_iterator<Iterator1>& x,
+		const rb_iterator<Iterator2>& y )
+	{
+		return x.base() - y.base();
+	}
+
+	template <class Iterator>
+	inline rb_iterator<Iterator>	operator+(
+		typename rb_iterator<Iterator>::difference_type n,
+		const rb_iterator<Iterator>& x )
+	{
+		return rb_iterator<Iterator>(x.base() + n);
+	}
+
+	template< typename T >
+	class	const_rb_iterator
+	{
+
+		public:
+
+			typedef T										value_type;
+			typedef T&										reference;
+			typedef const T*								pointer;
+			typedef std::ptrdiff_t							difference_type;
+			typedef std::bidirectional_iterator_tag			iterator_category;
+			typedef Node<T>									node_type;
+			typedef typename Node<T>::const_base_pointer	link_type;
+
+		private:
+
+			link_type	it;
+
+		public:
+
+			const_rb_iterator( void ) : it(NULL) { }
+
+			const_rb_iterator( link_type rhs ) : it(rhs) { }
+
+			const_rb_iterator( const const_rb_iterator & rhs ) : it(rhs.it) { }
+
+			~const_rb_iterator() {}
+
+			inline link_type	base( void ) const
+			{
+				return this->it;
+			}
+
+			inline const_rb_iterator	& operator=( const const_rb_iterator & rhs )
+			{
+				if ( this != &rhs )
+					this->it = rhs.it;
+				return *this;
+			}
+
+			inline reference	operator*( void ) const
+			{
+				return this->it->content;
+			}
+
+			inline pointer	operator->( void ) const
+			{
+				 return &(this->it->content);
+			}
+
+			inline bool		operator==( const const_rb_iterator & rhs ) const
+			{
+				return this->it == rhs.it;
+			}
+
+			inline bool		operator!=( const const_rb_iterator & rhs ) const
+			{
+				return this->it != rhs.it;
+			}
+
+			inline const_rb_iterator	& operator++( void )
+			{
+				this->it = node_type::next( this->it );
+				return *this;
+			}
+
+			inline const_rb_iterator	operator++( int )
+			{
+				const_rb_iterator	tmp = this->it;
+
+				this->it = node_type::next( this->it );
+				return tmp;
+			}
+
+			inline const_rb_iterator	& operator--( void )
+			{
+				this->it = node_type::prev( this->it );
+				return *this;
+			}
+
+			inline const_rb_iterator	operator--( int )
+			{
+				const_rb_iterator	tmp = this->it;
+
+				this->it = node_type::prev( this->it );
+				return tmp;
+			}
+
+	};
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator==( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() == y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() < y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator!=( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() != y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() > y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>=( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() >= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<=( const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() <= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline typename const_rb_iterator<Iterator1>::difference_type	operator-(
+		const const_rb_iterator<Iterator1>& x,
+		const const_rb_iterator<Iterator2>& y )
+	{
+		return x.base() - y.base();
+	}
+
+	template <class Iterator>
+	inline const_rb_iterator<Iterator>	operator+(
+		typename const_rb_iterator<Iterator>::difference_type n,
+		const const_rb_iterator<Iterator>& x )
+	{
+		return const_rb_iterator<Iterator>(x.base() + n);
+	}
 
 	template< typename Key,
 		typename T,
@@ -248,7 +454,7 @@ namespace ft {
 			typedef std::size_t									size_type;
 			typedef std::ptrdiff_t								difference_type;
 			typedef typename ft::rb_iterator<T>					iterator;
-			typedef typename ft::rb_iterator<const T>			const_iterator;
+			typedef typename ft::const_rb_iterator<T>			const_iterator;
 			typedef typename ft::reverse_iterator<iterator>		reverse_iterator;
 			typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef typename Allocator::template rebind< Node<T> >::other	allocator_type;
@@ -705,7 +911,8 @@ namespace ft {
 			template <class InputIterator>
 			rb_tree(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
-				const Compare& comp = Compare(), const Allocator& = Allocator()) : _comp(comp)
+				const Compare& comp = Compare(), const Allocator& alloc = Allocator())
+				: _comp(comp), _alloc(alloc), _nil(_initNil()), _root(_nil), _sizeTree(0)
 			{
 				while ( first != last )
 					_insertNode(*(first++));
@@ -780,7 +987,7 @@ namespace ft {
 
 			inline const_iterator			end( void ) const
 			{
-				return iterator(this->_nil);
+				return const_iterator(this->_nil);
 			}
 
 			inline reverse_iterator			rbegin( void )
@@ -790,7 +997,7 @@ namespace ft {
 
 			inline const_reverse_iterator	rbegin( void ) const
 			{
-				return reverse_iterator(this->_nil);
+				return const_reverse_iterator(this->_nil);
 			}
 
 			inline reverse_iterator			rend( void )
@@ -800,7 +1007,7 @@ namespace ft {
 
 			inline const_reverse_iterator	rend( void ) const
 			{
-				return reverse_iterator(node_type::minTree( this->_root ));
+				return const_reverse_iterator(node_type::minTree( this->_root ));
 			}
 
 			// ===== CAPACITY =====
@@ -954,10 +1161,10 @@ namespace ft {
 
 			iterator lower_bound( const key_type& x )
 			{
-				node_type	node = node_type::minTree( this->_root );
+				link_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& KeyFirst()(node->content) < KeyFirst()(x);
+						&& KeyFirst()(node->content) < x;
 						node = node_type::next(node) )
 					;
 				return iterator(node);
@@ -965,10 +1172,10 @@ namespace ft {
 
 			const_iterator lower_bound( const key_type& x ) const
 			{
-				node_type	node = node_type::minTree( this->_root );
+				link_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& KeyFirst()(node->content) < KeyFirst()(x);
+						&& KeyFirst()(node->content) < x;
 						node = node_type::next(node) )
 					;
 				return const_iterator(node);
@@ -983,10 +1190,10 @@ namespace ft {
 
 			iterator upper_bound( const key_type& x )
 			{
-				node_type	node = node_type::minTree( this->_root );
+				link_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& KeyFirst()(node->content) <= KeyFirst()(x);
+						&& KeyFirst()(node->content) <= x;
 						node = node_type::next(node) )
 					;
 				return iterator(node);
@@ -994,10 +1201,10 @@ namespace ft {
 
 			const_iterator upper_bound( const key_type& x ) const
 			{
-				node_type	node = node_type::minTree( this->_root );
+				link_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& KeyFirst()(node->content) <= KeyFirst()(x);
+						&& KeyFirst()(node->content) <= x;
 						node = node_type::next(node) )
 					;
 				return const_iterator(node);
