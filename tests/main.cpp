@@ -509,7 +509,7 @@ int main(void)
 
 	// ==== VECTOR ====
 
-	constructVector();
+/*	constructVector();
 	beginAndEndVector();
 	capacityTestVector();
 	accessConstructVector();
@@ -527,7 +527,7 @@ int main(void)
 //	treeTest();
 
 	// ====================
-
+*/
 	constructMap();
 	accessMap();
 	capacityMap();

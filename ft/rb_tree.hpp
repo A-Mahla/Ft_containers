@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 03:12:56 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 14:25:40 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,33 @@ namespace ft {
 				_destroyNode( root );
 			}
 
+			inline void	_spacialSwap( link_type & x, link_type & y, e_color color )
+			{
+				x->parent = y->parent;
+				if ( y->parent == this->_nil )
+					this->_root = x;
+				else if ( y->parent->left == y )
+					y->parent->left = x;
+				else if ( y->parent->right == y )
+					y->parent->left = x;
+				x->right = y->right;
+				if ( y->right != this->_nil )
+					y->right->parent = x;
+				x->left = y->left;
+				if ( y->left != this->_nil )
+					y->left->parent = x;
+				y->color = color;
+			}
+
+			inline void	_swapDelete( link_type & x, link_type & y )
+			{
+				link_type tmp = x;
+
+				x = y;
+				y = tmp;
+				_spacialSwap(x, y, x->color);
+			}
+
 			void	_rotateLeft( link_type node )
 			{
 				link_type	x = node->right;
@@ -360,7 +387,7 @@ namespace ft {
 
 				while ( x != this->_nil && KeyFirst()(x->content) != k )
 				{
-					if ( KeyFirst()(x->content) > k )
+					if ( this->_comp(k, KeyFirst()(x->content)) )
 						x = x->left;
 					else
 						x = x->right;
@@ -374,7 +401,7 @@ namespace ft {
 
 				while ( x != this->_nil && KeyFirst()(x->content) != k )
 				{
-					if ( KeyFirst()(x->content) > k )
+					if ( this->_comp(k, KeyFirst()(x->content)) )
 						x = x->left;
 					else
 						x = x->right;
@@ -391,9 +418,9 @@ namespace ft {
 				while ( x != this->_nil )
 				{
 					y = x;
-					if ( KeyFirst()(x->content) == k.first )
+					if ( KeyFirst()(x->content) == KeyFirst()(k) )
 						return ft::make_pair<iterator, bool>(iterator(x), false);
-					if ( KeyFirst()(x->content) > k.first )
+					if ( this->_comp(KeyFirst()(k), KeyFirst()(x->content)) )
 						x = x->left;
 					else
 						x = x->right;
@@ -406,7 +433,7 @@ namespace ft {
 					this->_root = node;
 				else
 				{
-					if ( KeyFirst()(y->content) > KeyFirst()(node->content) )
+					if ( this->_comp(KeyFirst()(node->content), KeyFirst()(y->content)) )
 						y->left = node;
 					else
 						y->right = node;
@@ -585,7 +612,7 @@ namespace ft {
 					this->_root = x;
 
 				if ( y != node )
-					node->content = y->content;
+					_swapDelete(node, y);
 
 				if ( y->color == black )
 					_deleteCorrect(x);
@@ -627,7 +654,7 @@ namespace ft {
 					this->_root = x;
 
 				if ( y != node )
-					node->content = y->content;
+					_swapDelete(node, y);
 
 				if ( y->color == black )
 					_deleteCorrect(x);
@@ -678,7 +705,7 @@ namespace ft {
 			template <class InputIterator>
 			rb_tree(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
-				const Compare& comp = Compare(), const Allocator& = Allocator())
+				const Compare& comp = Compare(), const Allocator& = Allocator()) : _comp(comp)
 			{
 				while ( first != last )
 					_insertNode(*(first++));
@@ -930,7 +957,7 @@ namespace ft {
 				node_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& node->content.first < x.first;
+						&& KeyFirst()(node->content) < KeyFirst()(x);
 						node = node_type::next(node) )
 					;
 				return iterator(node);
@@ -941,7 +968,7 @@ namespace ft {
 				node_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& node->content.first < x.first;
+						&& KeyFirst()(node->content) < KeyFirst()(x);
 						node = node_type::next(node) )
 					;
 				return const_iterator(node);
@@ -959,7 +986,7 @@ namespace ft {
 				node_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& node->content.first <= x.first;
+						&& KeyFirst()(node->content) <= KeyFirst()(x);
 						node = node_type::next(node) )
 					;
 				return iterator(node);
@@ -970,7 +997,7 @@ namespace ft {
 				node_type	node = node_type::minTree( this->_root );
 
 				for ( ; node != this->_nil
-						&& node->content.first <= x.first;
+						&& KeyFirst()(node->content) <= KeyFirst()(x);
 						node = node_type::next(node) )
 					;
 				return const_iterator(node);
