@@ -6,13 +6,12 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/10 14:24:45 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 18:17:15 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __RANDOM_ITERATOR_HPP__
 # define __RANDOM_ITERATOR_HPP__
-
 
 namespace ft {
 
@@ -31,11 +30,6 @@ namespace ft {
 		private:
 
 			pointer	 it;
-
-			operator random_iterator< const T >( void ) const
-			{
-				return random_iterator< const T >(this->it);
-			}
 
 
 		public:
@@ -72,7 +66,7 @@ namespace ft {
 
 			inline bool		operator!=( const random_iterator & rhs ) const
 			{
-				return !(this->it == rhs.it);
+				return this->it != rhs.it;
 			}
 
 			inline random_iterator	& operator++( void )
@@ -153,7 +147,12 @@ namespace ft {
 				return this->it - rhs.it;
 			}
 
-			inline value_type	operator[]( const long int n ) const
+			inline reference	operator[]( const long int n )
+			{
+				return *(this->it + n);
+			}
+
+			inline reference	operator[]( const long int n ) const
 			{
 				return *(this->it + n);
 			}
@@ -170,15 +169,84 @@ namespace ft {
 
 			inline bool		operator>=( const random_iterator & rhs ) const
 			{
-				return !(rhs < *this);
+				return !(rhs > *this);
 			}
 
 			inline bool		operator<=( const random_iterator & rhs ) const
 			{
-				return !(rhs > *this);
+				return !(rhs < *this);
+			}
+
+			operator random_iterator< const T >( void ) const
+			{
+				return random_iterator< const T >(this->it);
+			}
+
+			pointer	base( void ) const
+			{
+				return this->it;
 			}
 
 	};
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator==( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() == y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() < y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator!=( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() != y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() > y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator>=( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() >= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline bool	operator<=( const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() <= y.base();
+	}
+
+	template <class Iterator1, class Iterator2>
+	inline typename random_iterator<Iterator1>::difference_type	operator-(
+		const random_iterator<Iterator1>& x,
+		const random_iterator<Iterator2>& y )
+	{
+		return x.base() - y.base();
+	}
+
+	template <class Iterator>
+	inline random_iterator<Iterator>	operator+(
+		typename random_iterator<Iterator>::difference_type n,
+		const random_iterator<Iterator>& x )
+	{
+		return random_iterator<Iterator>(x.base() + n);
+	}
+
 }
 
 #endif

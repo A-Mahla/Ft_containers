@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 03:35:00 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 16:47:10 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,9 @@ namespace ft {
 				const Allocator& alloc = Allocator())
 			{
 				this->_alloc = alloc;
-				this->_start = this->_alloc.allocate( last - first );
+				this->_start = this->_alloc.allocate( std::distance(first, last) );
 				this->_finish = this->_start;
-				this->_end_of_storage = this->_start + (last - first );
+				this->_end_of_storage = this->_start + ( std::distance(first, last) );
 				insert( begin(), first, last );
 			}
 
@@ -582,7 +582,7 @@ namespace ft {
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last )
 			{
 				const size_type	nPos = position - begin();
-				size_type		n = last - first;
+				size_type		n = std::distance(first, last);
 				size_type		nEnd = end() - begin();
 
 				// resize if > capacity() and construct

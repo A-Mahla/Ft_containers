@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 14:25:40 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/12 16:56:47 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,11 +150,6 @@ namespace ft {
 
 			link_type	it;
 
-			operator rb_iterator< const T >( void ) const
-			{
-				return rb_iterator< const T >(this->it);
-			}
-
 		public:
 
 			rb_iterator( void ) : it(NULL) { }
@@ -195,6 +190,11 @@ namespace ft {
 			inline bool		operator!=( const rb_iterator & rhs ) const
 			{
 				return this->it != rhs.it;
+			}
+
+			operator rb_iterator< const T >( void ) const
+			{
+				return rb_iterator< const T >(this->it);
 			}
 
 			inline rb_iterator	& operator++( void )
