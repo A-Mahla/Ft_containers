@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 20:05:29 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 21:39:23 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,9 @@ namespace ft {
 			rb_iterator( link_type rhs ) : it(rhs) { }
 
 			rb_iterator( const rb_iterator & rhs ) : it(rhs.it) { }
+
+//			template< class U>
+//			rb_iterator( const rb_iterator<U> & rhs ) : it(rhs.base()) { }
 
 			~rb_iterator() {}
 
@@ -317,6 +320,13 @@ namespace ft {
 			{
 				if ( this != &rhs )
 					this->it = rhs.it;
+				return *this;
+			}
+
+			template< class U>
+			inline const_rb_iterator	& operator=( const rb_iterator<U> & rhs )
+			{
+				this->it = rhs.base();
 				return *this;
 			}
 
@@ -594,7 +604,7 @@ namespace ft {
 				return x;
 			}
 
-			link_type	_find( const key_type& k ) const
+			const link_type	_find( const key_type& k ) const
 			{
 				link_type	x = this->_root;
 
@@ -953,7 +963,7 @@ namespace ft {
 
 			inline allocator_type get_allocator( void ) const
 			{
-				return this->_tree._alloc;
+				return this->_alloc;
 			}
 
 			// ===== ITERATORS =====
@@ -1054,7 +1064,7 @@ namespace ft {
 
 			inline const_iterator	find( const Key& k ) const
 			{
-				link_type	node = _find(k);
+				const link_type	node = _find(k);
 				if ( node == this->_nil )
 					return end();
 				return const_iterator(node);
