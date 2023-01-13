@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 11:53:19 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 20:05:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 
 # include "metaprog.hpp"
 # include "algo.hpp"
+# include "pair.hpp"
 # include "reverse_iterator.hpp"
 
 namespace ft {
 
-	template< typename T1, typename T2 >
-	struct pair;
-
-	template< class T1, class T2 >
-	ft::pair<T1,T2>	make_pair( T1 t, T2 u );
 
 	enum e_color { black = true, red = false };
 
@@ -1112,6 +1108,11 @@ namespace ft {
 				_deleteNode(position.base());
 			}
 
+			inline void	deleteNode( const_iterator position )
+			{
+				_deleteNode(KeyFirst()(*position));
+			}
+
 			/* @member deleteNode()
 			 *
 			 * @brief erase a node (iterator) from current instance
@@ -1288,22 +1289,6 @@ namespace ft {
 
 
 	};
-
-
-	template <class Key, class T, class Compare, class KeyFirst, class Allocator>
-	inline bool	operator==( const rb_tree<Key, T, Compare, KeyFirst, Allocator>& x,
-		const rb_tree<Key, T, Compare, KeyFirst, Allocator>& y )
-	{
-		return x.getSize() == y.getSize()
-				&& ft::equal(x.begin(), x.end(), y.begin());
-	}
-
-	template <class Key, class T, class Compare, class KeyFirst, class Allocator>
-	inline bool	operator<( const rb_tree<Key, T, Compare, KeyFirst, Allocator>& x,
-		const rb_tree<Key, T, Compare, KeyFirst, Allocator>& y )
-	{
-		return lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
-	}
 
 
 }

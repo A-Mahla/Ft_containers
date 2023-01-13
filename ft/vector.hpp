@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 16:47:10 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 18:03:14 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ namespace ft {
 				this->_start = this->_alloc.allocate(n);
 				this->_finish = this->_start + n;
 				for ( pointer x = this->_start; x != this->_finish; x++ )
-					this->_alloc.construct(x, value);
+					this->_alloc.construct(x, T(value));
 				this->_end_of_storage = _finish;
 			}
 
@@ -349,7 +349,7 @@ namespace ft {
 			inline void	reserve( size_type n )
 			{
 				if ( n > max_size() )
-					throw std::length_error("std::length_error");
+					throw std::length_error("vector::reserve");
 				if ( n > capacity() )
 					_realloc( n, false );
 			}
@@ -474,7 +474,7 @@ namespace ft {
 			{
 				if ( size() == capacity() )
 					reserve( _hdlCapacity( size() + 1 ) );
-				this->_alloc.construct( this->_finish++, x );
+				this->_alloc.construct( this->_finish++, T(x) );
 			}
 
 			/* @member pop_back()
@@ -648,8 +648,8 @@ namespace ft {
 					this->_alloc.construct( &(*tmpFirst), *last );
 				}
 				this->_finish = &(*tmpFirst);
-				while ( tmpFirst++ != endIt )
-					this->_alloc.destroy( &(*tmpFirst) );
+				while ( tmpFirst != endIt )
+					this->_alloc.destroy( &(*(tmpFirst++)) );
 				return first;
 			}
 

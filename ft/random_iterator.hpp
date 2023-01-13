@@ -6,12 +6,14 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 18:17:15 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 16:15:08 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __RANDOM_ITERATOR_HPP__
 # define __RANDOM_ITERATOR_HPP__
+
+# include <iterator>
 
 namespace ft {
 

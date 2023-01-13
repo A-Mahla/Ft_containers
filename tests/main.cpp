@@ -9,6 +9,7 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
+	#include <set>
 	using namespace std;
 	#define X 1
 
@@ -18,6 +19,7 @@
 	#include "map.hpp"
 	#include "stack.hpp"
 	#include "vector.hpp"
+	#include "set.hpp"
 	using namespace ft;
 	#define X 0
 
@@ -567,6 +569,9 @@ void	deleteMap(void)
 	mp[60] = "7";
 	mp[90] = "8";
 
+	#if VIEWER
+		mp.print();
+	#endif
 	mp.erase(25);
 	mp.erase(55);
 	mp.erase(24);
@@ -682,26 +687,27 @@ class foo {
 		bool		_verbose;
 };
 
-# define _pair pair
+#define _pair pair
+
+#define T1 std::string
 
 template <typename T>
 std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
 {
-	o << "key: " << iterator->first << " | value: " << iterator->second;
+	o << "value: " << *iterator;
 	if (nl)
 		o << std::endl;
 	return ("");
 }
 
-
-template <typename T_MAP>
-void	printSize(T_MAP const &mp, bool print_content = 1)
+template <typename T_SET>
+void	printSize(T_SET const &st, bool print_content = 1)
 {
-	std::cout << "size: " << mp.size() << std::endl;
-	std::cout << "max_size: " << mp.max_size() << std::endl;
+	std::cout << "size: " << st.size() << std::endl;
+	std::cout << "max_size: " << st.max_size() << std::endl;
 	if (print_content)
 	{
-		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		typename T_SET::const_iterator it = st.begin(), ite = st.end();
 		std::cout << std::endl << "Content is:" << std::endl;
 		for (; it != ite; ++it)
 			std::cout << "- " << printPair(it, false) << std::endl;
@@ -709,55 +715,78 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 	std::cout << "###############################################" << std::endl;
 }
 
-#include <list>
-
-#include <list>
-
-#define T1 char
-#define T2 int
-typedef _pair<const T1, T2> T3;
-
-
-template <class MAP>
-void	cmp(const MAP &lhs, const MAP &rhs)
+template <typename T3>
+void	printReverse(set<T1> &st)
 {
-	static int i = 0;
+	typename set<T1>::iterator it = st.end(), ite = st.begin();
 
-	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+	std::cout << "printReverse:" << std::endl;
+	while (it-- != ite)
+		std::cout << "-> " << printPair(it, false) << std::endl;
+	std::cout << "_______________________________________________" << std::endl;
+}
+#include <list>
+
+
+static int iter = 0;
+
+template <typename SET, typename U>
+void	ft_erase(SET &st, U param)
+{
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	st.erase(param);
+	printSize(st);
+}
+
+template <typename SET, typename U, typename V>
+void	ft_erase(SET &st, U param, V param2)
+{
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	st.erase(param, param2);
+	printSize(st);
+}
+
+int		othertest(void)
+{
+	std::list<T1> lst;
+	unsigned int lst_size = 10;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(std::string((lst_size - i), i + 65));
+	set<T1> st(lst.begin(), lst.end());
+	printSize(st);
+
+	ft_erase(st, ++st.begin());
+
+	ft_erase(st, st.begin());
+	ft_erase(st, --st.end());
+
+	ft_erase(st, st.begin(), ++(++(++st.begin())));
+	ft_erase(st, --(--(--st.end())), --st.end());
+
+	st.insert("Hello");
+	st.insert("Hi there");
+	printSize(st);
+	ft_erase(st, --(--(--st.end())), st.end());
+
+	st.insert("ONE");
+	st.insert("TWO");
+	st.insert("THREE");
+	st.insert("FOUR");
+	printSize(st);
+	ft_erase(st, st.begin(), st.end());
+
+	return (0);
 }
 
 
-void		othertest(void)
+/*=====================MAP===============================*/
+
+void	testSet( void )
 {
-	map<T1, T2> mp1;
-	map<T1, T2> mp2;
+	set<int> a;
 
-	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
-	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
-
-	cmp(mp1, mp1); // 0
-	cmp(mp1, mp2); // 1
-
-	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
-
-	cmp(mp1, mp2); // 2
-	cmp(mp2, mp1); // 3
-
-	(++(++mp1.begin()))->second = 42;
-
-	cmp(mp1, mp2); // 4
-	cmp(mp2, mp1); // 5
-
-	swap(mp1, mp2);
-
-	cmp(mp1, mp2); // 6
-	cmp(mp2, mp1); // 7
-
+	a.insert(5);
 }
-
 
 int main(void)
 {
@@ -793,6 +822,7 @@ int main(void)
 
 	test42();
 */
+	testSet();
 	othertest();
 	clock_t end = clock();
 
