@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/12 23:32:03 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 11:12:36 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -518,13 +518,12 @@ namespace ft {
 				else if ( y->parent->left == y )
 					y->parent->left = x;
 				else if ( y->parent->right == y )
-					y->parent->left = x;
+					y->parent->right = x;
 				x->right = y->right;
-				if ( y->right != this->_nil )
-					y->right->parent = x;
+				y->right->parent = x;
 				x->left = y->left;
-				if ( y->left != this->_nil )
-					y->left->parent = x;
+				y->left->parent = x;
+				x->color = y->color;
 				y->color = color;
 			}
 
@@ -1086,6 +1085,21 @@ namespace ft {
 			{
 				return _insertNode(x);
 			}
+
+			/* @member insert()
+			 *
+			 * @brief insert range of iterator before the position
+			 *
+			 * @return iterator*/
+
+			template <class InputIterator>
+			inline void insert(InputIterator first,
+				typename enable_if< !is_integral<InputIterator>::value, InputIterator>::type last)
+			{
+				while ( first != last )
+					_insertNode(*(first++));
+			}
+
 
 			/* @member deleteNode()
 			 *

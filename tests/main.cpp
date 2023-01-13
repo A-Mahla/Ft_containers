@@ -651,44 +651,85 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 
 #include <list>
 
+#include <list>
+
 #define T1 int
-#define T2 int
-typedef _pair<const T1, T2> T3;
+#define T2 std::string
+typedef map<T1, T2>::value_type T3;
+
+static int iter = 0;
+
+template <typename MAP>
+void	ft_erase(MAP &mp, const T1 param)
+{
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	mp.erase(param);
+	printSize(mp);
+}
+
 
 void		othertest(void)
 {
-	std::list<T3> lst;
-	unsigned int lst_size = 7;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(T3(lst_size - i, i));
+	map<T1, T2> mp;
 
-	map<T1, T2> mp(lst.begin(), lst.end());
-	map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
+	mp[42] = "lol";
 
-	map<T1, T2> mp_range(it, --(--ite));
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 5;
-	
+	mp[50] = "mdr";
+	mp[25] = "funny";
 
-	it = mp.begin(); ite = --(--mp.end());
-	map<T1, T2> mp_copy(mp);
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 7;
+	mp[46] = "bunny";
+	mp[21] = "fizz";
+	mp[30] = "buzz";
+	mp[55] = "fuzzy";
 
-	std::cout << "\t-- PART ONE --" << std::endl;
+	mp[18] = "bee";
+	mp[23] = "coconut";
+	mp[28] = "diary";
+	mp[35] = "fiesta";
+	mp[44] = "hello";
+	mp[48] = "world";
+	mp[53] = "this is a test";
+	mp[80] = "hey";
+
+	mp[12] = "no";
+	mp[20] = "idea";
+	mp[22] = "123";
+	mp[24] = "345";
+	mp[27] = "27";
+	mp[29] = "29";
+	mp[33] = "33";
+	mp[38] = "38";
+
+	mp[43] = "1";
+	mp[45] = "2";
+	mp[47] = "3";
+	mp[49] = "4";
+	mp[51] = "5";
+	mp[54] = "6";
+	mp[60] = "7";
+	mp[90] = "8";
+
 	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
+	ft_erase(mp, 25);
+	ft_erase(mp, 55);
+	ft_erase(mp, 24);
+	ft_erase(mp, 54);
 
-	mp = mp_copy;
-	mp_copy = mp_range;
-	mp_range.clear();
+	ft_erase(mp, 22);
+	ft_erase(mp, 51);
 
-	std::cout << "\t-- PART TWO --" << std::endl;
-	printSize(mp);
-	printSize(mp_range);
-	printSize(mp_copy);
+	ft_erase(mp, 21);
+	ft_erase(mp, 53);
+	ft_erase(mp, 20);
+	ft_erase(mp, 23);
+	ft_erase(mp, 23);
+	ft_erase(mp, 42);
+	ft_erase(mp, 38);
+	ft_erase(mp, 35);
+	ft_erase(mp, 33);
+	mp.print();
 }
+
 
 int main(void)
 {
