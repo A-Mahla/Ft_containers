@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 21:13:18 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 22:13:48 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -527,6 +527,8 @@ namespace ft {
 				const size_type	nPos = position - begin();
 				size_type		nEnd = end() - begin();
 
+				if ( !n )
+					return;
 				// resize if > capacity() and construct
 				if ( nEnd + n > capacity() )
 					reserve( nEnd + n );

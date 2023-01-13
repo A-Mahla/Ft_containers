@@ -687,18 +687,33 @@ class foo {
 		bool		_verbose;
 };
 
-#define _pair pair
+class Awesome {
 
-#define T1 std::string
+	public:
 
-template <typename T>
-std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
-{
-	o << "value: " << *iterator;
-	if (nl)
-		o << std::endl;
-	return ("");
-}
+		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
+		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
+		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
+		virtual ~Awesome(void) {}
+
+		Awesome &operator=( Awesome const & rhs ) { this->_n = rhs._n; return (*this); }
+		bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
+		bool operator!=( Awesome const & rhs ) const { return (this->_n != rhs._n); }
+		bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }
+		bool operator<( Awesome const & rhs ) const { return (this->_n < rhs._n); }
+		bool operator>=( Awesome const & rhs ) const { return (this->_n >= rhs._n); }
+		bool operator<=( Awesome const & rhs ) const { return (this->_n <= rhs._n); }
+		void operator+=(int rhs){ _n += rhs; }
+		int get( void ) const { return this->_n; }
+
+	private:
+
+		int _n;
+};
+
+std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.get(); return o; }
+
+#include <list>
 
 template <typename T_SET>
 void	printSize(T_SET const &st, bool print_content = 1)
@@ -715,71 +730,49 @@ void	printSize(T_SET const &st, bool print_content = 1)
 	std::cout << "###############################################" << std::endl;
 }
 
-template <typename T3>
-void	printReverse(set<T1> &st)
+template <class T>
+void	print_vector(vector<T> &test)
 {
-	typename set<T1>::iterator it = st.end(), ite = st.begin();
-
-	std::cout << "printReverse:" << std::endl;
-	while (it-- != ite)
-		std::cout << "-> " << printPair(it, false) << std::endl;
-	std::cout << "_______________________________________________" << std::endl;
-}
-#include <list>
-
-
-static int iter = 0;
-
-template <typename SET, typename U>
-void	ft_erase(SET &st, U param)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	st.erase(param);
-	printSize(st);
-}
-
-template <typename SET, typename U, typename V>
-void	ft_erase(SET &st, U param, V param2)
-{
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	st.erase(param, param2);
-	printSize(st);
-}
-
-int		othertest(void)
-{
-	std::list<T1> lst;
-	unsigned int lst_size = 10;
-	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(std::string((lst_size - i), i + 65));
-	set<T1> st(lst.begin(), lst.end());
-	printSize(st);
-
-	ft_erase(st, ++st.begin());
-
-	ft_erase(st, st.begin());
-	ft_erase(st, --st.end());
-
-	ft_erase(st, st.begin(), ++(++(++st.begin())));
-	ft_erase(st, --(--(--st.end())), --st.end());
-
-	st.insert("Hello");
-	st.insert("Hi there");
-	printSize(st);
-	ft_erase(st, --(--(--st.end())), st.end());
-
-	st.insert("ONE");
-	st.insert("TWO");
-	st.insert("THREE");
-	st.insert("FOUR");
-	printSize(st);
-	ft_erase(st, st.begin(), st.end());
-
-	return (0);
+	typename vector<T>::iterator		beg = test.begin();
+	typename vector<T>::iterator		end = test.end();
+	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
+	for (typename vector<T>::iterator it = beg; it != end; it++)
+	{
+		std::cout << *it << " ";
+		if (((it - beg) % 10 == 9) && it > beg)
+			std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 
-/*=====================MAP===============================*/
+
+void		othertest(void)
+{
+	std::cout << std::endl << "INSERAwesome AwesomeESAwesomeS" << std::endl;
+	vector<Awesome> test(1, 1);
+	vector<Awesome> test2(5, 5);
+
+	test.insert(test.begin(), 200, 12);
+	print_vector<Awesome>(test);
+	test.insert(test.begin() + 12, 200, 30);
+	print_vector<Awesome>(test);
+	test.insert(test.end(), 12, 50);
+	print_vector<Awesome>(test);
+	test.insert(test.end() - 1, 0, 60);
+	print_vector<Awesome>(test);
+	test.insert(test.end() - 1, 1, 70);
+	print_vector<Awesome>(test);
+	test.insert(test.begin() + 412, test2.begin(), test2.end());
+	print_vector<Awesome>(test);
+	test.insert(test.begin() + 6, test2.begin(), test2.end());
+	print_vector<Awesome>(test);
+	test.insert(test.end(), test2.begin(), test2.end());
+	print_vector<Awesome>(test);
+}
+
+
+/*=====================SET===============================*/
 
 void	testSet( void )
 {
