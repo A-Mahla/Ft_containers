@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 22:13:48 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 22:22:36 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft {
 
 			inline void	_realloc( size_type sz, bool construct, T c = T() )
 			{
-				vector<T> tmp(*this);
+				const vector<T> tmp(*this);
 				size_type n = 0;
 
 				for ( iterator it = begin(); it != end(); it++ )
