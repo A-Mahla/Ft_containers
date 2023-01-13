@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 11:12:36 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/13 11:53:19 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -644,7 +644,7 @@ namespace ft {
 				this->_sizeTree++;
 				_insertCorrect(node);
 				_majNil();
-				return ft::make_pair<iterator, bool>(iterator(node), false);
+				return ft::make_pair<iterator, bool>(iterator(node), true);
 			}
 
 			inline void	_insertCorrectLeft( link_type& node )

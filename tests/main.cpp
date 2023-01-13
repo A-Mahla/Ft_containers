@@ -526,6 +526,66 @@ void	modifierMap( void )
 	#endif
 }
 
+void	deleteMap(void)
+{
+	map<int, std::string> mp;
+
+	mp[42] = "lol";
+
+	mp[50] = "mdr";
+	mp[25] = "funny";
+
+	mp[46] = "bunny";
+	mp[21] = "fizz";
+	mp[30] = "buzz";
+	mp[55] = "fuzzy";
+
+	mp[18] = "bee";
+	mp[23] = "coconut";
+	mp[28] = "diary";
+	mp[35] = "fiesta";
+	mp[44] = "hello";
+	mp[48] = "world";
+	mp[53] = "this is a test";
+	mp[80] = "hey";
+
+	mp[12] = "no";
+	mp[20] = "idea";
+	mp[22] = "123";
+	mp[24] = "345";
+	mp[27] = "27";
+	mp[29] = "29";
+	mp[33] = "33";
+	mp[38] = "38";
+
+	mp[43] = "1";
+	mp[45] = "2";
+	mp[47] = "3";
+	mp[49] = "4";
+	mp[51] = "5";
+	mp[54] = "6";
+	mp[60] = "7";
+	mp[90] = "8";
+
+	mp.erase(25);
+	mp.erase(55);
+	mp.erase(24);
+	mp.erase(54);
+
+	mp.erase(22);
+	mp.erase(51);
+
+	mp.erase(21);
+	mp.erase(53);
+	mp.erase(20);
+	mp.erase(23);
+	mp.erase(23);
+	mp.erase(42);
+	mp.erase(38);
+	mp.erase(35);
+	mp.erase(33);
+}
+
 /*=====================42 Test===============================*/
 
 void	test42( void )
@@ -653,81 +713,49 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 
 #include <list>
 
-#define T1 int
-#define T2 std::string
-typedef map<T1, T2>::value_type T3;
+#define T1 char
+#define T2 int
+typedef _pair<const T1, T2> T3;
 
-static int iter = 0;
 
-template <typename MAP>
-void	ft_erase(MAP &mp, const T1 param)
+template <class MAP>
+void	cmp(const MAP &lhs, const MAP &rhs)
 {
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	mp.erase(param);
-	printSize(mp);
+	static int i = 0;
+
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
 
 
 void		othertest(void)
 {
-	map<T1, T2> mp;
+	map<T1, T2> mp1;
+	map<T1, T2> mp2;
 
-	mp[42] = "lol";
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
 
-	mp[50] = "mdr";
-	mp[25] = "funny";
+	cmp(mp1, mp1); // 0
+	cmp(mp1, mp2); // 1
 
-	mp[46] = "bunny";
-	mp[21] = "fizz";
-	mp[30] = "buzz";
-	mp[55] = "fuzzy";
+	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
 
-	mp[18] = "bee";
-	mp[23] = "coconut";
-	mp[28] = "diary";
-	mp[35] = "fiesta";
-	mp[44] = "hello";
-	mp[48] = "world";
-	mp[53] = "this is a test";
-	mp[80] = "hey";
+	cmp(mp1, mp2); // 2
+	cmp(mp2, mp1); // 3
 
-	mp[12] = "no";
-	mp[20] = "idea";
-	mp[22] = "123";
-	mp[24] = "345";
-	mp[27] = "27";
-	mp[29] = "29";
-	mp[33] = "33";
-	mp[38] = "38";
+	(++(++mp1.begin()))->second = 42;
 
-	mp[43] = "1";
-	mp[45] = "2";
-	mp[47] = "3";
-	mp[49] = "4";
-	mp[51] = "5";
-	mp[54] = "6";
-	mp[60] = "7";
-	mp[90] = "8";
+	cmp(mp1, mp2); // 4
+	cmp(mp2, mp1); // 5
 
-	printSize(mp);
-	ft_erase(mp, 25);
-	ft_erase(mp, 55);
-	ft_erase(mp, 24);
-	ft_erase(mp, 54);
+	swap(mp1, mp2);
 
-	ft_erase(mp, 22);
-	ft_erase(mp, 51);
+	cmp(mp1, mp2); // 6
+	cmp(mp2, mp1); // 7
 
-	ft_erase(mp, 21);
-	ft_erase(mp, 53);
-	ft_erase(mp, 20);
-	ft_erase(mp, 23);
-	ft_erase(mp, 23);
-	ft_erase(mp, 42);
-	ft_erase(mp, 38);
-	ft_erase(mp, 35);
-	ft_erase(mp, 33);
-	mp.print();
 }
 
 
