@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 22:22:36 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/14 01:25:35 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft {
 
 			inline void	_realloc( size_type sz, bool construct, T c = T() )
 			{
-				const vector<T> tmp(*this);
+				const vector tmp(*this);
 				size_type n = 0;
 
 				for ( iterator it = begin(); it != end(); it++ )
@@ -565,6 +565,9 @@ namespace ft {
 				size_type		n = std::distance(first, last);
 				size_type		nEnd = end() - begin();
 
+				if ( n == 0 )
+					return;
+
 				// resize if > capacity() and construct
 				if ( nEnd + n > capacity() )
 					reserve( nEnd + n );
@@ -609,6 +612,9 @@ namespace ft {
 			{
 				iterator	tmpFirst = first;
 				iterator	endIt = end();
+
+				if ( first == last )
+					return first;
 
 				for ( ; last != endIt; tmpFirst++, last++ )
 				{
