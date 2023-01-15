@@ -925,15 +925,17 @@ void	print_tree(std::string prefix, Node<pair<const int, std::string> >* node, i
 	}
 }
 
-void	print(Node<pair<const int, std::string> >* node)
+void	print(map<int, std::string>& mp)
 {
-	print_tree("", node->left, 2);
+	if ( mp.size() )
+		print_tree("", mp.end().base()->left, 2);
 }
 
 void	viewerMap( void )
 {
 	map<int, std::string> mp;
 
+	print(mp);
 	mp[42] = "lol";
 
 	mp[50] = "mdr";
@@ -972,7 +974,7 @@ void	viewerMap( void )
 	mp[90] = "8";
 
 	std::cout << std::endl << "\tPrint MAP" << std::endl << std::endl;
-	print(mp.end().base());
+	print(mp);
 
 	mp.erase(25);
 	mp.erase(55);
@@ -993,7 +995,7 @@ void	viewerMap( void )
 	mp.erase(33);
 
 	std::cout << std::endl << "\tAfter deleted some elements" << std::endl << std::endl;
-	print(mp.end().base());
+	print(mp);
 
 }
 #endif
