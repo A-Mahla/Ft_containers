@@ -6,7 +6,7 @@
 #    By: meudier <meudier@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/17 21:07:29 by amahla            #+#    #+#              #
-#    Updated: 2023/01/11 17:07:37 by amahla           ###   ########.fr        #
+#    Updated: 2023/01/15 23:17:25 by amahla           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,30 +28,15 @@ DEBUGDIR			:=	./debugobj
 SRCS				:=	main.cpp
 
 CCFLAGS				:=  -std=c++98 -Wall -Wextra -Werror
-OPTFLAG				:=
 
 NAME				:=	_test
 
 OUTDIR				:=	$(OBJDIR)
 
-DEBUGNAME			:=	$(addsuffix .debug,$(PROGNAME))
-
-ifdef DEBUG
-	OPTFLAG 		:=	-g
-	NAME			:=	$(DEBUGNAME)
-	OUTDIR			:=	$(DEBUGDIR)
-endif
-
 all					:	$(addprefix $(PROG), $(NAME))	\
 						$(addprefix $(PROG_STD), $(NAME))
 
 viewer				:	$(addprefix $(PROG_VIEWER), $(NAME))
-
-debug				:
-ifndef DEBUG
-	$(MAKE) DEBUG=1
-endif
-
 
 $(OUTDIR)/%_custom.o		:	$(SRCDIR)/%.cpp | $(OUTDIR)
 	@mkdir -p $(dir $@)
@@ -94,7 +79,7 @@ fclean				:	clean
 re					:	fclean
 	$(MAKE) all
 
-.PHONY				:	all clean fclean re debug diff
+.PHONY				:	all clean fclean re diff viewer
 
 -include	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=.d))
 -include	$(addprefix $(OUTDIR)/,$(SRCS:.cpp=_custom.d))
