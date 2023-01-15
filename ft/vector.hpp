@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:19:33 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/14 01:25:35 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/15 22:51:44 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,18 +79,6 @@ namespace ft {
 					return capacity() * 2;
 			}
 
-		protected:
-
-			/* @member get_allocator()
-			 *
-			 * @brief replaces the contents of the container by n * u 
-			 *
-			 * @return allocator_type*/
-
-			allocator_type	get_allocator( void ) const
-			{
-				return ( this->_alloc );
-			}
 
 		public:
 
@@ -216,6 +204,17 @@ namespace ft {
 					this->_alloc.destroy( p );
 				this->_finish = this->_start;
 				insert( begin(), n, u );
+			}
+
+			/* @member get_allocator()
+			 *
+			 * @brief replaces the contents of the container by n * u 
+			 *
+			 * @return allocator_type*/
+
+			allocator_type	get_allocator( void ) const
+			{
+				return ( this->_alloc );
 			}
 
 

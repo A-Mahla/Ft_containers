@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 15:18:36 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/09 15:55:25 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/15 22:54:04 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ namespace ft {
 	struct false_type : integral_constant< bool, false > { };
 
 
-	/*	is_same			*/
+/*	== Other example of differents metaproggramming structures ==
+
+	//	is_same
 	template< typename T, typename U >
 	struct is_same : false_type { };
 
@@ -41,7 +43,7 @@ namespace ft {
 	struct is_same< T, T > : true_type { };
 
 
-	/*	remove_cv_qualified	*/
+	//	remove_cv_qualified	
 	template< typename T >
 	struct remove_cv {
 		typedef T type;
@@ -60,7 +62,7 @@ namespace ft {
 	template< typename T >
 	struct remove_cv< T const volatile > {
 		typedef T type;
-	};
+	};*/
 
 /*===========================================================================*/
 
