@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
+#include <list>
 
 //#include <ctime>
 
@@ -58,6 +59,8 @@ public:
 };
 
 struct Test {};
+
+
 
 /*====================VECTOR_TEST=======================*/
 
@@ -390,7 +393,7 @@ void	comparisonVector( void )
 
 }
 
-/*=====================STAC==============================*/
+/*=====================STACK==============================*/
 
 void	stackTest( void )
 {
@@ -427,28 +430,180 @@ void	constructMap( void )
 	map<int, std::string> b(a);
 
 	map<int, std::string> c;
+	std::list<pair<int, std::string> > test;
 
 	c = a;
 	for ( int n(0); n < 100000; n++ )
-		c[n];
+	{
+		test.push_back(make_pair<int, std::string>(n, "what"));
+		c[n] = "yo";
+	}
+	b.insert(test.begin(), test.end());
+	std::cout << b.size() << std::endl;
 }
 
-void	capacityMap( void )
+void	capacityAndModidierMap( void )
 {
-	map<int, std::string> a;
+	map<int, int> a;
 
-	a[7] = "";
+	a[7] = 0;
 	a[8];
 	a[9];
 	a[9];
-	a[9] = "yo";
+	a[432] = 34;
+	a[437] = 143;
+	a[489] = 94;
+	a[403] = 192;
+	a[73] = 603;
+	a[92] = 0;
+	a[7652];
+	a[-1241];
+	a[-1212345] = 0123;
+	a[-654] = 43;
+	a[-789234];
+	a[9] = 9;
 	a[45];
 	a[-45];
 
 	std::cout << a.size() << std::endl;
 	std::cout << a.max_size() << std::endl;
 	std::cout << a.empty() << std::endl;
+
+	map<int, int>::iterator it1 = a.begin();
+	map<int, int>::iterator it2 = a.begin();
+	map<int, int>::iterator it3 = a.begin();
+
+	for (int i = 0; i < 13; i++) { 
+		if ( i < 3 )
+			it3++;
+		if ( i < 8 )
+			it2++;
+		it1++; 
+	}
+	map<int, int> mp(a.begin(), it1);
+	map<int, int> cpy(it3, it2);
+
+
+	// mp.printBT();
+	std::cout << "size of mp : " << mp.size() << "\n";
+	// cpy.printBT();
+	std::cout << "size of cpy : " << cpy.size() << "\n";
+	cpy = mp;
+	std::cout << "size of cpy after taking mp: " << cpy.size() << " and checking empty() " << cpy.empty() << "\n";
+	// cpy.printBT();
+
+
+	std::cout << "mp[5] = " << mp[5] << "\n";
+	mp[5] = 1999;
+	std::cout << "after doing [mp[5] = 1999] : mp[5] = " << mp[5] << "\n";
+	std::cout << "size :" << mp.size() << "\n";
+
+	std::cout << "\n" << "\n" << "****************** testing the swap function :" << "\n";
+	cpy.insert(make_pair(1000, 0));
+	cpy.insert(make_pair(2000, 0));
+	cpy.insert(make_pair(3000, 0));
+	cpy.insert(make_pair(-8000, 0));
+
+	std::cout << "printing both my map to check there differences :\nmp -->" << "\n";
+	std::cout << mp.size() << " printing the size first\n";
+	// mp.printBT();
+	std::cout << "cpy -->\n";
+	std::cout << cpy.size() << " printing the size first\n";
+	// cpy.printBT();
+
+	mp.swap(cpy);
+
+	std::cout << "printing again after swap :\nmp -->" << "\n";
+	std::cout << mp.size() << " printing the size first\n";
+	// mp.printBT();
+	std::cout << "cpy -->\n";
+	std::cout << cpy.size() << " printing the size first\n";
+	// cpy.printBT();
+
+
+	std::cout << "\n******************* end of the test *******************\n\n";
+	mp.clear();
+	cpy.clear();
+	map<int, int>::iterator itbeg = mp.begin();
+	map<int, int>::iterator itend = mp.end();
+
+	if (itbeg == itend)
+		std::cout << "we enter here because (itbeg == itend) because we just clear !!\n";
+
+	std::cout << (mp.key_comp()).operator()(5, 10) << "\n";
+
+	mp.insert(make_pair(1045, 0));
+	std::cout << "finding stuff that does not exit : " << (--(mp.find(56)))->first << "\n";
+	mp.insert(make_pair(56, 0));
+	std::cout << "finding stuff that does exit : " << mp.find(56)->first << "\n";
+
+	map<char,int> mymap;
+
+	mymap.insert(make_pair('a', 0));
+	mymap.insert(make_pair('b', 0));
+	mymap.insert(make_pair('c', 0));
+
+	std::cout << "initialising mymap with value = 0 : \n";
+
+	std::cout << "mymap['a'] : " << mymap['a'] << "\n";
+	std::cout << "mymap['b'] : " << mymap['b'] << "\n";
+	std::cout << "mymap['c'] : " << mymap['c'] << "\n";
+
+	mymap['a'] = 10;
+	mymap['b'] = 20;
+	mymap['c'] = 30;
+
+	std::cout << "now after chamging value this way ( mymap['x'] = X ) :\n";
+	std::cout << "mymap['a'] : " << mymap['a'] << "\n";
+	std::cout << "mymap['b'] : " << mymap['b'] << "\n";
+	std::cout << "mymap['c'] : " << mymap['c'] << "\n";
+
+
+	pair<map<char,int>::iterator,map<char,int>::iterator> ret;
+	ret = mymap.equal_range('b');
+
+	std::cout << "lower bound points to: ";
+	std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+	std::cout << "upper bound points to: ";
+	std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+	map<int, int> y;
+	map<int, int> z;
+
+
+	std::cout << "************************ testing swap function : **************************** \n\n";
+
+	y.insert(make_pair(1, 56));
+	y.insert(make_pair(2, 57));
+	y.insert(make_pair(3, 58));
+
+	z.insert(make_pair(8, 45));
+	z.insert(make_pair(9, 46));
+	z.insert(make_pair(10, 47));
+
+	std::cout << "keys inserted for z : [8, 9, 10]\n" << z[8] << " " << z[9] << " " << z[10]  << " " << "\n";
+	std::cout << "keys inserted for y : [1, 2, 3] -> " << y[1]  << " " << y[2]  << " " << y[3]  << " " << "\n";
+
+	map<int, int>::iterator rit1 = y.begin();
+	map<int, int>::iterator rit2 = z.begin();
+
+	swap(y, z);
+
+	std::cout << "keys inserted for z : [8, 9, 10] ->" << z[8]  << " " << z[9]  << " " << z[10]  << " " << "\n";
+	std::cout << "keys inserted for y : [1, 2, 3] -> " << y[1]  << " " << y[2]  << " " << y[3]  << " " << "\n";
+
+	std::cout << "\nand testing now with iterators\n\n";
+
+
+	for (; rit1 != z.end(); rit1++)
+		std::cout << "with syntax (*rit).first " << (*rit1).first << "\n";
+	std::cout << "---------------------------------------------\n";
+	for (; rit2 != y.end(); rit2++)
+		std::cout << "with syntax (*rit).first " << (*rit2).first << "\n";
+
 }
+
 
 void	accessMap( void )
 {
@@ -470,62 +625,6 @@ void	accessMap( void )
 	{
 		std::cout << e.what() << std::endl;
 	}
-}
-
-void	modifierMap( void )
-{
-	map<int, std::string>	a;
-
-	a[1];
-	a[7] = "";
-	a[8];
-	a[10];
-	a[11];
-	a[12];
-	a[15];
-	a[45];
-	a[-45];
-
-//	a.insert(pair<int, std::string>(9, "yooo"));
-	a.insert(pair<int, std::string>(21, "yooo"));
-	a.insert(--(a.end()), pair<int, std::string>(9, "yooo"));
-
-	#if VIEWER
-		std::cout << "tree a" << std::endl;
-		a.print();
-	#endif
-
-	std::cout << std::endl;
-	a.erase(a.begin());
-	std::cout << std::endl;
-	a.erase(10);
-
-	#if VIEWER
-		std::cout << "tree a" << std::endl;
-		a.print();
-		std::cout << a.size() << std::endl;
-	#endif
-
-	map<int, std::string>	b;
-
-	b.swap(a);
-	#if VIEWER
-		std::cout << "tree a" << std::endl;
-		a.print();
-		std::cout << a.size() << std::endl;
-		std::cout << "tree b" << std::endl;
-		b.print();
-		std::cout << b.size() << std::endl;
-	#endif
-	b.erase(b.begin(), b.end());
-	#if VIEWER
-		std::cout << "tree a" << std::endl;
-		a.print();
-		std::cout << b.size() << std::endl;
-		std::cout << "tree b" << std::endl;
-		b.print();
-		std::cout << b.size() << std::endl;
-	#endif
 }
 
 void	deleteMap(void)
@@ -569,9 +668,6 @@ void	deleteMap(void)
 	mp[60] = "7";
 	mp[90] = "8";
 
-	#if VIEWER
-		mp.print();
-	#endif
 	mp.erase(25);
 	mp.erase(55);
 	mp.erase(24);
@@ -590,6 +686,317 @@ void	deleteMap(void)
 	mp.erase(35);
 	mp.erase(33);
 }
+
+
+/*=====================SET===============================*/
+
+void	constructSet( void )
+{
+	set<int> a;
+
+	a.insert(7);
+	a.insert(8);
+	a.insert(9);
+	a.insert(9);
+	a.insert(9);
+	a.insert(45);
+	a.insert(-45);
+
+
+	set<int> b(a);
+
+	set<int> c;
+	std::list<int> test;
+
+	c = a;
+	for ( int n(0); n < 100000; n++ )
+	{
+		test.push_back(n);
+		c.insert(n);
+	}
+	b.insert(test.begin(), test.end());
+	std::cout << b.size() << std::endl;
+
+}
+
+
+void	capacityAndModidierSet( void )
+{
+	set<int> a;
+
+	a.insert(7);
+	a.insert(8);
+	a.insert(9);
+	a.insert(9);
+	a.insert(432);
+	a.insert(437);
+	a.insert(489);
+	a.insert(403);
+	a.insert(73);
+	a.insert(92);
+	a.insert(7652);
+	a.insert(-1241);
+	a.insert(-1212345);
+	a.insert(-654);
+	a.insert(-789234);
+	a.insert(9);
+	a.insert(45);
+	a.insert(-45);
+
+	std::cout << a.size() << std::endl;
+	std::cout << a.max_size() << std::endl;
+	std::cout << a.empty() << std::endl;
+
+	set<int>::iterator it1 = a.begin();
+	set<int>::iterator it2 = a.begin();
+	set<int>::iterator it3 = a.begin();
+
+	for (int i = 0; i < 13; i++) { 
+		if ( i < 3 )
+			it3++;
+		if ( i < 8 )
+			it2++;
+		it1++; 
+	}
+	set<int> mp(a.begin(), it1);
+	set<int> cpy(it3, it2);
+
+
+	std::cout << "size of mp : " << mp.size() << "\n";
+	std::cout << "size of cpy : " << cpy.size() << "\n";
+	cpy = mp;
+	std::cout << "size of cpy after taking mp: " << cpy.size() << " and checking empty() " << cpy.empty() << "\n";
+
+	mp.insert(5);
+	std::cout << "size :" << mp.size() << "\n";
+
+	std::cout << "\n" << "\n" << "****************** testing the swap function :" << "\n";
+	cpy.insert(1000);
+	cpy.insert(2000);
+	cpy.insert(3000);
+	cpy.insert(8000);
+
+	std::cout << "printing both my set to check there differences :\nmp -->" << "\n";
+	std::cout << mp.size() << " printing the size first\n";
+	std::cout << "cpy -->\n";
+	std::cout << cpy.size() << " printing the size first\n";
+
+	mp.swap(cpy);
+
+	std::cout << "printing again after swap :\nmp -->" << "\n";
+	std::cout << mp.size() << " printing the size first\n";
+	std::cout << "cpy -->\n";
+	std::cout << cpy.size() << " printing the size first\n";
+
+
+	std::cout << "\n******************* end of the test *******************\n\n";
+	mp.clear();
+	cpy.clear();
+	set<int>::iterator itbeg = mp.begin();
+	set<int>::iterator itend = mp.end();
+
+	if (itbeg == itend)
+		std::cout << "we enter here because (itbeg == itend) because we just clear !!\n";
+
+	std::cout << (mp.key_comp()).operator()(5, 10) << "\n";
+
+	mp.insert(1045);
+	std::cout << "finding stuff that does not exit : " << *(--(mp.find(56))) << "\n";
+	mp.insert(56);
+	std::cout << "finding stuff that does exit : " << *(mp.find(56)) << "\n";
+
+	set<char> myset;
+
+	myset.insert('a');
+	myset.insert('b');
+	myset.insert('c');
+
+
+	std::cout << "myset['a'] : " << *(myset.find('a')) << "\n";
+	std::cout << "myset['b'] : " << *(myset.find('b')) << "\n";
+	std::cout << "myset['c'] : " << *(myset.find('c')) << "\n";
+
+	myset.insert('a');
+	myset.insert('b');
+	myset.insert('c');
+
+	std::cout << "myset['a'] : " << *(myset.find('a')) << "\n";
+	std::cout << "myset['b'] : " << *(myset.find('b')) << "\n";
+	std::cout << "myset['c'] : " << *(myset.find('c')) << "\n";
+
+
+	pair<set<char>::iterator,set<char>::iterator> ret;
+	ret = myset.equal_range('b');
+
+	std::cout << "lower bound points to: ";
+	std::cout << *(ret.first) << '\n';
+
+	std::cout << "upper bound points to: ";
+	std::cout << *(ret.first) << '\n';
+
+	set<int> y;
+	set<int> z;
+
+
+	std::cout << "************************ testing swap function : **************************** \n\n";
+
+	y.insert(1);
+	y.insert(2);
+	y.insert(3);
+
+	z.insert(8);
+	z.insert(9);
+	z.insert(10);
+
+	set<int>::iterator rit1 = z.begin();
+	set<int>::iterator rit2 = y.begin();
+
+	for (; rit1 != z.end(); rit1++)
+		std::cout << "with syntax (*rit) " << (*rit1) << "\n";
+	std::cout << "---------------------------------------------\n";
+	for (; rit2 != y.end(); rit2++)
+		std::cout << "with syntax (*rit) " << (*rit2) << "\n";
+
+	swap(y, z);
+
+	rit1 = z.begin();
+	rit2 = y.begin();
+
+	for (; rit1 != z.end(); rit1++)
+		std::cout << "with syntax (*rit) " << (*rit1) << "\n";
+	std::cout << "---------------------------------------------\n";
+	for (; rit2 != y.end(); rit2++)
+		std::cout << "with syntax (*rit) " << (*rit2) << "\n";
+}
+
+
+/*=======================================================*/
+
+/*=====================Map viewer========================*/
+
+#if VIEWER
+
+void	display_tree_content(std::string prefix, Node<pair<const int, std::string> >* node, int is_left)
+{
+	const std::string	e_type = "NODE";
+	const std::string	e_colors[2] = {"\x1b[33m", "\x1b[32m"};
+
+	if (is_left == 2)
+		std::cout << " ──";
+	if (is_left == 1)
+		std::cout << prefix << "├──";
+	else if (is_left == 0 )
+		std::cout << prefix << "└──";
+	if ( node->parent != NULL )
+	{
+
+		std::cout << e_colors[node->color] << e_type;
+		std::cout << " ( key : " << node->content.first;
+		//		std::cout << " )\x1b[0m\n";
+		std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
+	}
+	else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
+		std::cout << "\x1b[31mNULL\x1b[0m\n";
+}
+
+void	print_tree(std::string prefix, Node<pair<const int, std::string> >* node, int is_left)
+{
+
+	std::string	new_prefix;
+
+	if ( node->parent != NULL && node->left != NULL && node->right != NULL )
+		//	if ( node )
+	{
+		display_tree_content(prefix, node, is_left);
+		if ( is_left == 2 )
+			is_left = 0;
+		if (!is_left)
+		{
+			new_prefix = prefix + "    ";
+			print_tree(new_prefix, node->right, 1);
+			print_tree(new_prefix, node->left, 0);
+		}
+		else
+		{
+			new_prefix = prefix + "│   ";
+			print_tree(new_prefix, node->right, 1);
+			print_tree(new_prefix, node->left, 0);
+		}
+	}
+}
+
+void	print(Node<pair<const int, std::string> >* node)
+{
+	print_tree("", node->left, 2);
+}
+
+void	viewerMap( void )
+{
+	map<int, std::string> mp;
+
+	mp[42] = "lol";
+
+	mp[50] = "mdr";
+	mp[25] = "funny";
+
+	mp[46] = "bunny";
+	mp[21] = "fizz";
+	mp[30] = "buzz";
+	mp[55] = "fuzzy";
+
+	mp[18] = "bee";
+	mp[23] = "coconut";
+	mp[28] = "diary";
+	mp[35] = "fiesta";
+	mp[44] = "hello";
+	mp[48] = "world";
+	mp[53] = "this is a test";
+	mp[80] = "hey";
+
+	mp[12] = "no";
+	mp[20] = "idea";
+	mp[22] = "123";
+	mp[24] = "345";
+	mp[27] = "27";
+	mp[29] = "29";
+	mp[33] = "33";
+	mp[38] = "38";
+
+	mp[43] = "1";
+	mp[45] = "2";
+	mp[47] = "3";
+	mp[49] = "4";
+	mp[51] = "5";
+	mp[54] = "6";
+	mp[60] = "7";
+	mp[90] = "8";
+
+	std::cout << std::endl << "\tPrint MAP" << std::endl << std::endl;
+	print(mp.end().base());
+
+	mp.erase(25);
+	mp.erase(55);
+	mp.erase(24);
+	mp.erase(54);
+
+	mp.erase(22);
+	mp.erase(51);
+
+	mp.erase(21);
+	mp.erase(53);
+	mp.erase(20);
+	mp.erase(23);
+	mp.erase(23);
+	mp.erase(42);
+	mp.erase(38);
+	mp.erase(35);
+	mp.erase(33);
+
+	std::cout << std::endl << "\tAfter deleted some elements" << std::endl << std::endl;
+	print(mp.end().base());
+
+}
+#endif
 
 /*=====================42 Test===============================*/
 
@@ -658,136 +1065,13 @@ void	test42( void )
 
 }
 
-template <typename T>
-class foo {
-	public:
-		typedef T	value_type;
-
-		foo(void) : value(), _verbose(false) { };
-		foo(value_type src, const bool verbose = false) : value(src), _verbose(verbose) { };
-		foo(foo const &src, const bool verbose = false) : value(src.value), _verbose(verbose) { };
-		~foo(void) { if (this->_verbose) std::cout << "~foo::foo()" << std::endl; };
-		void m(void) { std::cout << "foo::m called [" << this->value << "]" << std::endl; };
-		void m(void) const { std::cout << "foo::m const called [" << this->value << "]" << std::endl; };
-		foo &operator=(value_type src) { this->value = src; return *this; };
-		foo &operator=(foo const &src) {
-			if (this->_verbose || src._verbose)
-				std::cout << "foo::operator=(foo) CALLED" << std::endl;
-			this->value = src.value;
-			return *this;
-		};
-		value_type	getValue(void) const { return this->value; };
-		void		switchVerbose(void) { this->_verbose = !(this->_verbose); };
-
-		operator value_type(void) const {
-			return value_type(this->value);
-		}
-	private:
-		value_type	value;
-		bool		_verbose;
-};
-
-class Awesome {
-
-	public:
-
-		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
-		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
-		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
-		virtual ~Awesome(void) {}
-
-		Awesome &operator=( Awesome const & rhs ) { this->_n = rhs._n; return (*this); }
-		bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
-		bool operator!=( Awesome const & rhs ) const { return (this->_n != rhs._n); }
-		bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }
-		bool operator<( Awesome const & rhs ) const { return (this->_n < rhs._n); }
-		bool operator>=( Awesome const & rhs ) const { return (this->_n >= rhs._n); }
-		bool operator<=( Awesome const & rhs ) const { return (this->_n <= rhs._n); }
-		void operator+=(int rhs){ _n += rhs; }
-		int get( void ) const { return this->_n; }
-
-	private:
-
-		int _n;
-};
-
-std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.get(); return o; }
-
-#include <list>
-
-template <typename T_SET>
-void	printSize(T_SET const &st, bool print_content = 1)
-{
-	std::cout << "size: " << st.size() << std::endl;
-	std::cout << "max_size: " << st.max_size() << std::endl;
-	if (print_content)
-	{
-		typename T_SET::const_iterator it = st.begin(), ite = st.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << printPair(it, false) << std::endl;
-	}
-	std::cout << "###############################################" << std::endl;
-}
-
-template <class T>
-void	print_vector(vector<T> &test)
-{
-	typename vector<T>::iterator		beg = test.begin();
-	typename vector<T>::iterator		end = test.end();
-	std::cout << "size : " << test.size() << ", capacity : " << test.capacity() << std::endl;
-	for (typename vector<T>::iterator it = beg; it != end; it++)
-	{
-		std::cout << *it << " ";
-		if (((it - beg) % 10 == 9) && it > beg)
-			std::cout << std::endl;
-	}
-	std::cout << std::endl;
-}
-
-
-
-void		othertest(void)
-{
-	std::cout << std::endl << "INSERAwesome AwesomeESAwesomeS" << std::endl;
-	vector<Awesome> test(1, 1);
-	vector<Awesome> test2(5, 5);
-
-	test.insert(test.begin(), 200, 12);
-	print_vector<Awesome>(test);
-	test.insert(test.begin() + 12, 200, 30);
-	print_vector<Awesome>(test);
-	test.insert(test.end(), 12, 50);
-	print_vector<Awesome>(test);
-	test.insert(test.end() - 1, 0, 60);
-	print_vector<Awesome>(test);
-	test.insert(test.end() - 1, 1, 70);
-	print_vector<Awesome>(test);
-	test.insert(test.begin() + 412, test2.begin(), test2.end());
-	print_vector<Awesome>(test);
-	test.insert(test.begin() + 6, test2.begin(), test2.end());
-	print_vector<Awesome>(test);
-	test.insert(test.end(), test2.begin(), test2.end());
-	print_vector<Awesome>(test);
-}
-
-
-/*=====================SET===============================*/
-
-void	testSet( void )
-{
-	set<int> a;
-
-	a.insert(5);
-}
-
 int main(void)
 {
 	clock_t start = clock();
 
-
+	#ifndef VIEWER
 	// ==== VECTOR ====
-/*
+
 	constructVector();
 	beginAndEndVector();
 	capacityTestVector();
@@ -801,22 +1085,22 @@ int main(void)
 
 	// ==== MAP ====
 
-	// ==== Test_tree ====
-
-//	treeTest();
-
-	// ====================
-
 	constructMap();
 	accessMap();
-	capacityMap();
-	modifierMap();
+	capacityAndModidierMap();
+	deleteMap();
+
+	// ====== SET ====
+
+	constructSet();
+	capacityAndModidierSet();
 
 
 	test42();
-*/
-	testSet();
-	othertest();
+	#else
+	viewerMap();
+	#endif
+
 	clock_t end = clock();
 
 	double elapsed_time = double(end - start) / CLOCKS_PER_SEC;

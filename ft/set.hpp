@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 19:46:35 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/15 13:56:29 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,14 +404,6 @@ namespace ft {
 					lower_bound(x), upper_bound(x)
 				);
 			}
-			#if VIEWER
-
-				void	print( void )
-				{
-					this->_tree.print();
-				}
-
-			#endif
 
 	};
 

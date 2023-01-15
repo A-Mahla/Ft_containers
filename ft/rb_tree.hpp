@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 13:29:41 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/13 21:39:23 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/15 14:01:56 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,21 +264,6 @@ namespace ft {
 		return x.base() <= y.base();
 	}
 
-	template <class Iterator1, class Iterator2>
-	inline typename rb_iterator<Iterator1>::difference_type	operator-(
-		const rb_iterator<Iterator1>& x,
-		const rb_iterator<Iterator2>& y )
-	{
-		return x.base() - y.base();
-	}
-
-	template <class Iterator>
-	inline rb_iterator<Iterator>	operator+(
-		typename rb_iterator<Iterator>::difference_type n,
-		const rb_iterator<Iterator>& x )
-	{
-		return rb_iterator<Iterator>(x.base() + n);
-	}
 
 	template< typename T >
 	class	const_rb_iterator
@@ -422,21 +407,6 @@ namespace ft {
 		return x.base() <= y.base();
 	}
 
-	template <class Iterator1, class Iterator2>
-	inline typename const_rb_iterator<Iterator1>::difference_type	operator-(
-		const const_rb_iterator<Iterator1>& x,
-		const const_rb_iterator<Iterator2>& y )
-	{
-		return x.base() - y.base();
-	}
-
-	template <class Iterator>
-	inline const_rb_iterator<Iterator>	operator+(
-		typename const_rb_iterator<Iterator>::difference_type n,
-		const const_rb_iterator<Iterator>& x )
-	{
-		return const_rb_iterator<Iterator>(x.base() + n);
-	}
 
 	template< typename Key,
 		typename T,
@@ -1234,68 +1204,6 @@ namespace ft {
 					;
 				return const_iterator(node);
 			}
-
-
-
-
-			#if VIEWER
-
-				void	print( void )
-				{
-					print_tree("", this->_root, 2);
-				}
-
-				void	display_tree_content(std::string prefix, link_type node, int is_left)
-				{
-					const std::string	e_type = "NODE";
-					const std::string	e_colors[2] = {"\x1b[33m", "\x1b[32m"};
-				
-					if (is_left == 2)
-						std::cout << " ──";
-					if (is_left == 1)
-						std::cout << prefix << "├──";
-					else if (is_left == 0 )
-						std::cout << prefix << "└──";
-					if ( node->parent != NULL )
-					{
-				
-						std::cout << e_colors[node->color] << e_type;
-						std::cout << " ( key : " << node->content.first;
-				//		std::cout << " )\x1b[0m\n";
-						std::cout <<", content : " << node->content.second << ")\x1b[0m\n";
-					}
-					else if ( node->parent == NULL && node->left == NULL && node->right == NULL )
-						std::cout << "\x1b[31mNULL\x1b[0m\n";
-				}
-				
-				void	print_tree(std::string prefix, link_type node, int is_left)
-				{
-				
-					std::string	new_prefix;
-				
-					if ( node->parent != NULL && node->left != NULL && node->right != NULL )
-						//	if ( node )
-					{
-						display_tree_content(prefix, node, is_left);
-						if ( is_left == 2 )
-							is_left = 0;
-						if (!is_left)
-						{
-							new_prefix = prefix + "    ";
-							print_tree(new_prefix, node->right, 1);
-							print_tree(new_prefix, node->left, 0);
-						}
-						else
-						{
-							new_prefix = prefix + "│   ";
-							print_tree(new_prefix, node->right, 1);
-							print_tree(new_prefix, node->left, 0);
-						}
-					}
-				}
-			
-			#endif
-
 
 
 	};
