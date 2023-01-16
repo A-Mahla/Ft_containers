@@ -6,7 +6,7 @@
 /*   By: amahla <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:10:27 by amahla            #+#    #+#             */
-/*   Updated: 2023/01/15 13:57:24 by amahla           ###   ########.fr       */
+/*   Updated: 2023/01/16 11:43:26 by amahla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ namespace ft {
 			 * @return NO*/
 
 			inline explicit	map( const Compare& comp = Compare(),
-				const Allocator& = Allocator() ) : _tree( comp )
+				const Allocator& alloc = Allocator() ) : _tree( comp, alloc )
 			{ }
 
 			/* @member map()
@@ -100,7 +100,8 @@ namespace ft {
 			template <class InputIterator>
 			inline	map(InputIterator first,
 				typename enable_if< !is_integral< InputIterator >::value, InputIterator >::type last,
-				const Compare& = Compare(), const Allocator& = Allocator()) : _tree(first, last)
+				const Compare& comp = Compare(), const Allocator& alloc = Allocator())
+				: _tree(first, last, comp, alloc)
 				{ }
 
 			/* @member ~map()
